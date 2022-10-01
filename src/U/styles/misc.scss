@@ -1,0 +1,32 @@
+.router-link-active {
+    border-bottom: 1px solid currentColor;
+}
+
+.material-design-icon {
+    display: inline-flex;
+    align-self: center;
+    position: relative;
+    height: 1em;
+    width: 1em;
+}
+
+.material-design-icon > .material-design-icon__svg {
+    height: 1em;
+    width: 1em;
+    fill: currentColor;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.h100 {
+    height: 100%;
+}
+
+.separator {
+    width: 1px;
+    height: 1em;
+    margin: 0 0.5em;
+    background-color: var(--border-color);
+}
