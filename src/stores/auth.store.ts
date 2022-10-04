@@ -23,9 +23,10 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     login() {
       return this.loginReq.send({
-        body: toFormData(this.authForm)
-      }).then(res => {
-        console.log('res', res)
+        body: toFormData(this.form)
+      }).then((data: any) => {
+        this.authToken = data.token
+        this.user = data.user
       })
     },
   },

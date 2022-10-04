@@ -9,6 +9,7 @@
 * */
 import { TOKEN_KEY, USER_KEY } from '../constants'
 import { env } from '../env'
+import { useAuthStore } from '../stores/auth.store'
 import { Storage } from './storage-helper'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'OPTIONS' | 'DELETE' | 'HEAD' | 'CONNECT' | 'TRACE'
@@ -35,6 +36,7 @@ export class FetchRequest {
 
   withProps(props: Partial<FetchRequest>) {
     for (const prop in props) {
+      // @ts-ignore
       this[prop] = props[prop]
     }
     return this
@@ -102,16 +104,26 @@ export class FetchRequest {
 
       if (this.lastRequestId) clearTimeout(this.lastRequestId)
       this.lastRequestId = setTimeout(() => {
+        const auth = useAuthStore()
         // append the base url
         const url = env.apiUrl + this.url.replace(/^\//, '')
         // attach token if available
-        config.headers = config.headers || {}
-        let token = Storage.get(TOKEN_KEY)
+        config.headers = config.headers || {
+          'Accept': 'application/json'
+        }
+        let token = auth.authToken
         if (token) { // @ts-ignore
           config.headers.Authorization = `Bearer ${token}`
         }
 
-        fetch(url, config).then((res: Response) => res.json()).then(res => {
+        fetch(url, config).then(async (res: Response) => {
+          let output = res
+          try {
+            output = await res.json()
+          } catch (e) {
+          }
+          return output
+        }).then(res => {
           // if (res.data?.status === 'fail' || res.data?.status === 'invalid_schema') {
           //   this.error = res.data?.message || 'Something went wrong'
           //   this.showError()
@@ -144,7 +156,7 @@ export class FetchRequest {
           else this.error = res.data?.message || res.data?.error || res.data || res
 
           this.showError()
-        }).finally(() => {
+        }).then(() => {
           this.firstRequest = false
           this.loading = false
           this.loaded = true
@@ -166,6 +178,7 @@ export class FetchRequest {
       if (config.hasOwnProperty('data')) {
         // @ts-ignore
         for (let key in config.body) {
+          // @ts-ignore
           formData.set(key, typeof config.body[key] === 'object' ? JSON.stringify(config.body[key]) : config.body[key])
         }
       }
