@@ -2,11 +2,9 @@
     <div :class="{'notification-container': true, 'notification-container-empty' : items.length===0}">
         <transition-group name="ntf" tag="div" mode="out">
             <div v-for="item in items" :key="item.id" :class="'notification shadow-0 '+item.options.type"
-                 @click="removeItem(item.id)">
-                <div class="notification-message">
-                    <h4 class="title" v-if="item.title">{{ item.title }}</h4>
-                    <div class="message" v-if="item.message" v-html="item.message"/>
-                </div>
+                 @click="removeItem(item)">
+                <h4 class="title" v-if="item.title">{{ item.title }}</h4>
+                <div class="message" v-if="item.message" v-html="item.message"/>
             </div>
         </transition-group>
     </div>
@@ -14,58 +12,34 @@
 
 <script>
 export default {
-    data() {
-        return {
-            message: null,
-            title: null,
-            options: {
-                type: 'success',
-                duration: 4000,
-                permanent: false
-            },
-            items: [],
-            idx: 0
-        }
-    },
+    data: () => ({
+        items: [],
+    }),
     methods: {
-        createUUID() {
-            const pattern = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-            return pattern.replace(/[xy]/g, c => {
-                const r = (Math.random() * 16) | 0
-                const v = c === 'x' ? r : (r & 0x3) | 0x8
-                return v.toString(16)
-            })
-        },
-        addItem(type, title, message, options) {
-            let defaultOptions = {
-                type: type,
-                duration: this.options.duration,
-                permanent: this.options.permanent
-            }
-            let itemOptions = Object.assign({}, defaultOptions, options)
-
-            let idx = this.createUUID()
-            let newItem = {
-                id: idx,
-                message: message,
-                title: title,
-                options: itemOptions
+        addItem(type, title, message, options = {}) {
+            const item = {
+                id: Date.now() + Math.random(),
+                message,
+                title,
+                options: {
+                    type,
+                    duration: 4000,
+                    permanent: false,
+                    ...options
+                }
             }
 
-            this.items.push(newItem)
+            this.items.push(item)
 
-            if (itemOptions.permanent === false) {
+            if (!item.options.permanent) {
                 setTimeout(() => {
-                    this.removeItem(idx)
-                }, itemOptions.duration)
+                    this.removeItem(item)
+                }, item.options.duration)
             }
         },
-        removeItem(uid) {
-            this.items = Object.assign([], this.items.filter(x => x.id !== uid))
+        removeItem(item) {
+            this.items.splice(this.items.indexOf(item))
         },
-        removeAll() {
-            this.items = []
-        }
     }
 }
 </script>
@@ -86,7 +60,7 @@ div[data-notify="container"] {
     right: 0;
     z-index: 999999;
     width: 320px;
-    padding: 0px 15px;
+    padding: 0 15px;
     max-height: calc(100% - 30px);
 }
 

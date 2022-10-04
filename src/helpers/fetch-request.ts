@@ -74,7 +74,7 @@ export class FetchRequest {
     }
 
     const notify = useNotify()
-    notify.error('Something went wrong!', this.error, { permanent: true })
+    notify.error('Something went wrong!', this.error)
   }
 
   logoutAndRefresh() {
