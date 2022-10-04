@@ -1,5 +1,5 @@
 <template>
-    <ApmModal
+    <UModal
         :title="title"
         v-model="open"
         :ok-title="okTitle"
@@ -7,17 +7,15 @@
         @ok="onOk"
         @cancel="onCancel"
     >{{ message }}
-    </ApmModal>
+    </UModal>
 </template>
 
 <script>
-import ApmModal from "@/components/base-components/ApmModal.vue"
+import UModal from "../../components/UModal.vue"
 
 export default {
     name: "ConfirmModal",
-    components: { ApmModal },
-    props: {},
-    computed: {},
+    components: { UModal },
     data: () => ({
         title: '',
         open: false,

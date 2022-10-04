@@ -1,24 +1,27 @@
-import ConfirmModal from "./ConfirmModal.vue"
-import { createApp, defineComponent } from "vue";
+import { vRipple } from '../../directives/ripple.directive'
+import { useDynamicComponent } from '../useDynamicComponent'
+import ConfirmModal from './ConfirmModal.vue'
 
-export default {
-    install(app, options = {}) {
-        const wrapper = document.createElement("div")
-        document.querySelector('body').appendChild(wrapper)
-        let Component = createApp(defineComponent({ extends: ConfirmModal })).mount(wrapper)
+type ConfirmOptions = {
+  okTitle?: string,
+  cancelTitle?: string,
+}
 
-        app.config.globalProperties.$confirm = (title, message, options) => {
-            return new Promise(resolve => {
-                Component.setData({
-                    ...options,
-                    title,
-                    message,
-                    open: true,
-                    onClose(ok) {
-                        resolve(ok)
-                    }
-                })
-            })
-        }
-    }
+const { app, component } = useDynamicComponent(ConfirmModal)
+// @ts-ignore
+app.directive('ripple', vRipple)
+
+export function useConfirm(title: string, message: string, options: ConfirmOptions = {}) {
+  return new Promise(resolve => {
+    // @ts-ignore
+    component.setData({
+      ...options,
+      title,
+      message,
+      open: true,
+      onClose(ok: boolean) {
+        resolve(ok)
+      }
+    })
+  })
 }

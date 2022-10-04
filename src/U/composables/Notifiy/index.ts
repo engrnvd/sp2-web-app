@@ -1,7 +1,7 @@
 import { useDynamicComponent } from '../useDynamicComponent'
 import Notify from './Notify.vue'
 
-const component = useDynamicComponent(Notify)
+const { component } = useDynamicComponent(Notify)
 
 type NotifyOptions = {
   permanent?: boolean,
