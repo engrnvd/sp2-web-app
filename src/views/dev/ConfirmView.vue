@@ -5,7 +5,8 @@ import { useConfirm } from '../../U/composables/Confirm/index'
 async function confirm1() {
     const yes = await useConfirm('Destroy everything', 'Are you sure about this?')
     if (yes) {
-        document.body.style.transition = 'opacity 6s ease, filter 0.5s'
+        document.body.style.transition = 'opacity 3s ease'
+        document.body.style.transitionDelay = '1s'
         document.body.style.filter = 'grayscale(1)'
         document.body.style.opacity = '0'
     }
