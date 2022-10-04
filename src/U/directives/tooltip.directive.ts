@@ -1,4 +1,4 @@
-const EdgeOffset = 0
+const EdgeOffset = 5
 const TooltipOffset = 5
 
 function updateTooltip(e) {
@@ -19,7 +19,7 @@ function updateTooltip(e) {
     top = eRect.height + TooltipOffset
   }
 
-  if ((eRect.left + tRect.width / 2 + EdgeOffset) >= vWidth) { // too close to right edge
+  if ((eRect.left + (tRect.width + eRect.width) / 2 + EdgeOffset) >= vWidth) { // too close to right edge
     left = 0 - tRect.width - TooltipOffset
     top = (eRect.height - tRect.height) / 2
   }
