@@ -3,14 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import { devRoutes } from './dev-routes'
 
 // @ts-ignore
-const devModeRoutes = import.meta.env.DEV ? [
-  {
-    path: '/dev',
-    name: 'dev',
-    component: () => import('../views/dev/DevView.vue'),
-    children: [...devRoutes]
-  }
-] : []
+const devModeRoutes = import.meta.env.DEV ? devRoutes : []
 
 const router = createRouter({
   // @ts-ignore
