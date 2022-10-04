@@ -10,6 +10,7 @@
 import { TOKEN_KEY, USER_KEY } from '../constants'
 import { env } from '../env'
 import { useAuthStore } from '../stores/auth.store'
+import { useNotify } from '../U/composables/Notifiy/index'
 import { Storage } from './storage-helper'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'OPTIONS' | 'DELETE' | 'HEAD' | 'CONNECT' | 'TRACE'
@@ -59,12 +60,21 @@ export class FetchRequest {
     this.config = { ...this.config, ...config }
   }
 
-  showError() {
+  handleError(res: any) {
+    if (typeof res === 'string' && res.match(/Failed to execute 'setRequestHeader' on 'XMLHttpRequest'/)) {
+      this.logoutAndRefresh()
+    }
+
+    if (typeof res === 'string') this.error = res
+    else this.error = res.data?.message || res.data?.error || res.data || res
+
     const logoutErrors = ['Wrong number of segments', 'logged out', 'You are not logged in!']
     if (logoutErrors.includes(this.error)) {
       this.logoutAndRefresh()
     }
-    // todo: app.config.globalProperties.$notify('error', 'Something went wrong!', this.error)
+
+    const notify = useNotify()
+    notify.error('Something went wrong!', this.error, { permanent: true })
   }
 
   logoutAndRefresh() {
@@ -116,6 +126,7 @@ export class FetchRequest {
           config.headers.Authorization = `Bearer ${token}`
         }
 
+        // @ts-ignore
         fetch(url, config).then(async (res: Response) => {
           let output = res
           try {
@@ -124,7 +135,7 @@ export class FetchRequest {
           }
 
           if (!res.ok) {
-            reject(output)
+            this.handleError(output)
             return
           }
 
@@ -154,14 +165,8 @@ export class FetchRequest {
             this.data = res
           }
         }).catch(res => {
-          if (typeof res === 'string' && res.match(/Failed to execute 'setRequestHeader' on 'XMLHttpRequest'/)) {
-            this.logoutAndRefresh()
-          }
-
-          if (typeof res === 'string') this.error = res
-          else this.error = res.data?.message || res.data?.error || res.data || res
-
-          this.showError()
+          this.handleError(res)
+          // @ts-ignore
         }).finally(() => {
           this.firstRequest = false
           this.loading = false
