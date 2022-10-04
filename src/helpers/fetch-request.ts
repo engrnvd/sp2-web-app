@@ -122,6 +122,12 @@ export class FetchRequest {
             output = await res.json()
           } catch (e) {
           }
+
+          if (!res.ok) {
+            reject(output)
+            return
+          }
+
           return output
         }).then(res => {
           // if (res.data?.status === 'fail' || res.data?.status === 'invalid_schema') {
@@ -156,7 +162,7 @@ export class FetchRequest {
           else this.error = res.data?.message || res.data?.error || res.data || res
 
           this.showError()
-        }).then(() => {
+        }).finally(() => {
           this.firstRequest = false
           this.loading = false
           this.loaded = true
