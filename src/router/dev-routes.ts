@@ -12,6 +12,14 @@ export const devRoutes = [
         path: 'inputs',
         component: () => import('../views/dev/InputsView.vue')
       },
+      {
+        path: 'notify',
+        component: () => import('../views/dev/NotifyView.vue')
+      },
+      {
+        path: 'confirm',
+        component: () => import('../views/dev/ConfirmView.vue')
+      },
     ]
   }
 
