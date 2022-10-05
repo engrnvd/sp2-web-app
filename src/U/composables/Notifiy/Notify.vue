@@ -6,7 +6,7 @@
                 <h4 v-if="item.title" class="title d-flex align-items-center gap-2">
                     <CheckCircleIcon v-if="item.options.type === 'success'"/>
                     <AlertCircleIcon v-else-if="item.options.type === 'danger'"/>
-                    <InformationIcon v-else="item.options.type === 'danger'"/>
+                    <InformationIcon v-else/>
                     <span>{{ item.title }}</span>
                 </h4>
                 <div class="message" v-if="item.message" v-html="item.message"/>
