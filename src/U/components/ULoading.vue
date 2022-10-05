@@ -10,10 +10,10 @@
     </div>
 </template>
 
-<style scoped lang="scss">
-$dot-size: 0.4em;
-
+<style lang="scss">
 .u-loading {
+    --dot-size: 0.5em;
+    --dot-spacing: 0.1em;
     align-items: center;
     color: currentColor;
     display: flex;
@@ -25,9 +25,9 @@ $dot-size: 0.4em;
         background: currentColor;
         border-radius: 100%;
         display: inline-block;
-        height: $dot-size;
-        margin: 0 0.1em;
-        width: $dot-size;
+        height: var(--dot-size);
+        width: var(--dot-size);
+        margin: 0 var(--dot-spacing);
     }
 
     .bounce1 {

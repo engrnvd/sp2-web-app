@@ -150,6 +150,15 @@ defineProps({
         &.compact {
             font-size: 1.25em;
         }
+
+        &:disabled {
+            background-color: transparent !important;
+        }
+
+        .u-loading {
+            --dot-size: 0.3em;
+            --dot-spacing: 0.05em;
+        }
     }
 
     @include btn-variants
