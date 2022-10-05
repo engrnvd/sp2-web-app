@@ -116,7 +116,7 @@ export class FetchRequest {
       this.lastRequestId = setTimeout(() => {
         const auth = useAuthStore()
         // append the base url
-        const url = env.apiUrl + this.url.replace(/^\//, '')
+        let url = env.apiUrl + this.url.replace(/^\//, '')
         // attach token if available
         config.headers = config.headers || {
           'Accept': 'application/json'
@@ -124,6 +124,11 @@ export class FetchRequest {
         let token = auth.authToken
         if (token) { // @ts-ignore
           config.headers.Authorization = `Bearer ${token}`
+        }
+
+        if (this.params) {
+          // @ts-ignore
+          url += '?' + new URLSearchParams(this.params)
         }
 
         // @ts-ignore
@@ -148,16 +153,16 @@ export class FetchRequest {
           // }
           if (this.pagination) {
             // @ts-ignore
-            if (config.params.page !== 1 && config.paginationMode === 'append') {
+            if (this.params.page !== 1 && this.paginationMode === 'append') {
               // @ts-ignore
-              this.data.data = this.data.data.concat(res.data)
+              this.data.data = this.data.data.concat(res)
             } else {
               // @ts-ignore
-              this.data = res.data
+              this.data = res
             }
 
             // @ts-ignore
-            if (!res.data.data || !res.data.data.length || this.data.data.length === parseInt(res.data.total)) {
+            if (!res.data || !res.data.length || this.data.length === parseInt(res.total)) {
               this.allLoaded = true
             }
           } else {
