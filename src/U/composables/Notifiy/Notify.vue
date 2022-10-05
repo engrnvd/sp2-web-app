@@ -3,7 +3,12 @@
         <transition-group name="ntf" tag="div" mode="out">
             <div v-for="item in items" :key="item.id" :class="'notification shadow-0 '+item.options.type"
                  @click="removeItem(item)">
-                <h4 class="title" v-if="item.title">{{ item.title }}</h4>
+                <h4 v-if="item.title" class="title d-flex align-items-center gap-2">
+                    <CheckCircleIcon v-if="item.options.type === 'success'"/>
+                    <AlertCircleIcon v-else-if="item.options.type === 'danger'"/>
+                    <InformationIcon v-else="item.options.type === 'danger'"/>
+                    <span>{{ item.title }}</span>
+                </h4>
                 <div class="message" v-if="item.message" v-html="item.message"/>
             </div>
         </transition-group>
@@ -11,7 +16,12 @@
 </template>
 
 <script>
+import AlertCircleIcon from "@/material-design-icons/AlertCircle.vue"
+import CheckCircleIcon from '@/material-design-icons/CheckCircle.vue'
+import InformationIcon from "@/material-design-icons/Information.vue"
+
 export default {
+    components: { InformationIcon, AlertCircleIcon, CheckCircleIcon },
     data: () => ({
         items: [],
     }),
@@ -23,7 +33,7 @@ export default {
                 title,
                 options: {
                     type,
-                    duration: 4000,
+                    duration: 5000,
                     permanent: false,
                     ...options
                 }
@@ -38,7 +48,7 @@ export default {
             }
         },
         removeItem(item) {
-            this.items.splice(this.items.indexOf(item))
+            this.items = this.items.filter(i => i.id !== item.id)
         },
     }
 }
@@ -59,7 +69,7 @@ div[data-notify="container"] {
     top: 0;
     right: 0;
     z-index: 999999;
-    width: 320px;
+    width: 270px;
     padding: 0 15px;
     max-height: calc(100% - 30px);
 }
@@ -72,6 +82,7 @@ div[data-notify="container"] {
     position: relative;
     opacity: 0.95;
     margin-top: 1em;
+    font-size: 0.8rem;
 
     --color: var(--primary);
 
@@ -88,6 +99,7 @@ div[data-notify="container"] {
     .title {
         font-weight: bold;
         margin: 0 0 1em 0;
+        line-height: 1;
     }
 
     &:hover, &:focus {

@@ -11,7 +11,10 @@ const { app, component } = useDynamicComponent(ConfirmModal)
 // @ts-ignore
 app.directive('ripple', vRipple)
 
-export function useConfirm(title: string, message: string, options: ConfirmOptions = {}) {
+export function useConfirm(title: string, message: string, options: ConfirmOptions = {
+  okTitle: 'Yes',
+  cancelTitle: 'No'
+}) {
   return new Promise(resolve => {
     // @ts-ignore
     component.setData({

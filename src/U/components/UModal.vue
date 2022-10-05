@@ -11,7 +11,7 @@
                     <div class="apm-modal-body" :class="bodyClass">
                         <slot></slot>
                     </div>
-                    <div v-if="!noFooter" class="apm-modal-footer d-flex p-4">
+                    <div v-if="!noFooter" class="apm-modal-footer d-flex">
                         <slot name="footer">
                             <UButton class="mr-2" @click="ok" :disabled="okDisable">{{ okTitle }}</UButton>
                             <UButton secondary v-if="!okOnly" @click="cancel">{{ cancelTitle }}</UButton>
@@ -130,6 +130,10 @@ export default {
         top: 1em;
         font-size: 1.25em;
     }
+
+    .apm-modal-footer {
+        padding: 0 3em 3em;
+    }
 }
 
 .apm-modal-header {
@@ -138,7 +142,7 @@ export default {
 
 .apm-modal-body {
     padding: 3em;
-    max-height: calc(100vh - 5em);
+    max-height: calc(100vh - 4em);
     overflow: auto;
 }
 </style>

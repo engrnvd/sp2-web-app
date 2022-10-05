@@ -23,8 +23,20 @@ const notify = useNotify()
         <UButton info @click="notify.info('This is the title', 'This the message of this particular notification')">
             info
         </UButton>
-        <UButton secondary
+        <UButton success
                  @click="notify.success('Forever', 'Unless you click me', {permanent: true})">
+            Permanent
+        </UButton>
+        <UButton danger
+                 @click="notify.error('Forever', 'Unless you click me', {permanent: true})">
+            Permanent
+        </UButton>
+        <UButton info
+                 @click="notify.info('Forever', 'Unless you click me', {permanent: true})">
+            Permanent
+        </UButton>
+        <UButton primary
+                 @click="notify.showMessage('primary', 'Forever', 'Unless you click me', {permanent: true})">
             Permanent
         </UButton>
         <UButton secondary
