@@ -36,6 +36,7 @@
     --main-text-color-contrast: #{color.invert(#eee)};
     --ripple-light: var(--ripple-dark);
     --disabled-bg: #5f6770;
+    --border-color: #4e524f;
     @include light-n-dark-variants('primary', color.adjust($primary, $lightness: 15%));
     @include light-n-dark-variants('danger', color.adjust($danger, $lightness: 22%));
 }

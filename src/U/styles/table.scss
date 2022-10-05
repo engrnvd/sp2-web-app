@@ -1,0 +1,38 @@
+table {
+    &, td, th {
+        border-collapse: collapse;
+    }
+
+    thead tr {
+        border-bottom: 1px solid var(--border-color);
+
+        th {
+            font-weight: normal;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+    }
+
+    td, th {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    tr:last-child {
+        td, th {
+            border-bottom: none;
+        }
+    }
+
+    &.table-striped {
+        tr:nth-child(2n) {
+            td, th {
+                background-color: var(--border-color);
+            }
+        }
+    }
+
+    &.table-hover tbody tr:hover {
+        box-shadow: var(--shadow-0);
+    }
+}
