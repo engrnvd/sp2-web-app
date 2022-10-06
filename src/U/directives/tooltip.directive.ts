@@ -30,6 +30,7 @@ function updateTooltip(e) {
 
 export const vTooltip = {
   mounted: (el: any, { value }) => {
+    if (!value) return
     const tooltip = document.createElement('span')
     tooltip.classList.add('u-tooltip')
     tooltip.innerText = value
@@ -40,6 +41,7 @@ export const vTooltip = {
     el.addEventListener('mouseenter', updateTooltip)
   },
   updated: (el, { value }) => {
+    if (!value) return
     el.querySelector('.u-tooltip').innerText = value
   },
   unmounted: (el) => {
