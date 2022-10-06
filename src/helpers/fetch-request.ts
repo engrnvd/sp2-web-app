@@ -43,6 +43,12 @@ export class FetchRequest {
     return this
   }
 
+  get hasLoadedData() {
+    // @ts-ignore
+    const data = this.pagination ? this.data?.data : this.data
+    return this.loaded && data?.length
+  }
+
   constructor(url: string, method: HttpMethod = 'GET', config: RequestInit = {}) {
     this.url = url
 
