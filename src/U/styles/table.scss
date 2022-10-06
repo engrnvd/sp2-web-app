@@ -32,7 +32,7 @@ table {
         }
     }
 
-    &.table-hover tbody tr:hover {
-        box-shadow: var(--shadow-0);
+    &.table-hover tbody tr:not(:only-child):hover {
+        box-shadow: var(--shadow-raised);
     }
 }
