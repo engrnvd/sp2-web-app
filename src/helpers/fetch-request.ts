@@ -29,7 +29,7 @@ export class FetchRequest {
   delay = 0
   delayFirstRequest = false
   pagination = false
-  paginationMode: 'append' | 'replace' = 'append'
+  paginationMode: 'append' | 'replace' = 'replace'
   params = {
     page: 1,
     perPage: 10
