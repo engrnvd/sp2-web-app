@@ -66,7 +66,7 @@ export class FetchRequest {
     }
 
     if (typeof res === 'string') this.error = res
-    else this.error = res.data?.message || res.data?.error || res.data || res
+    else this.error = res?.message || res?.error || res
 
     const logoutErrors = ['Wrong number of segments', 'logged out', 'You are not logged in!']
     if (logoutErrors.includes(this.error)) {
