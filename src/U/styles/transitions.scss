@@ -13,7 +13,7 @@
 }
 
 .slide-down-enter-from, .slide-down-leave-to {
-    transform: translateY(-25%);
+    transform: translateY(-10%);
     opacity: 0;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .slide-up-enter-from, .slide-up-leave-to {
-    transform: translateY(25%);
+    transform: translateY(10%);
     opacity: 0;
 }
 
