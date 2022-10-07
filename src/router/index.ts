@@ -14,6 +14,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    { path: '/email-verified', component: () => import('@/views/EmailVerifiedView.vue') },
     ...devModeRoutes,
   ]
 })
