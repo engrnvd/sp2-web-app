@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', {
       login: false,
     },
     loginReq: new FetchRequest('login', 'POST'),
+    logoutReq: new FetchRequest('logout', 'POST'),
     user: useStorage(USER_KEY),
     authToken: useStorage(TOKEN_KEY),
   }),
@@ -27,6 +28,12 @@ export const useAuthStore = defineStore('auth', {
       }).then((data: any) => {
         this.authToken = data.token
         this.user = data.user
+      })
+    },
+    logout() {
+      return this.logoutReq.send().then((data: any) => {
+        this.authToken = null
+        this.user = null
       })
     },
   },
