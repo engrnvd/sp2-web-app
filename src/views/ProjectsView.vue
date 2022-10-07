@@ -8,7 +8,7 @@ const auth = useAuthStore()
 
 <template>
     <h1>Projects</h1>
-    <h2>Email: {{ auth.form.email }}</h2>
+    <h2>Email: {{ auth.user?.email || 'not logged in' }}</h2>
 </template>
 
 <style>

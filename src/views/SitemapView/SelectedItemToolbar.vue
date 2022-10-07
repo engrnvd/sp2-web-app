@@ -84,7 +84,6 @@ function duplicateItem() {
 
         <UColorPicker
             v-tooltip="'Color'"
-            show-toggle-btn
             :model-value="item.meta.color"
             @update:model-value="changeColor"
         />
@@ -114,6 +113,7 @@ function duplicateItem() {
     box-shadow: var(--shadow-0);
     background-color: var(--bg);
     font-size: 1.25em;
+    z-index: 1;
 
     a {
         height: 1em;
