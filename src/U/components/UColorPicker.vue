@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, onBeforeUnmount, onMounted, ref } from 'vue'
-import { colorHelper } from '../helpers/color-helper'
+import { defineProps, onBeforeUnmount, onMounted, ref } from 'vue'
 
 // props
 const props = defineProps({
@@ -26,9 +25,6 @@ const emit = defineEmits(['update:modelValue'])
 const showColorPicker = ref(false)
 const el = ref()
 
-// computed
-const borderColor = computed(() => colorHelper.isLight(props.modelValue) ? '#bbb' : '#eee')
-
 // methods
 function closeColorPicker() {
     if (props.showToggleBtn) showColorPicker.value = false
@@ -36,7 +32,6 @@ function closeColorPicker() {
 
 function selectColor(color) {
     emit('update:modelValue', color)
-    closeColorPicker()
 }
 
 function outsideClick(e) {
@@ -60,7 +55,7 @@ onBeforeUnmount(() => {
            v-if="showToggleBtn"
            href="#"
            @click.stop="showColorPicker = !showColorPicker"
-           :style="{backgroundColor: modelValue || '#adb5bd', borderColor}">
+           :style="{backgroundColor: modelValue || '#adb5bd'}">
         </a>
         <div :class="`color-picker ${pickerPosition}`" v-if="showColorPicker || !showToggleBtn">
             <div class="color-list mb-3">
@@ -94,7 +89,7 @@ onBeforeUnmount(() => {
     height: var(--size);
     border-radius: 50%;
     line-height: 1;
-    border: 2px solid #bbb;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .color-picker {
