@@ -7,6 +7,7 @@ import { RouterLink } from 'vue-router'
     <header class="main-header p-2">
         <nav class="main-nav d-flex gap-4">
             <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/projects">Projects</RouterLink>
             <RouterLink to="/dev/buttons">Dev</RouterLink>
         </nav>
     </header>

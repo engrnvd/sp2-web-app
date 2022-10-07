@@ -2,6 +2,7 @@
 import MainHeader from './components/layout/header/MainHeader.vue'
 import MainFooter from './components/layout/MainFooter.vue'
 import { RouterView, useRoute } from 'vue-router'
+import LoginModal from './views/LoginModal.vue'
 
 const route = useRoute()
 </script>
@@ -14,7 +15,9 @@ const route = useRoute()
             <RouterView/>
         </main>
 
-        <MainFooter/>
+        <MainFooter v-if="route.name !== 'home'"/>
+
+        <LoginModal/>
     </div>
 </template>
 

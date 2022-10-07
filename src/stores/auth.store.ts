@@ -7,8 +7,8 @@ import { toFormData } from '../helpers/misc'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     form: {
-      email: '',
-      password: '',
+      email: '08es34@gmail.com',
+      password: '123456',
     },
     modals: {
       login: false,
