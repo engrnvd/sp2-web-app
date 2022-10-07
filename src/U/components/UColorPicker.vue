@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { defineProps, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useOutsideClick } from '@/U/composables/useOutsideClick'
+import { defineProps, ref } from 'vue'
 
 // props
 const props = defineProps({
@@ -34,18 +35,7 @@ function selectColor(color) {
     emit('update:modelValue', color)
 }
 
-function outsideClick(e) {
-    if (!el.value.contains(e.target)) closeColorPicker()
-}
-
-// life cycle hooks
-onMounted(() => {
-    document.addEventListener('click', outsideClick, true)
-})
-
-onBeforeUnmount(() => {
-    document.removeEventListener('click', outsideClick, true)
-})
+useOutsideClick(el, closeColorPicker)
 
 </script>
 
