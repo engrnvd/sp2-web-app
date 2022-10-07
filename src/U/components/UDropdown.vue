@@ -8,14 +8,17 @@ const props = defineProps({
     right: Boolean,
     down: Boolean,
     up: Boolean,
+    autoClose: { type: Boolean, default: true },
 })
 
 const ddEl = ref()
 const open = ref(false)
 
-useOutsideClick(ddEl, () => {
+function close() {
     open.value = false
-})
+}
+
+useOutsideClick(ddEl, close)
 
 </script>
 
@@ -25,7 +28,11 @@ useOutsideClick(ddEl, () => {
             <slot></slot>
         </div>
         <Transition :name="`slide-${up ? 'up' : 'down'}`">
-            <div :class="{left, right, down, up}" class="u-dropdown-content shadow-0" v-if="open">
+            <div
+                :class="{left, right, down, up}"
+                class="u-dropdown-content shadow-0"
+                @click="() => { if (autoClose) close() }"
+                v-if="open">
                 <slot name="content"></slot>
             </div>
         </Transition>
@@ -45,6 +52,7 @@ useOutsideClick(ddEl, () => {
         position: absolute;
         background-color: var(--bg);
         border-radius: var(--border-radius);
+        z-index: 9;
 
         &.left {
             right: 0;
