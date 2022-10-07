@@ -8,7 +8,9 @@ const auth = useAuthStore()
 
 <template>
     <UButton icon transparent @click="auth.modals.login = true" v-tooltip="'Profile'">
-        <AccountOutlineIcon/>
+        <img class="avatar sm" v-if="auth.isLoggedIn && auth.user.avatar" :src="auth.user.avatar" :alt="auth.user.name">
+        <span v-else-if="auth.isLoggedIn" class="font-weight-bold">{{ auth.user.name[0] }}</span>
+        <AccountOutlineIcon v-else/>
     </UButton>
 </template>
 

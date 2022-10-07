@@ -1,0 +1,11 @@
+.avatar {
+    --avatar-size: 2em;
+    border-radius: 50%;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    object-fit: cover;
+
+    &.sm {
+        --avatar-size: 1.25em;
+    }
+}
