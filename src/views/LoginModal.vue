@@ -23,8 +23,7 @@ function submit() {
     if (v.hasErrors) return
 
     auth.login().then(data => {
-        const req = new FetchRequest('user', 'GET')
-        req.send()
+        auth.modals.login = false
     })
 }
 
@@ -44,7 +43,7 @@ function submit() {
                         :errors="v.errors.password"/>
 
                 <div class="d-flex align-items-center justify-content-between">
-                    <UButton>Login</UButton>
+                    <UButton :loading="auth.loginReq.loading">Login</UButton>
                     <a href="" class="text-base" @click.prevent="">Forgot password?</a>
                 </div>
             </form>
