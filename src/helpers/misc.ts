@@ -86,3 +86,7 @@ export function cssVar(variable, value = null): string {
 export function cssFontSize() {
   return parseInt(cssVar('--font-size'))
 }
+
+export function randomArrayItem(arr: any[]) {
+  return arr[randomInt(0, arr.length)]
+}

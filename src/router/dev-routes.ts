@@ -20,6 +20,10 @@ export const devRoutes = [
         path: 'confirm',
         component: () => import('../views/dev/ConfirmView.vue')
       },
+      {
+        path: 'dropdown',
+        component: () => import('../views/dev/DropdownView.vue')
+      },
     ]
   }
 
