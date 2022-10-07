@@ -10,6 +10,8 @@ export const useAuthStore = defineStore('auth', {
       name: '',
       email: '08es34@gmail.com',
       password: '123456',
+      otp: '',
+      newPassword: '',
     },
     modals: {
       login: false,
@@ -17,6 +19,8 @@ export const useAuthStore = defineStore('auth', {
     loginReq: new FetchRequest('login', 'POST'),
     signupReq: new FetchRequest('register', 'POST'),
     logoutReq: new FetchRequest('logout', 'POST'),
+    forgotReq: new FetchRequest('forgot-password', 'POST'),
+    resetReq: new FetchRequest('reset-password', 'POST'),
     user: useStorage(USER_KEY),
     authToken: useStorage(TOKEN_KEY),
   }),
@@ -38,6 +42,20 @@ export const useAuthStore = defineStore('auth', {
     login() {
       return this.loginReq.send({
         body: toFormData(this.form)
+      }).then((data: any) => {
+        this.logUserIn(data)
+      })
+    },
+    sendForgotReq() {
+      return this.forgotReq.send({
+        body: toFormData({ email: this.form.email })
+      }).then((data: any) => {
+        this.logUserIn(data)
+      })
+    },
+    resetPassword() {
+      return this.resetReq.send({
+        body: toFormData({ email: this.form.email, otp: this.form.otp, password: this.form.newPassword })
       }).then((data: any) => {
         this.logUserIn(data)
       })
