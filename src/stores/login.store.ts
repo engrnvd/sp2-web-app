@@ -9,6 +9,7 @@ export const LoginStates = {
 export const useLoginStore = defineStore('login', {
   state: () => ({
     page: LoginStates.Login,
+    showOtp: false,
   }),
   getters: {
     isLoginPage: state => state.page === LoginStates.Login,
