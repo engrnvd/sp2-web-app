@@ -1,17 +1,17 @@
-import { ApmCanvas } from './canvas/ApmCanvas'
+import type { ApmCanvas } from './canvas/ApmCanvas'
 import { SitemapPage } from './SitemapPage'
 import { SitemapSection } from './SitemapSection'
 
 export class Sitemap {
   canvas: ApmCanvas
   id: any
-  name: string
-  isTemplate: Boolean = false
+  name: string = ''
+  is_template: Boolean = false
   tree: SitemapPage[] = []
   sections: SitemapSection[] = []
-  createdAt: any
-  updatedAt: any
-  ownerId: any
+  created_at: any
+  updated_at: any
+  owner_id: any
 
   constructor(canvas: ApmCanvas, data: any = {}) {
     this.canvas = canvas
@@ -19,7 +19,7 @@ export class Sitemap {
     try {
       for (const key in data) {
         if (key === 'tree') {
-          data.tree.forEach((page, index) => {
+          data.tree.forEach((page: Object) => {
             this.tree.push(new SitemapPage(this, page))
           })
         } else if (key === 'sections') {
@@ -27,6 +27,7 @@ export class Sitemap {
             this.sections.push(new SitemapSection(this, section))
           }
         } else {
+          // @ts-ignore
           this[key] = data[key]
         }
       }
@@ -44,10 +45,10 @@ export class Sitemap {
     ctx.translate(canvas.origin.x, canvas.origin.y)
     ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 
-    let minX = null
-    let minY = null
-    let maxX = null
-    let maxY = null
+    let minX: any = null
+    let minY: any = null
+    let maxX: any = null
+    let maxY: any = null
     this.tree.forEach(page => {
       page.update().draw()
       // update canvas points
