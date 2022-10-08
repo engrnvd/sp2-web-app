@@ -2,12 +2,10 @@
 import { useSitemapsStore } from '@/views/projects/store'
 import PlusIcon from '@/material-design-icons/Plus.vue'
 import UButton from '@/U/components/UButton.vue'
-import ApmFilter from '@/components/common/crud/ApmFilter.vue'
-import ApmEditable from '@/components/common/crud/ApmEditable.vue'
-import NotFoundRow from '@/components/common/crud/NotFoundRow.vue'
 import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
 import ApmPagination from '@/components/common/crud/ApmPagination.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
+import { dayjs } from 'src/helpers/dayjs'
 import { onMounted, watch } from 'vue'
 import { useRouter, RouterView } from 'vue-router'
 
@@ -36,13 +34,24 @@ watch(() => sitemaps.req.params, () => {
                 New Project
             </UButton>
         </div>
+
         <div class="card p-4 text-muted" v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
             No projects yet.
             <RouterLink to="/projects/create">Create a new one</RouterLink>
         </div>
-        <div class="card p-4 d-flex align-items-center" v-for="sitemap in sitemaps.req.data.data" :key="sitemap.id">
-            <div class="name">
+
+        <div class="card p-4 gap-4 d-flex align-items-center" v-for="sitemap in sitemaps.req.data.data"
+             :key="sitemap.id">
+            <div class="name flex-grow-1 font-weight-bold">
                 <RouterLink :to="`/p/${sitemap.id}`">{{ sitemap.name }}</RouterLink>
+            </div>
+            <div class="flex-grow-1">
+                <div class="text-small text-muted mb-2">Created</div>
+                <div>{{ dayjs(sitemap.created_at).fromNow() }}</div>
+            </div>
+            <div class="flex-grow-1">
+                <div class="text-small text-muted mb-2">Last Updated</div>
+                <div>{{ dayjs(sitemap.updated_at).fromNow() }}</div>
             </div>
             <div class="flex-grow-1"></div>
             <div class="actions">
