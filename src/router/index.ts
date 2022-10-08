@@ -19,6 +19,7 @@ const router = createRouter({
       path: '/projects',
       name: 'projects',
       component: () => import('../views/projects/index.vue'),
+      meta: { auth: true },
       children: [
         {
           path: 'create',
@@ -30,6 +31,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
+      meta: { auth: true },
       component: () => import('../views/ProfileView.vue')
     },
     {
