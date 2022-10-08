@@ -11,9 +11,9 @@
                     <div class="apm-modal-body" :class="bodyClass">
                         <slot></slot>
                     </div>
-                    <div v-if="!noFooter" class="apm-modal-footer d-flex">
+                    <div v-if="!noFooter" class="apm-modal-footer d-flex gap-4">
                         <slot name="footer">
-                            <UButton class="mr-2" @click="ok" :disabled="okDisable">{{ okTitle }}</UButton>
+                            <UButton @click="ok" :loading="okLoading" :disabled="okDisabled">{{ okTitle }}</UButton>
                             <UButton secondary v-if="!okOnly" @click="cancel">{{ cancelTitle }}</UButton>
                         </slot>
                     </div>
@@ -48,7 +48,11 @@ export default {
             type: Boolean,
             default: false
         },
-        okDisable: {
+        okDisabled: {
+            type: Boolean,
+            default: false
+        },
+        okLoading: {
             type: Boolean,
             default: false
         },
@@ -107,21 +111,21 @@ export default {
 
 .apm-modal {
     background-color: var(--bg);
-    width: 550px;
+    width: 32rem;
     max-width: 96vw;
     border-radius: 0.5em;
     position: relative;
 
     &.modal-sm {
-        width: 450px;
+        width: 28rem;
     }
 
     &.modal-lg {
-        width: 900px;
+        width: 56rem;
     }
 
     &.modal-xlg {
-        width: 1150px;
+        width: 72rem;
     }
 
     .close-modal-btn {

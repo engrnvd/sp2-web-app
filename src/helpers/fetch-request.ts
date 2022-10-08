@@ -10,7 +10,7 @@
 import { TOKEN_KEY, USER_KEY } from '../constants'
 import { env } from '../env'
 import { useAuthStore } from '../stores/auth.store'
-import { useNotify } from '../U/composables/Notifiy/index'
+import { useNotify } from '@/U/composables/Notifiy/index'
 import { Storage } from './storage-helper'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'OPTIONS' | 'DELETE' | 'HEAD' | 'CONNECT' | 'TRACE'
@@ -30,7 +30,7 @@ export class FetchRequest {
   delayFirstRequest = false
   pagination = false
   paginationMode: 'append' | 'replace' = 'replace'
-  params = {
+  params: Object = {
     page: 1,
     perPage: 10
   }
@@ -38,7 +38,13 @@ export class FetchRequest {
   withProps(props: Partial<FetchRequest>) {
     for (const prop in props) {
       // @ts-ignore
-      this[prop] = props[prop]
+      if (typeof props[prop] === 'object') {
+        // @ts-ignore
+        this[prop] = { ...this[prop], ...props[prop] }
+      } else {
+        // @ts-ignore
+        this[prop] = props[prop]
+      }
     }
     return this
   }
