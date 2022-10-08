@@ -46,7 +46,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const auth = useAuthStore()
-  if (!auth.isLoggedIn && to.meta.auth || (to.name === 'sitemap' && to.params.id !== 'new')) {
+  const needsAuth = to.meta.auth || (to.name === 'sitemap' && to.params.id !== 'new')
+  if (!auth.isLoggedIn && needsAuth) {
     auth.showLoginModal()
     return '/'
   }
