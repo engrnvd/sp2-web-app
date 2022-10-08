@@ -13,6 +13,12 @@ import UButton from '@/U/components/UButton.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
+
+function logout() {
+    auth.logout().then(d => {
+        router.push('/')
+    })
+}
 </script>
 
 <template>
@@ -42,7 +48,7 @@ const router = useRouter()
                     Projects
                 </UMenuItem>
                 <hr class="my-2">
-                <UMenuItem @click="auth.logout()">
+                <UMenuItem @click="logout">
                     <LogoutIcon/>
                     Logout
                 </UMenuItem>
