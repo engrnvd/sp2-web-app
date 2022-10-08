@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { FetchRequest } from '@/helpers/fetch-request'
 import { toFormData } from '@/helpers/misc'
-import { useNotify } from '@/U/composables/Notifiy'
 
-const notify = useNotify()
 const form = {
   name: '',
   owner_id: '',
@@ -38,8 +36,6 @@ export const useSitemapsStore = defineStore('sitemaps', {
         // @ts-ignore
         this.req.data.data.unshift(res)
         this.resetForm()
-
-        notify.success('Success', 'Sitemap created')
       })
     },
     resetForm() {

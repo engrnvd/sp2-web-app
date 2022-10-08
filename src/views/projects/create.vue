@@ -4,7 +4,7 @@ import UInput from '@/U/components/UInput.vue'
 import { requiredRule } from '@/Vee/rules/required.rule'
 import { useValidator } from '@/Vee/useValidator'
 import { Validator } from '@/Vee/validator'
-import { useSitemapsStore } from '@/views/sitemaps/store'
+import { useSitemapsStore } from './store'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -26,7 +26,7 @@ function save() {
 
 <template>
     <UModal
-        title="Add New Sitemap"
+        title="New Project"
         :model-value="true"
         @cancel="router.back()"
         ok-title="Save"

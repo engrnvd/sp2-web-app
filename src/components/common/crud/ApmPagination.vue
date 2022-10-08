@@ -14,11 +14,11 @@ const numPages = computed(() => Math.ceil(props.req.data.total / props.req.param
 </script>
 
 <template>
-    <div class="p-4 apm-pagination d-flex gap-4 align-items-center" v-if="req.data?.data?.length">
+    <div class="p-4 apm-pagination d-flex gap-4 align-items-center" v-if="req.data?.data?.length && numPages > 1">
         <div class="info text-muted">
             Showing {{ req.data.from }} - {{ req.data.to }} of {{ req.data.total }}
         </div>
-        <div class="buttons d-flex align-items-center justify-content-center gap-4 flex-grow-1" v-if="numPages > 1">
+        <div class="buttons d-flex align-items-center justify-content-center gap-4 flex-grow-1">
             <UIconBtn :disabled="req.params.page <= 1" @click="req.params.page --">
                 <ChevronLeftIcon/>
             </UIconBtn>

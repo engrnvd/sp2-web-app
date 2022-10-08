@@ -15,9 +15,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/sitemaps',
-      name: 'sitemaps',
-      component: () => import('../views/sitemaps/index.vue')
+      path: '/projects',
+      name: 'projects',
+      component: () => import('../views/projects/index.vue'),
+      children: [
+        {
+          path: 'create',
+          name: 'projects.create',
+          component: () => import('../views/projects/create.vue'),
+        },
+      ],
     },
     {
       path: '/profile',
