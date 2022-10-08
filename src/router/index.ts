@@ -1,3 +1,4 @@
+import { useAuthStore } from 'src/stores/auth.store'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { devRoutes } from './dev-routes'
@@ -17,6 +18,14 @@ const router = createRouter({
     { path: '/email-verified', component: () => import('@/views/EmailVerifiedView.vue') },
     ...devModeRoutes,
   ]
+})
+
+router.beforeEach(async (to, from) => {
+  const auth = useAuthStore()
+  if (!auth.isLoggedIn && to.meta.auth || (to.name === 'sitemap' && to.params.id !== 'new')) {
+    auth.showLoginModal()
+    return '/'
+  }
 })
 
 export default router

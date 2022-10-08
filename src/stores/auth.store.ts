@@ -28,6 +28,9 @@ export const useAuthStore = defineStore('auth', {
     isLoggedIn: state => state.user && state.authToken,
   },
   actions: {
+    showLoginModal() {
+      this.modals.login = true
+    },
     logUserIn(userData: any) {
       this.authToken = userData.token
       this.user = userData.user
