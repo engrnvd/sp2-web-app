@@ -28,7 +28,8 @@ const route = useRoute()
     overflow: hidden;
 
     .main-content {
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 }
 
