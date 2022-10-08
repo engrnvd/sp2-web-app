@@ -6,6 +6,7 @@ import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
 import ApmPagination from '@/components/common/crud/ApmPagination.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
 import { dayjs } from 'src/helpers/dayjs'
+import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
 import { onMounted, watch } from 'vue'
 import { useRouter, RouterView } from 'vue-router'
 
@@ -35,9 +36,13 @@ watch(() => sitemaps.req.params, () => {
             </UButton>
         </div>
 
-        <div class="card p-4 text-muted" v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
-            No projects yet.
-            <RouterLink to="/projects/create">Create a new one</RouterLink>
+        <div class="card p-4 text-muted all-center flex-column"
+             v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
+            <div style="font-size: 14rem" class="text-secondary">
+                <DrawingBoxIcon/>
+            </div>
+            <div class="mb-5">You don't have any projects.</div>
+            <RouterLink class="u-btn primary" to="/projects/create">Create your first project</RouterLink>
         </div>
 
         <div class="card p-4 gap-4 d-flex align-items-center" v-for="sitemap in sitemaps.req.data.data"
