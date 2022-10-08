@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import SitemapEditor from './SitemapView/SitemapEditor.vue'
+import { useAuthStore } from 'src/stores/auth.store'
+import { onBeforeMount } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const auth = useAuthStore()
+
+onBeforeMount(() => {
+    if (auth.isLoggedIn) router.replace('/projects')
+    else router.replace('/p/new')
+})
 
 </script>
 
-<template>
-    <SitemapEditor/>
-</template>
+<template></template>

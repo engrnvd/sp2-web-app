@@ -32,9 +32,9 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue')
     },
     {
-      path: '/m/:id',
+      path: '/p/:id?',
       name: 'sitemap',
-      component: () => import('../views/SitemapView/SitemapView.vue')
+      component: () => import('../views/SitemapView/SitemapEditor.vue')
     },
     { path: '/email-verified', component: () => import('@/views/EmailVerifiedView.vue') },
     ...devModeRoutes,

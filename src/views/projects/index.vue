@@ -42,12 +42,7 @@ watch(() => sitemaps.req.params, () => {
         </div>
         <div class="card p-4 d-flex align-items-center" v-for="sitemap in sitemaps.req.data.data" :key="sitemap.id">
             <div class="name">
-                <ApmEditable
-                    type="text"
-                    field="name"
-                    :url="`/sitemaps/${sitemap.id}`"
-                    v-model="sitemap.name"
-                ></ApmEditable>
+                <RouterLink :to="`/p/${sitemap.id}`">{{ sitemap.name }}</RouterLink>
             </div>
             <div class="flex-grow-1"></div>
             <div class="actions">
