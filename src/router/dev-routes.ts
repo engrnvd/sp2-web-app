@@ -24,6 +24,10 @@ export const devRoutes = [
         path: 'dropdown',
         component: () => import('../views/dev/DropdownView.vue')
       },
+      {
+        path: 'editable',
+        component: () => import('../views/dev/EditableView.vue')
+      },
     ]
   }
 
