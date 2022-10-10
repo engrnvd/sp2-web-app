@@ -37,28 +37,28 @@ export const useAuthStore = defineStore('auth', {
     },
     register() {
       return this.signupReq.send({
-        body: toFormData(this.form)
+        body: JSON.stringify(this.form)
       }).then((data: any) => {
         this.logUserIn(data)
       })
     },
     login() {
       return this.loginReq.send({
-        body: toFormData(this.form)
+        body: JSON.stringify(this.form)
       }).then((data: any) => {
         this.logUserIn(data)
       })
     },
     sendForgotReq() {
       return this.forgotReq.send({
-        body: toFormData({ email: this.form.email })
+        body: JSON.stringify({ email: this.form.email })
       }).then((data: any) => {
         this.logUserIn(data)
       })
     },
     resetPassword() {
       return this.resetReq.send({
-        body: toFormData({ email: this.form.email, otp: this.form.otp, password: this.form.newPassword })
+        body: JSON.stringify({ email: this.form.email, otp: this.form.otp, password: this.form.newPassword })
       }).then((data: any) => {
         this.logUserIn(data)
       })

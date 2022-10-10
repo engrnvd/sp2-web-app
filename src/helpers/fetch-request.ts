@@ -7,11 +7,10 @@
 * pagination: Whether to request paginated data. Type: Bool. Default: false
 * paginationMode: replace | append. Type: Bool. Default: 'replace'. Set to 'append' to implement "load more" feature)
 * */
-import { TOKEN_KEY, USER_KEY } from '../constants'
+import { useRouter } from 'vue-router'
 import { env } from '../env'
 import { useAuthStore } from '../stores/auth.store'
-import { useNotify } from '@/U/composables/Notifiy/index'
-import { Storage } from './storage-helper'
+import { useNotify } from 'src/U/composables/Notifiy'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'OPTIONS' | 'DELETE' | 'HEAD' | 'CONNECT' | 'TRACE'
 
@@ -80,7 +79,7 @@ export class FetchRequest {
     if (typeof res === 'string') this.error = res
     else this.error = res?.message || res?.error || res
 
-    const logoutErrors = ['Wrong number of segments', 'logged out', 'You are not logged in!']
+    const logoutErrors = ['Wrong number of segments', 'logged out', 'You are not logged in!', 'Unauthenticated.']
     if (logoutErrors.includes(this.error)) {
       this.logoutAndRefresh()
     }
@@ -89,18 +88,12 @@ export class FetchRequest {
     notify.error('Something went wrong!', this.error)
   }
 
-  logoutAndRefresh() {
-    let loggedIn = Storage.get(TOKEN_KEY)
-    if (loggedIn) {
-      Storage.remove(USER_KEY)
-      Storage.remove(TOKEN_KEY)
-    }
-
-    // todo
-    // store.commit('user/setAuthToken', '')
-    // store.commit('user/setUser', null)
-    // store.commit('menu/toggleUserMenuValues', userMenuItems)
-    // store.commit('menu/toggleLoginModal', true)
+  async logoutAndRefresh() {
+    const auth = useAuthStore()
+    auth.user = null
+    auth.authToken = null
+    const router = useRouter()
+    await router.push('/')
   }
 
   send(config: RequestInit = {}) {
