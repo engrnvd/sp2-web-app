@@ -110,7 +110,7 @@ function cancel() {
         outline: none;
 
         &:hover, &:focus {
-            border-color: var(--primary);
+            border-color: var(--border-color);
         }
 
         &[type=checkbox], &[type=radio] {
