@@ -18,7 +18,7 @@ function save() {
     v.validate()
     if (v.hasErrors) return
     sitemaps.create().then(res => {
-        router.back()
+        router.push(`/p/${sitemaps.createReq.data.id}`)
     })
 }
 

@@ -13,9 +13,9 @@ export const defaultPage = (data = {}) => ({
   ...data,
 })
 
-export const newSitemapTemplate = () => ({
-  name: 'Untitled Sitemap',
-  tree: [
+export const newSitemapTemplate = (data: any = {}) => ({
+  name: data.name || 'Untitled Sitemap',
+  tree: data.tree || [
     defaultPage({
       name: 'Home',
       isRoot: true,
@@ -34,6 +34,7 @@ export const newSitemapTemplate = () => ({
         defaultPage({ name: 'Page 4' }),
       ],
     }),
-  ]
+  ],
+  sections: data.sections || [],
 })
 

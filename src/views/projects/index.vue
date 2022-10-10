@@ -38,7 +38,7 @@ watch(() => sitemaps.req.params, () => {
 
         <div class="card p-4 text-muted all-center flex-column"
              v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
-            <div style="font-size: 14rem" class="text-secondary">
+            <div style="font-size: 14rem; color: rgba(0,0,0,0.1)">
                 <DrawingBoxIcon/>
             </div>
             <div class="mb-5">You don't have any projects.</div>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import { update } from '@tweenjs/tween.js'
-import { onMounted, reactive, ref } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ApmCanvas } from '@/classes/canvas/ApmCanvas'
 import { Sitemap } from '@/classes/Sitemap'
 import MainLoader from '@/components/common/MainLoader.vue'
@@ -41,6 +41,10 @@ onMounted(() => {
     }, 300)
 
     window.addEventListener('resize', updateCanvasSize)
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateCanvasSize)
 })
 
 </script>
