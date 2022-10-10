@@ -1,13 +1,13 @@
 <script lang="ts" setup>
+import { _getInputTextSize } from 'src/helpers/dom-helper'
 import { FetchRequest } from 'src/helpers/fetch-request'
-import { toFormData } from 'src/helpers/misc'
 import AlertCircleIcon from 'src/material-design-icons/AlertCircle.vue'
 import CheckIcon from 'src/material-design-icons/Check.vue'
 import CheckCircleIcon from 'src/material-design-icons/CheckCircle.vue'
 import CloseIcon from 'src/material-design-icons/Close.vue'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
 import ULoading from 'src/U/components/ULoading.vue'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
     modelValue: {},
@@ -46,8 +46,10 @@ watch(_value, () => {
 })
 
 // methods
-function updateWidth() {
-    inputEl.value.style.width = `${_value.value.toString().length}ch`
+async function updateWidth() {
+    await nextTick()
+    let w = _getInputTextSize(inputEl.value)
+    inputEl.value.style.width = `${w}px`
 }
 
 function ok() {
@@ -66,11 +68,15 @@ function ok() {
         })
     }).then(res => {
         emit('update:modelValue', _value.value)
+        showSuccessIcon.value = true
+        setTimeout(() => showSuccessIcon.value = false, 1000)
     })
 }
 
 function cancel() {
     _value.value = props.modelValue
+    req.error = ''
+    req.loaded = false
     inputEl.value.blur()
 }
 
@@ -83,8 +89,10 @@ function cancel() {
         </slot>
         <ULoading v-if="req.loading"/>
         <AlertCircleIcon v-if="req.error" class="text-danger" v-tooltip="req.error"/>
-        <CheckCircleIcon v-if="req.loaded && !req.error" class="text-success" v-tooltip="`Saved`"/>
-        <template v-if="confirmBeforeSave && hasChanged">
+        <Transition name="fade">
+            <CheckCircleIcon v-if="showSuccessIcon" class="text-success" v-tooltip="`Saved`"/>
+        </Transition>
+        <template v-if="confirmBeforeSave && hasChanged && !req.loading">
             <UIconBtn success @click="ok">
                 <CheckIcon/>
             </UIconBtn>
@@ -100,6 +108,7 @@ function cancel() {
     width: fit-content;
 
     input {
+        color: var(--main-text-color);
         box-sizing: content-box;
         min-width: 2ch;
         padding: 0.5em 1em;
@@ -109,8 +118,12 @@ function cancel() {
         border-radius: var(--border-radius);
         outline: none;
 
-        &:hover, &:focus {
+        &:hover {
             border-color: var(--border-color);
+        }
+
+        &:focus {
+            border-color: var(--primary);
         }
 
         &[type=checkbox], &[type=radio] {

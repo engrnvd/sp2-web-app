@@ -131,7 +131,8 @@ export class FetchRequest {
         let url = env.apiUrl + this.url.replace(/^\//, '')
         // attach token if available
         config.headers = config.headers || {
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         }
         let token = auth.authToken
         if (token) { // @ts-ignore
