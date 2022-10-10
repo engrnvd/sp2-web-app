@@ -7,42 +7,47 @@ import { colorHelper } from '../U/helpers/color-helper'
 import { canvasHelper } from './canvas/canvas-helper'
 import { CanvasItem } from './canvas/CanvasItem'
 import { Connection } from './canvas/Connection'
-import { Sitemap } from './Sitemap'
+import type { Sitemap } from './Sitemap'
 import { SitemapBlock } from './SitemapBlock'
 
 export class SitemapPage {
   sitemap: Sitemap
   parent: SitemapPage
   _type = 'page'
-  id: string
-  name: string
-  color: string
-  link: string
+  id: string = ''
+  name: string = ''
+  color: string = ''
+  link: string = ''
   isRoot: Boolean = false
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
   children: SitemapPage[] = []
+  // @ts-ignore
   ci: CanvasItem = null
+  // @ts-ignore
   header: CanvasItem = null
 
-  constructor(sitemap: Sitemap, data, parent: SitemapPage = null) {
+  // @ts-ignore
+  constructor(sitemap: Sitemap, data: Object, parent: SitemapPage = null) {
     this.sitemap = sitemap
     this.parent = parent
 
     try {
+      // @ts-ignore
       const { children, blocks, ...rest } = data
 
       for (const key in rest) {
+        // @ts-ignore
         this[key] = rest[key]
       }
 
       if (children) {
-        children.forEach((child: SitemapPage, index) => {
+        children.forEach((child: SitemapPage) => {
           this.children.push(new SitemapPage(this.sitemap, child, this))
         })
       }
       if (blocks) {
-        blocks.forEach((block, index) => {
+        blocks.forEach((block: Object) => {
           this.blocks.push(new SitemapBlock(this, block))
         })
       }
@@ -92,7 +97,7 @@ export class SitemapPage {
     }
   }
 
-  toData() {
+  toData(): Object {
     return {
       id: this.id,
       name: this.name,
@@ -191,7 +196,7 @@ export class SitemapPage {
     ctx.fillText(text, this.ci.left - textW / 2, this.ci.bottom - fontSize / 2)
   }
 
-  addChildAt(index, data = {}) {
+  addChildAt(index: number, data = {}) {
     const page = new SitemapPage(this.sitemap, defaultPage(data), this)
     new AddPageCommand({ page, index }).execute()
     return page
@@ -205,7 +210,7 @@ export class SitemapPage {
     return this.parent.addChildAt(this.parent.children.indexOf(this) + 1)
   }
 
-  addBlockAt(index, blockData = {}) {
+  addBlockAt(index: number, blockData = {}) {
     const block = new SitemapBlock(this, defaultBlock(blockData))
     new AddBlockCommand({ block, index }).execute()
     return block
