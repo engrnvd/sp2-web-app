@@ -7,6 +7,7 @@ import { Sitemap } from '@/classes/Sitemap'
 import MainLoader from '@/components/common/MainLoader.vue'
 import { newSitemapTemplate } from '@/helpers/sitemap-helper'
 import { useAppStore } from '@/stores/app.store'
+import { useRoute } from 'vue-router'
 import AddBlockBtn from './AddBlockBtn.vue'
 import AddChildPageBtn from './AddChildPageBtn.vue'
 import AddSiblingPageBtn from './AddSiblingPageBtn.vue'
@@ -19,6 +20,7 @@ const app = useAppStore()
 const parentEl = ref()
 const canvasEl = ref()
 const canvas = reactive(new ApmCanvas())
+let route = useRoute()
 
 const draw = () => {
     app.sitemap.draw()
@@ -35,10 +37,20 @@ function updateCanvasSize() {
 onMounted(() => {
     updateCanvasSize()
 
-    setTimeout(() => {
-        app.setSitemap(new Sitemap(canvas, newSitemapTemplate()))
-        draw()
-    }, 300)
+    let id = route.params.id
+
+    if (!id || id === 'new') {
+        setTimeout(() => {
+            app.setSitemap(new Sitemap(canvas, newSitemapTemplate()))
+            draw()
+        }, 100)
+    } else if (app.sitemap?.id !== id) {
+        app.sitemapReq.url = `sitemaps/${id}`
+        app.sitemapReq.send().then(d => {
+            app.setSitemap(new Sitemap(canvas, app.sitemapReq.data))
+            draw()
+        })
+    }
 
     window.addEventListener('resize', updateCanvasSize)
 })

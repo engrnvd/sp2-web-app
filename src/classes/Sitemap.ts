@@ -18,11 +18,11 @@ export class Sitemap {
 
     try {
       for (const key in data) {
-        if (key === 'tree') {
+        if (key === 'tree' && data.tree) {
           data.tree.forEach((page: Object) => {
             this.tree.push(new SitemapPage(this, page))
           })
-        } else if (key === 'sections') {
+        } else if (key === 'sections' && data.sections) {
           for (const section of data.sections) {
             this.sections.push(new SitemapSection(this, section))
           }

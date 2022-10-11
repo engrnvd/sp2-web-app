@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useAppStore } from 'src/stores/app.store'
 import { RouterLink, useRoute } from 'vue-router'
 import AppLogo from '../../common/AppLogo.vue'
 import ProfileBtn from './ProfileBtn.vue'
@@ -10,6 +11,7 @@ import DarkModeToggleBtn from './DarkModeToggleBtn.vue'
 import { env } from '@/env'
 
 const route = useRoute()
+let app = useAppStore()
 
 </script>
 
@@ -19,13 +21,13 @@ const route = useRoute()
             <AppLogo/>
         </RouterLink>
 
-        <h4 class="m-0 text-muted">
-            {{ env.appName }}
+        <h4 class="m-0 text-muted main-heading">
+            {{ app.sitemap && route.name === 'sitemap' ? app.sitemap.name : env.appName }}
         </h4>
 
         <div class="flex-grow-1"></div>
 
-        <template v-if="route.name === 'home'">
+        <template v-if="route.name === 'sitemap'">
             <ViewToggleBtn/>
             <ProjectSettingsBtn/>
             <ProjectDownloadBtn/>

@@ -16,7 +16,7 @@ export class SitemapPage {
   _type = 'page'
   id: string = ''
   name: string = ''
-  color: string = ''
+  color: string = '#03a9f4'
   link: string = ''
   isRoot: Boolean = false
   collapsed: Boolean = false
