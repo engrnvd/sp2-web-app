@@ -7,6 +7,7 @@
 * pagination: Whether to request paginated data. Type: Bool. Default: false
 * paginationMode: replace | append. Type: Bool. Default: 'replace'. Set to 'append' to implement "load more" feature)
 * */
+import { _deepClone } from 'src/helpers/misc'
 import { useRouter } from 'vue-router'
 import { env } from '../env'
 import { useAuthStore } from '../stores/auth.store'
@@ -96,6 +97,16 @@ export class FetchRequest {
     await router.push('/')
   }
 
+  appendParams(url: string) {
+    let params = _deepClone(this.params)
+    if (!this.pagination) {
+      delete params.page
+      delete params.perPage
+    }
+    let query = new URLSearchParams(params).toString()
+    return query ? url + '?' + query : url
+  }
+
   send(config: RequestInit = {}) {
     return new Promise((resolve, reject) => {
       if (!this.url) {
@@ -132,10 +143,7 @@ export class FetchRequest {
           config.headers.Authorization = `Bearer ${token}`
         }
 
-        if (this.params) {
-          // @ts-ignore
-          url += '?' + new URLSearchParams(this.params)
-        }
+        if (this.params) url = this.appendParams(url)
 
         // @ts-ignore
         fetch(url, config).then(async (res: Response) => {
