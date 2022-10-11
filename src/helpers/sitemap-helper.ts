@@ -8,7 +8,6 @@ export const defaultPage = (data = {}) => ({
   name: 'Page name',
   color: '#00b3a1',
   link: '',
-  isRoot: false,
   blocks: [],
   ...data,
 })
@@ -18,7 +17,6 @@ export const newSitemapTemplate = (data: any = {}) => ({
   tree: data.tree || [
     defaultPage({
       name: 'Home',
-      isRoot: true,
       blocks: [
         defaultBlock({ name: 'Header' }),
         defaultBlock({ name: 'Hero Section' }),

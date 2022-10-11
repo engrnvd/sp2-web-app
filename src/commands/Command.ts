@@ -1,37 +1,45 @@
 import { useCommandsStore } from '../stores/commands.store'
 
 export class Command {
-    description: string = 'Parent Command'
-    payload: any = null
-    commands = null
+  description: string = 'Parent Command'
+  payload: any = null
+  commands: any = null
 
-    constructor(payload) {
-        this.payload = payload
-        this.commands = useCommandsStore()
-    }
+  constructor(payload: any) {
+    this.payload = payload
+    this.commands = useCommandsStore()
+  }
 
-    label() {
-        return this.description
-    }
+  label() {
+    return this.description
+  }
 
-    run() {
-        this.commands.currentCommandIdx = this.commands.history.indexOf(this)
-    }
+  run() {
+    this.commands.currentCommandIdx = this.commands.history.indexOf(this)
+  }
 
-    saveToHistory() {
-        this.commands.history.push(this)
-    }
+  saveToHistory() {
+    this.commands.history.push(this)
+  }
 
-    execute() {
-        this.saveToHistory()
-        this.run()
-    }
+  execute() {
+    this.saveToHistory()
+    this.run()
+    this.commands.save()
+  }
 
-    redo() {
-        this.run()
-    }
+  redo() {
+    this.run()
+  }
 
-    undo() {
-        this.commands.currentCommandIdx--
+  undo() {
+    this.commands.currentCommandIdx--
+  }
+
+  toData() {
+    return {
+      description: this.description,
+      type: this.constructor.name,
     }
+  }
 }

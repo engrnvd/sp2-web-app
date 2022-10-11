@@ -1,21 +1,25 @@
 import { defineStore } from 'pinia'
+import type { Command } from 'src/commands/Command'
+import { FetchRequest } from 'src/helpers/fetch-request'
+import { useAppStore } from 'src/stores/app.store'
 
 export const useCommandsStore = defineStore('commands', {
   state: () => ({
     history: [],
     currentCommandIdx: -1,
+    req: new FetchRequest('', 'POST'),
   }),
   getters: {
-    currentCommand() {
+    currentCommand(): Command {
       return this.history[this.currentCommandIdx]
     },
-    nextCommand() {
+    nextCommand(): Command {
       return this.history[this.currentCommandIdx + 1]
     },
-    canUndo() {
+    canUndo(): boolean {
       return this.currentCommandIdx >= 0
     },
-    canRedo() {
+    canRedo(): boolean {
       return this.history.length > 0 && this.currentCommandIdx < this.history.length - 1
     },
   },
@@ -28,6 +32,15 @@ export const useCommandsStore = defineStore('commands', {
         if (!this.nextCommand) console.log('Error: cant redo')
         this.nextCommand.redo()
       }
+    },
+    save() {
+      let app = useAppStore()
+      if (!app.sitemap) return
+
+      this.req.url = `sitemaps/${app.sitemap.id}/save-command`
+      this.req.send({
+        body: JSON.stringify(this.currentCommand.toData())
+      })
     },
   },
 })

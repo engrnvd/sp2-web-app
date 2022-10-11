@@ -15,7 +15,7 @@ const route = useRoute()
             <RouterView/>
         </main>
 
-        <MainFooter v-if="route.name !== 'home'"/>
+        <MainFooter v-if="route.name !== 'sitemap'"/>
 
         <LoginModal/>
     </div>

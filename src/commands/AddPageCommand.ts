@@ -32,4 +32,12 @@ export class AddPageCommand extends Command {
 
     super.undo()
   }
+
+  toData() {
+    return {
+      ...super.toData(),
+      page: this.payload.page.toData(),
+      index: this.payload.index
+    }
+  }
 }

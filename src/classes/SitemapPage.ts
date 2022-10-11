@@ -14,11 +14,9 @@ export class SitemapPage {
   sitemap: Sitemap
   parent: SitemapPage
   _type = 'page'
-  id: string = ''
   name: string = ''
   color: string = '#03a9f4'
   link: string = ''
-  isRoot: Boolean = false
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
   children: SitemapPage[] = []
@@ -99,15 +97,17 @@ export class SitemapPage {
 
   toData(): Object {
     return {
-      id: this.id,
       name: this.name,
       color: this.color,
       link: this.link,
-      isRoot: this.isRoot,
       collapsed: this.collapsed,
       blocks: this.blocks.map(b => b.toData()),
       children: this.children.map(ch => ch.toData()),
     }
+  }
+
+  get isRoot(): boolean {
+    return !this.parent
   }
 
   get styles() {
