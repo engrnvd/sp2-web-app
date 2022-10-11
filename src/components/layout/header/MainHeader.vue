@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ApmEditable from 'src/components/common/ApmEditable.vue'
 import { useAppStore } from 'src/stores/app.store'
 import { RouterLink, useRoute } from 'vue-router'
 import AppLogo from '../../common/AppLogo.vue'
@@ -22,7 +23,15 @@ let app = useAppStore()
         </RouterLink>
 
         <h4 class="m-0 text-muted main-heading">
-            {{ app.sitemap && route.name === 'sitemap' ? app.sitemap.name : env.appName }}
+            <ApmEditable
+                v-if="app.sitemap && route.name === 'sitemap'"
+                v-model="app.sitemap.name"
+                :url="`sitemaps/${app.sitemap.id}`"
+                filed-name="name"
+                @update:modelValue="e => app.updateSitemapInListing()"
+                confirm-before-save
+            />
+            <span v-else class="px-2">{{ env.appName }}</span>
         </h4>
 
         <div class="flex-grow-1"></div>
@@ -48,5 +57,17 @@ let app = useAppStore()
 
 .separator {
     height: 1.5em;
+}
+
+</style>
+
+<style lang="scss">
+
+.main-heading {
+    input {
+        color: var(--muted);
+        font-weight: bold;
+        padding: 0.25em 0.5em;
+    }
 }
 </style>
