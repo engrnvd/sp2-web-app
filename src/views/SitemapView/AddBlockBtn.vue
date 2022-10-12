@@ -24,8 +24,8 @@ const style = computed(() => {
 
 function onClick() {
     const page: SitemapPage = item.value.meta
-    const block = page.addBlock(defaultBlock())
-    app.canvas.setEditedItem(block.ci)
+    page.addBlock(defaultBlock())
+    app.canvas.setEditedItem(page.blocks[page.blocks.length - 1].ci)
 }
 
 </script>

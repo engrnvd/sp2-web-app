@@ -1,13 +1,23 @@
 import { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
 
+interface Payload {
+  page: Partial<SitemapPage>,
+  index: number
+}
+
 export class AddPageCommand extends Command {
   description = 'Add new page'
-  // @ts-ignore
   page: SitemapPage
+  payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+    this.page = new SitemapPage(this.sitemap, this.payload.page)
+  }
 
   run() {
-    this.page = new SitemapPage(this.sitemap, this.payload.page)
     const index: number = this.payload.index
 
     let pages = this.page.parent?.childIds

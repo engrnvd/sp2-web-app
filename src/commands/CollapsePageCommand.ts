@@ -1,11 +1,21 @@
-import { SitemapPage } from '../classes/SitemapPage'
+import type { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
 
+interface Payload {
+  pageId: number
+}
+
 export class CollapsePageCommand extends Command {
-  description = 'Collapse page'
+  description = 'Toggle collapse'
+  payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+  }
 
   run() {
-    const page: SitemapPage = this.payload.page
+    const page: SitemapPage = this.sitemap.pages[this.payload.pageId]
 
     page.collapsed = !page.collapsed
 
@@ -13,7 +23,7 @@ export class CollapsePageCommand extends Command {
   }
 
   undo() {
-    const page: SitemapPage = this.payload.page
+    const page: SitemapPage = this.sitemap.pages[this.payload.pageId]
 
     page.collapsed = !page.collapsed
 

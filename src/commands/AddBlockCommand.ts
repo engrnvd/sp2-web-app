@@ -1,25 +1,37 @@
 import { SitemapBlock } from '../classes/SitemapBlock'
-import { SitemapPage } from '../classes/SitemapPage'
+import type { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
+
+interface Payload {
+  pageId: number,
+  block: Partial<SitemapBlock>,
+  index: number
+}
 
 export class AddBlockCommand extends Command {
   description = 'Add new block'
+  block: SitemapBlock
+  payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+    this.block = new SitemapBlock(this.sitemap.pages[this.payload.pageId], this.payload.block)
+  }
 
   run() {
-    const block: SitemapBlock = this.payload.block
     const index: number = this.payload.index
-    const page: SitemapPage = block.page
+    const page: SitemapPage = this.block.page
 
-    page.blocks.splice(index, 0, block)
+    page.blocks.splice(index, 0, this.block)
 
     super.run()
   }
 
   undo() {
-    const block: SitemapBlock = this.payload.block
-    const page: SitemapPage = block.page
+    const page: SitemapPage = this.block.page
 
-    page.blocks.splice(page.blocks.indexOf(block), 1)
+    page.blocks.splice(page.blocks.indexOf(this.block), 1)
 
     super.undo()
   }

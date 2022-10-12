@@ -214,9 +214,7 @@ export class SitemapPage {
   }
 
   addBlockAt(index: number, blockData = {}) {
-    const block = new SitemapBlock(this, defaultBlock(blockData))
-    new AddBlockCommand({ block, index }).execute()
-    return block
+    new AddBlockCommand({ pageId: this.id, block: defaultBlock(blockData), index }).execute()
   }
 
   addBlock(blockData = {}) {
@@ -224,7 +222,11 @@ export class SitemapPage {
   }
 
   toggleCollapse() {
-    new CollapsePageCommand({ page: this }).execute()
+    new CollapsePageCommand({ pageId: this.id }).execute()
+  }
+
+  get lastBlock() {
+    return this.blocks[this.blocks.length - 1]
   }
 
 }

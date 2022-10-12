@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import { computed, nextTick, ref, watch, watchEffect } from 'vue'
-import { SitemapBlock } from '../../classes/SitemapBlock'
-import { SitemapPage } from '../../classes/SitemapPage'
-import { DeleteItemCommand } from '../../commands/DeleteItemCommand'
-import { DuplicateItemCommand } from '../../commands/DuplicateItemCommand'
-import { EditItemPropCommand } from '../../commands/EditItemPropCommand'
-import { cssFontSize } from '../../helpers/misc'
+import { SitemapBlock } from 'src/classes/SitemapBlock'
+import { SitemapPage } from 'src/classes/SitemapPage'
+import { DeleteItemCommand } from 'src/commands/DeleteItemCommand'
+import { DuplicateItemCommand } from 'src/commands/DuplicateItemCommand'
+import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
+import { cssFontSize } from 'src/helpers/misc'
 import AddBlockIcon from '../../material-design-icons/AddBlock.vue'
 import ContentDuplicateIcon from '../../material-design-icons/ContentDuplicate.vue'
 import DeleteOutlineIcon from '../../material-design-icons/DeleteOutline.vue'
 import LinkVariantIcon from '../../material-design-icons/LinkVariant.vue'
-import { useAppStore } from '../../stores/app.store'
+import { useAppStore } from 'src/stores/app.store'
 import UColorPicker from '../../U/components/UColorPicker.vue'
 
 const app = useAppStore()
@@ -33,14 +33,18 @@ watchEffect(async () => {
 })
 
 function addBlock() {
+    let page: SitemapPage
     let block: SitemapBlock
     if (item.value.meta._type === 'page') {
-        let page: SitemapPage = item.value.meta
-        block = page.addBlock()
+        page = item.value.meta
+        page.addBlock()
+        block = page.lastBlock
     } else if (item.value.meta._type === 'block') {
         let currentBlock: SitemapBlock = item.value.meta
-        let page: SitemapPage = currentBlock.page
-        block = page.addBlockAt(page.blocks.indexOf(currentBlock) + 1)
+        page = currentBlock.page
+        const idx = page.blocks.indexOf(currentBlock) + 1
+        page.addBlockAt(idx)
+        block = page.blocks[idx]
     }
 
     app.canvas.setSelectedItem(block.ci)

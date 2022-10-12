@@ -51,13 +51,13 @@ export class Sitemap {
     }
   }
 
-  build() {
-    this.commands.forEach(async c => {
+  async build() {
+    for (const c of this.commands) {
       // @ts-ignore
       let commandClass = await import(`../commands/${c.type}`)
       let command = new commandClass[c.type](c.payload)
       command.run()
-    })
+    }
   }
 
   addToMap(mapName: 'pages' | 'sections', item: SitemapPage | SitemapSection) {
@@ -67,6 +67,22 @@ export class Sitemap {
     item.id = item.id || 1 + parseInt(maxId)
     // @ts-ignore
     this[mapName][item.id] = item
+  }
+
+  mapToData(mapName: 'pages' | 'sections') {
+    const res = []
+    for (const id in this[mapName]) {
+      res.push(this[mapName][id].toData())
+    }
+    return res
+  }
+
+  pagesData() {
+    return this.mapToData('pages')
+  }
+
+  sectionsData() {
+    return this.mapToData('sections')
   }
 
   addPage(page: SitemapPage) {
@@ -86,24 +102,8 @@ export class Sitemap {
     ctx.translate(canvas.origin.x, canvas.origin.y)
     ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 
-    let minX: any = null
-    let minY: any = null
-    let maxX: any = null
-    let maxY: any = null
-    for (const id in this.pages) {
-      const page = this.pages[id]
-      page.update().draw()
-      // update canvas points
-      const item = page.ci
-      if (minX === null || item.left < minX) minX = item.left
-      if (maxX === null || item.right > maxX) maxX = item.right
-      if (minY === null || item.top < minY) minY = item.top
-      if (maxY === null || item.bottom > maxY) maxY = item.bottom
-    }
-    if (minX) canvas.minX = minX
-    if (maxX) canvas.maxX = maxX
-    if (minY) canvas.minY = minY
-    if (maxY) canvas.maxY = maxY
+    const page = this.pages[1]
+    page.update().draw()
 
     ctx.restore()
   }
