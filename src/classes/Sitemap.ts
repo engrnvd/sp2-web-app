@@ -65,4 +65,13 @@ export class Sitemap {
 
     ctx.restore()
   }
+
+  toData(): Object {
+    return {
+      name: this.name,
+      is_template: this.is_template,
+      tree: this.tree.map(p => p.toData()),
+      sections: this.sections.map(s => s.toData()),
+    }
+  }
 }

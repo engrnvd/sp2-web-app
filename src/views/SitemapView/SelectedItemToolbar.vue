@@ -10,7 +10,7 @@ import AddBlockIcon from '../../material-design-icons/AddBlock.vue'
 import ContentDuplicateIcon from '../../material-design-icons/ContentDuplicate.vue'
 import DeleteOutlineIcon from '../../material-design-icons/DeleteOutline.vue'
 import LinkVariantIcon from '../../material-design-icons/LinkVariant.vue'
-import { useAppStore } from '../../stores/app.store'
+import { useAppStore } from 'src/stores/app.store'
 import UColorPicker from '../../U/components/UColorPicker.vue'
 
 const app = useAppStore()
