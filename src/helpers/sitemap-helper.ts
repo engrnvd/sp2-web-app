@@ -14,8 +14,9 @@ export const defaultPage = (data = {}) => ({
 
 export const newSitemapTemplate = (data: any = {}) => ({
   name: data.name || 'Untitled Sitemap',
-  tree: data.tree || [
-    defaultPage({
+  pages: data.pages || {
+    1: defaultPage({
+      id: 1,
       name: 'Home',
       blocks: [
         defaultBlock({ name: 'Header' }),
@@ -25,14 +26,13 @@ export const newSitemapTemplate = (data: any = {}) => ({
         defaultBlock({ name: 'FAQs' }),
         defaultBlock({ name: 'Footer' }),
       ],
-      children: [
-        defaultPage({ name: 'Page 1', color: '#03a9f4' }),
-        defaultPage({ name: 'Page 2' }),
-        defaultPage({ name: 'Page 3', color: '#03a9f4' }),
-        defaultPage({ name: 'Page 4' }),
-      ],
+      childIds: [2, 3, 4, 5],
     }),
-  ],
+    2: defaultPage({ id: 2, parent_id: 1, name: 'Page 1', color: '#03a9f4' }),
+    3: defaultPage({ id: 3, parent_id: 1, name: 'Page 2' }),
+    4: defaultPage({ id: 4, parent_id: 1, name: 'Page 3', color: '#03a9f4' }),
+    5: defaultPage({ id: 5, parent_id: 1, name: 'Page 4' }),
+  },
   sections: data.sections || [],
 })
 

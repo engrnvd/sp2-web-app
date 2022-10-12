@@ -70,7 +70,7 @@ onBeforeUnmount(() => {
         <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
         <AddChildPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
         <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"/>
-        <CollapsePageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
+        <CollapsePageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.childIds?.length"/>
 
         <SitemapFooter v-if="app.canvas"/>
 

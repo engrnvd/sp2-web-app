@@ -15,7 +15,7 @@ export class DuplicateItemCommand extends Command {
   }
 
   get items(): SitemapPage[] | SitemapBlock[] {
-    if (this.item instanceof SitemapPage) return this.item.parent.children
+    if (this.item instanceof SitemapPage) return this.item.parent.childIds
     if (this.item instanceof SitemapBlock) return this.item.page.blocks
     console.error('Cant duplicate', this.item)
     return []

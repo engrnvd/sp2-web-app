@@ -8,13 +8,14 @@ export class AddPageCommand extends Command {
     const page: SitemapPage = this.payload.page
     const index: number = this.payload.index
 
-    let pages = page.parent?.children
+    let pages = page.parent?.childIds
     if (!pages) {
       console.log('Error: cant add page: ', page)
       return
     }
 
-    pages.splice(index, 0, page)
+    page.sitemap.addPage(page)
+    pages.splice(index, 0, page.id)
 
     super.run()
   }
@@ -22,13 +23,14 @@ export class AddPageCommand extends Command {
   undo() {
     const page: SitemapPage = this.payload.page
 
-    let pages = page.parent?.children
+    let pages = page.parent?.childIds
     if (!pages) {
       console.log('Error: cant undo add page: ', page)
       return
     }
 
-    pages.splice(pages.indexOf(page), 1)
+    delete page.sitemap.pages[page.id]
+    pages.splice(pages.indexOf(page.id), 1)
 
     super.undo()
   }

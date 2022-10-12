@@ -16,7 +16,7 @@ export class DeleteItemCommand extends Command {
   }
 
   get items(): SitemapPage[] | SitemapBlock[] | SitemapSection[] {
-    if (this.item instanceof SitemapPage) return this.item.parent.children
+    if (this.item instanceof SitemapPage) return this.item.parent.childIds
     if (this.item instanceof SitemapBlock) return this.item.page.blocks
     if (this.item instanceof SitemapSection) return this.item.sitemap.sections
     console.error('Cant delete', this.item)

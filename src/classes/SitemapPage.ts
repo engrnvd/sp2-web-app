@@ -12,38 +12,34 @@ import { SitemapBlock } from './SitemapBlock'
 
 export class SitemapPage {
   sitemap: Sitemap
-  parent: SitemapPage
+  id: number = 0
+  parent_id: number = 0
+  section_id: number = 0
   _type = 'page'
   name: string = ''
   color: string = '#03a9f4'
   link: string = ''
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
-  children: SitemapPage[] = []
+  childIds: number[] = []
   // @ts-ignore
   ci: CanvasItem = null
   // @ts-ignore
   header: CanvasItem = null
 
   // @ts-ignore
-  constructor(sitemap: Sitemap, data: Object, parent: SitemapPage = null) {
+  constructor(sitemap: Sitemap, data: Object) {
     this.sitemap = sitemap
-    this.parent = parent
 
     try {
       // @ts-ignore
-      const { children, blocks, ...rest } = data
+      const { blocks, ...rest } = data
 
       for (const key in rest) {
         // @ts-ignore
         this[key] = rest[key]
       }
 
-      if (children) {
-        children.forEach((child: SitemapPage) => {
-          this.children.push(new SitemapPage(this.sitemap, child, this))
-        })
-      }
       if (blocks) {
         blocks.forEach((block: Object) => {
           this.blocks.push(new SitemapBlock(this, block))
@@ -95,19 +91,26 @@ export class SitemapPage {
     }
   }
 
+  get parent() {
+    return this.sitemap.pages[this.parent_id]
+  }
+
   toData(): Object {
     return {
+      id: this.id,
       name: this.name,
+      parent_id: this.parent_id,
+      section_id: this.section_id,
       color: this.color,
       link: this.link,
       collapsed: this.collapsed,
       blocks: this.blocks.map(b => b.toData()),
-      children: this.children.map(ch => ch.toData()),
+      childIds: this.childIds,
     }
   }
 
   get isRoot(): boolean {
-    return !this.parent
+    return !this.parent_id
   }
 
   get styles() {
@@ -149,11 +152,11 @@ export class SitemapPage {
       this.header.top = ci.top = 50
       this.header.left = ci.left = canvas.width / 2 - width / 2
     } else if (parent) {
-      const children = this.parent.children
+      const childIds = this.parent.childIds
       const gap = width / 2
-      const totalW = children.length * width + (children.length - 1) * gap
+      const totalW = childIds.length * width + (childIds.length - 1) * gap
       const startLeft = parent.ci.cx - totalW / 2
-      const index = parent.children.indexOf(this)
+      const index = parent.childIds.indexOf(this.id)
       this.header.left = ci.left = startLeft + index * (width + gap)
       this.header.top = ci.top = parent.ci.bottom + gap
     }
@@ -163,7 +166,7 @@ export class SitemapPage {
       this.ci.height += b.ci.height + blockGap
     })
 
-    if (this.children) this.children.forEach(p => p.update())
+    if (this.childIds) this.childIds.forEach(id => this.sitemap.pages[id].update())
 
     return this
   }
@@ -171,9 +174,9 @@ export class SitemapPage {
   draw() {
     this.ci.draw()
     this.header.draw()
-    if (this.children && !this.collapsed) this.children.forEach(p => {
-      p.draw()
-      const connection = new Connection(this, p)
+    if (this.childIds && !this.collapsed) this.childIds.forEach(id => {
+      this.sitemap.pages[id].draw()
+      const connection = new Connection(this, this.sitemap.pages[id])
       connection.draw()
     })
 
@@ -191,23 +194,24 @@ export class SitemapPage {
     ctx.textBaseline = 'top'
     ctx.fillStyle = cssVar('--light')
     ctx.font = `${fontSize}px ${cssVar('--font')}`
-    const text = String(this.children.length)
+    const text = String(this.childIds.length)
     const textW = ctx.measureText(text).width
     ctx.fillText(text, this.ci.left - textW / 2, this.ci.bottom - fontSize / 2)
   }
 
-  addChildAt(index: number, data = {}) {
-    const page = new SitemapPage(this.sitemap, defaultPage(data), this)
+  addChildAt(index: number, data: any = {}) {
+    data.parent_id = this.id
+    const page = new SitemapPage(this.sitemap, defaultPage(data))
     new AddPageCommand({ page, index }).execute()
     return page
   }
 
   addChild(childPageData = {}) {
-    return this.addChildAt(this.children.length, childPageData)
+    return this.addChildAt(this.childIds.length, childPageData)
   }
 
   addSibling() {
-    return this.parent.addChildAt(this.parent.children.indexOf(this) + 1)
+    return this.parent.addChildAt(this.parent.childIds.indexOf(this.id) + 1)
   }
 
   addBlockAt(index: number, blockData = {}) {
