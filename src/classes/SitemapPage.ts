@@ -1,3 +1,4 @@
+import { DeletePageCommand } from 'src/commands/DeletePageCommand'
 import { AddBlockCommand } from '../commands/AddBlockCommand'
 import { AddPageCommand } from '../commands/AddPageCommand'
 import { CollapsePageCommand } from '../commands/CollapsePageCommand'
@@ -227,6 +228,10 @@ export class SitemapPage {
 
   get lastBlock() {
     return this.blocks[this.blocks.length - 1]
+  }
+
+  delete() {
+    new DeletePageCommand({ page: this }).execute()
   }
 
 }

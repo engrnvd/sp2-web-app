@@ -57,7 +57,7 @@ function changeColor(color) {
 }
 
 function deleteItem() {
-    new DeleteItemCommand({ item: item.value.meta }).execute()
+    item.value.meta.delete()
     app.canvas.setSelectedItem(null)
     app.canvas.setEditedItem(null)
     app.canvas.setHoveredItem(null)
