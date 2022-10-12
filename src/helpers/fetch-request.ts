@@ -8,7 +8,6 @@
 * paginationMode: replace | append. Type: Bool. Default: 'replace'. Set to 'append' to implement "load more" feature)
 * */
 import { _deepClone } from 'src/helpers/misc'
-import { useRouter } from 'vue-router'
 import { env } from '../env'
 import { useAuthStore } from '../stores/auth.store'
 import { useNotify } from 'src/U/composables/Notifiy'
@@ -93,8 +92,7 @@ export class FetchRequest {
     const auth = useAuthStore()
     auth.user = null
     auth.authToken = null
-    const router = useRouter()
-    await router.push('/')
+    window.location.reload()
   }
 
   appendParams(url: string) {
