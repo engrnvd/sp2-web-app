@@ -200,8 +200,7 @@ export class SitemapPage {
   }
 
   addChildAt(index: number, data: any = {}) {
-    data.parent_id = this.id
-    const page = new SitemapPage(this.sitemap, defaultPage(data))
+    const page = defaultPage({ ...data, parent_id: this.id })
     new AddPageCommand({ page, index }).execute()
     return page
   }

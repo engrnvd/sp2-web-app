@@ -47,7 +47,9 @@ onMounted(() => {
     } else if (app.sitemap?.id !== id) {
         app.sitemapReq.url = `sitemaps/${id}`
         app.sitemapReq.send().then(d => {
-            app.setSitemap(new Sitemap(canvas, app.sitemapReq.data))
+            const sm = new Sitemap(canvas, app.sitemapReq.data)
+            app.setSitemap(sm)
+            sm.build()
             draw()
         })
     }

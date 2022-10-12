@@ -10,6 +10,12 @@ export interface SectionMap {
   [key: number]: SitemapSection;
 }
 
+export interface SitemapCommand {
+  label: string
+  type: string
+  payload: any
+}
+
 export class Sitemap {
   canvas: ApmCanvas
   id: any
@@ -20,6 +26,7 @@ export class Sitemap {
   created_at: any
   updated_at: any
   owner_id: any
+  commands: SitemapCommand[] = []
 
   constructor(canvas: ApmCanvas, data: any = {}) {
     this.canvas = canvas
@@ -42,6 +49,15 @@ export class Sitemap {
     } catch (e) {
       console.error('Malformed sitemap data.', e, data)
     }
+  }
+
+  build() {
+    this.commands.forEach(async c => {
+      // @ts-ignore
+      let commandClass = await import(`../commands/${c.type}`)
+      let command = new commandClass[c.type](c.payload)
+      command.run()
+    })
   }
 
   addToMap(mapName: 'pages' | 'sections', item: SitemapPage | SitemapSection) {

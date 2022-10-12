@@ -1,13 +1,20 @@
+import type { Sitemap, SitemapCommand } from 'src/classes/Sitemap'
+import { useAppStore } from 'src/stores/app.store'
 import { useCommandsStore } from '../stores/commands.store'
 
 export class Command {
   description: string = 'Parent Command'
   payload: any = null
   commands: any = null
+  // @ts-ignore
+  sitemap: Sitemap = null
 
   constructor(payload: any) {
     this.payload = payload
     this.commands = useCommandsStore()
+    const app = useAppStore()
+    // @ts-ignore
+    this.sitemap = app.sitemap
   }
 
   label() {
@@ -16,7 +23,6 @@ export class Command {
 
   run() {
     this.commands.currentCommandIdx = this.commands.history.indexOf(this)
-    this.commands.save()
   }
 
   saveToHistory() {
@@ -26,6 +32,7 @@ export class Command {
   execute() {
     this.saveToHistory()
     this.run()
+    this.commands.save()
   }
 
   redo() {
@@ -37,7 +44,7 @@ export class Command {
     this.commands.saveUndo()
   }
 
-  toData() {
+  toData(): SitemapCommand {
     let payload = {}
     for (const key in this.payload) {
       // @ts-ignore

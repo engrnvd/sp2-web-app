@@ -89,12 +89,11 @@ export class FetchRequest {
     notify.error('Something went wrong!', this.error)
   }
 
-  async logoutAndRefresh() {
+  logoutAndRefresh() {
     const auth = useAuthStore()
     auth.user = null
     auth.authToken = null
-    const router = useRouter()
-    await router.push('/')
+    window.location.reload()
   }
 
   appendParams(url: string) {
