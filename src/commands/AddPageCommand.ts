@@ -1,4 +1,4 @@
-import { SitemapPage } from '../classes/SitemapPage'
+import type { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
 
 export class AddPageCommand extends Command {
@@ -31,13 +31,5 @@ export class AddPageCommand extends Command {
     pages.splice(pages.indexOf(page), 1)
 
     super.undo()
-  }
-
-  toData() {
-    return {
-      ...super.toData(),
-      page: this.payload.page.toData(),
-      index: this.payload.index
-    }
   }
 }

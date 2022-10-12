@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { SitemapPage } from '../../classes/SitemapPage'
-import { AddPageCommand } from '../../commands/AddPageCommand'
-import { defaultPage } from '../../helpers/sitemap-helper'
-import PlusIcon from '../../material-design-icons/Plus.vue'
-import { useAppStore } from '../../stores/app.store'
+import { SitemapPage } from 'src/classes/SitemapPage'
+import PlusIcon from 'src/material-design-icons/Plus.vue'
+import { useAppStore } from 'src/stores/app.store'
 import PageHoverBtn from './PageHoverBtn.vue'
 
 const app = useAppStore()

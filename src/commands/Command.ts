@@ -16,6 +16,7 @@ export class Command {
 
   run() {
     this.commands.currentCommandIdx = this.commands.history.indexOf(this)
+    this.commands.save()
   }
 
   saveToHistory() {
@@ -25,7 +26,6 @@ export class Command {
   execute() {
     this.saveToHistory()
     this.run()
-    this.commands.save()
   }
 
   redo() {
@@ -34,12 +34,20 @@ export class Command {
 
   undo() {
     this.commands.currentCommandIdx--
+    this.commands.saveUndo()
   }
 
   toData() {
+    let payload = {}
+    for (const key in this.payload) {
+      // @ts-ignore
+      payload[key] = this.payload[key].toData ? this.payload[key].toData() : this.payload[key]
+    }
+
     return {
-      description: this.description,
+      label: this.label(),
       type: this.constructor.name,
+      payload,
     }
   }
 }

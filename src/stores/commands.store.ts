@@ -33,14 +33,19 @@ export const useCommandsStore = defineStore('commands', {
         this.nextCommand.redo()
       }
     },
-    save() {
+    save(undo = false) {
       let app = useAppStore()
       if (!app.sitemap) return
 
-      this.req.url = `sitemaps/${app.sitemap.id}/save-command`
+      this.req.url = `sitemaps/${app.sitemap.id}/commands/`
+      this.req.url += undo ? 'undo' : 'save'
+      let command = undo ? this.nextCommand : this.currentCommand
       this.req.send({
-        body: JSON.stringify(this.currentCommand.toData())
+        body: JSON.stringify(command.toData())
       })
+    },
+    saveUndo() {
+      return this.save(true)
     },
   },
 })
