@@ -32,7 +32,19 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       meta: { auth: true },
-      component: () => import('../views/profile/Profile.page.vue')
+      component: () => import('../views/profile/Profile.page.vue'),
+      children: [
+        {
+          path: 'change-password',
+          name: 'change-password',
+          component: () => import('../views/profile/ChangePassword.page.vue'),
+        },
+        {
+          path: 'delete-account',
+          name: 'delete-account',
+          component: () => import('../views/profile/DeleteAccount.page.vue'),
+        },
+      ]
     },
     {
       path: '/p/:id?',
