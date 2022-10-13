@@ -22,8 +22,15 @@ const canvasEl = ref()
 const canvas = reactive(new ApmCanvas())
 let route = useRoute()
 
-const draw = () => {
-    app.sitemap.draw()
+let lastDrawingTime = 0
+const draw = (timestamp: number) => {
+    const elapsedMs = timestamp - lastDrawingTime
+    const frameInterval = 1000 / 60
+    if (elapsedMs > frameInterval) {
+        app.sitemap.draw()
+        lastDrawingTime = timestamp
+    }
+
     requestAnimationFrame(draw)
     update()
 }
