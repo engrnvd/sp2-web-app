@@ -3,7 +3,7 @@ import Notify from './Notify.vue'
 
 const { component } = useDynamicComponent(Notify)
 
-type NotifyOptions = {
+export interface NotifyOptions {
   permanent?: boolean,
   duration?: number,
 }
