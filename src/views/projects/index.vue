@@ -6,14 +6,19 @@ import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
 import ApmPagination from '@/components/common/crud/ApmPagination.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
 import { dayjs } from 'src/helpers/dayjs'
+import ArchiveIcon from 'src/material-design-icons/Archive.vue'
+import ArchiveCancelIcon from 'src/material-design-icons/ArchiveCancel.vue'
+import ArchiveOffIcon from 'src/material-design-icons/ArchiveOff.vue'
 import ContentDuplicateIcon from 'src/material-design-icons/ContentDuplicate.vue'
 import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
-import { onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter, RouterView } from 'vue-router'
 
 const router = useRouter()
 const sitemaps = useSitemapsStore()
+const archived = ref(false)
+const data = computed(() => sitemaps.req.data?.data?.filter(sm => !!sm.archived === archived.value) || [])
 
 onMounted(() => {
     if (!sitemaps.req.hasLoadedData) sitemaps.load()
@@ -31,7 +36,10 @@ watch(() => sitemaps.req.params, () => {
             <div class="flex-grow-1">
                 <h2>Your Projects</h2>
             </div>
-            <UButton compact tooltip="Create a new Sitemap" @click="router.push('/projects/create')">
+            <UButton compact info :transparent="!archived" @click="archived = !archived">
+                {{ archived ? 'Showing' : 'Show' }} Archived
+            </UButton>
+            <UButton compact @click="router.push('/projects/create')">
                 <PlusIcon/>
                 New Project
             </UButton>
@@ -47,7 +55,7 @@ watch(() => sitemaps.req.params, () => {
         </div>
 
         <div class="card p-4 gap-4 d-grid col-4 align-items-center"
-             v-for="sitemap in sitemaps.req.data.data"
+             v-for="sitemap in data"
              :key="sitemap.id">
             <div class="name font-weight-bold">
                 <RouterLink :to="`/p/${sitemap.id}`">{{ sitemap.name }}</RouterLink>
@@ -61,10 +69,16 @@ watch(() => sitemaps.req.params, () => {
                 <div>{{ dayjs(sitemap.updated_at).fromNow() }}</div>
             </div>
             <div class="d-flex align-items-center gap-2 justify-content-end">
-                <ApmDeleteBtn :req="sitemaps.req" :id="sitemap.id"/>
-                <UIconBtn @click="sitemaps.clone(sitemap.id)" :loading="sitemaps.cloneReq.loading">
+                <UIconBtn tooltip="Clone" @click="sitemaps.clone(sitemap.id)" :loading="sitemaps.cloneReq.loading">
                     <ContentDuplicateIcon/>
                 </UIconBtn>
+                <UIconBtn :tooltip="`${sitemap.archived ? 'Unarchive' : 'Archive'}`"
+                          @click="sitemaps.archive(sitemap)"
+                          :loading="sitemaps.archiveReq.loading">
+                    <ArchiveOffIcon v-if="sitemap.archived"/>
+                    <ArchiveIcon v-else/>
+                </UIconBtn>
+                <ApmDeleteBtn tooltip="Delete" :req="sitemaps.req" :id="sitemap.id"/>
             </div>
         </div>
 

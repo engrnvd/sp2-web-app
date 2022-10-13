@@ -7,6 +7,7 @@ export class Sitemap {
   id: any
   name: string = ''
   is_template: Boolean = false
+  archived: Boolean = false
   tree: SitemapPage[] = []
   sections: SitemapSection[] = []
   created_at: any
