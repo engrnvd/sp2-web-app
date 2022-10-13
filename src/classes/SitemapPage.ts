@@ -116,8 +116,11 @@ export class SitemapPage {
     const paddingY = fontSize * 0.5
     const blockHeight = fontSize + paddingY * 2
     const headerHeight = cssFontSize() * 0.5
+    const blockGap = fontSize * 0.25
+    const gap = 40
     return {
       width,
+      gap,
       fontSize,
       paddingX: fontSize * 0.75,
       paddingY: fontSize * 0.5 + headerHeight,
@@ -125,8 +128,13 @@ export class SitemapPage {
       blockHeight,
       headerHeight,
       borderWidth: 2,
-      blockGap: fontSize * 0.25,
+      blockGap,
     }
+  }
+
+  get childrenWidth(): number {
+    const { width, gap } = this.styles
+    return this.children.length ? this.children.reduce((w, child) => w + child.childrenWidth + gap, 0) - gap : width
   }
 
   get shadedColor() {
@@ -138,7 +146,7 @@ export class SitemapPage {
   update() {
     const parent = this.parent
     const canvas = this.sitemap.canvas
-    const { width, blockHeight, blockGap, headerHeight, paddingY } = this.styles
+    const { width, blockHeight, blockGap, headerHeight, paddingY, gap } = this.styles
     const ci = this.ci
     ci.height = headerHeight + blockHeight * 2 + paddingY + blockGap
     ci.text = this.name
@@ -149,12 +157,11 @@ export class SitemapPage {
       this.header.top = ci.top = 50
       this.header.left = ci.left = canvas.width / 2 - width / 2
     } else if (parent) {
-      const children = this.parent.children
-      const gap = width / 2
-      const totalW = children.length * width + (children.length - 1) * gap
+      const totalW = parent.childrenWidth
       const startLeft = parent.ci.cx - totalW / 2
       const index = parent.children.indexOf(this)
-      this.header.left = ci.left = startLeft + index * (width + gap)
+      const siblingsBefore = parent.children.slice(0, index)
+      this.header.left = ci.left = startLeft + siblingsBefore.reduce((l, ch) => l + ch.childrenWidth + gap, 0) + this.childrenWidth / 2 - width / 2
       this.header.top = ci.top = parent.ci.bottom + gap
     }
 
