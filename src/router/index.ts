@@ -32,7 +32,7 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       meta: { auth: true },
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/profile/Profile.page.vue')
     },
     {
       path: '/p/:id?',

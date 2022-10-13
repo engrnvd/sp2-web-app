@@ -10,8 +10,9 @@ import ArchiveOffIcon from 'src/material-design-icons/ArchiveOff.vue'
 import ContentDuplicateIcon from 'src/material-design-icons/ContentDuplicate.vue'
 import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
+import PageHeader from 'src/components/common/PageHeader.vue'
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter, RouterView } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 
 const router = useRouter()
 const sitemaps = useSitemapsStore()
@@ -31,18 +32,18 @@ watch(() => sitemaps.req.params, () => {
 <template>
     <div>
         <RouterView/>
-        <div class="d-flex align-items-center gap-2 px-4">
-            <div class="flex-grow-1">
-                <h2>Your Projects</h2>
-            </div>
-            <UButton compact info :transparent="!archived" @click="archived = !archived">
-                {{ archived ? 'Showing' : 'Show' }} Archived
-            </UButton>
-            <UButton compact @click="router.push('/projects/create')">
-                <PlusIcon/>
-                New Project
-            </UButton>
-        </div>
+        <PageHeader>
+            Projects
+            <template #end>
+                <UButton compact info :transparent="!archived" @click="archived = !archived">
+                    {{ archived ? 'Showing' : 'Show' }} Archived
+                </UButton>
+                <UButton compact @click="router.push('/projects/create')">
+                    <PlusIcon/>
+                    New Project
+                </UButton>
+            </template>
+        </PageHeader>
 
         <div class="card p-4 text-muted all-center flex-column"
              v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
@@ -53,7 +54,7 @@ watch(() => sitemaps.req.params, () => {
             <RouterLink class="u-btn primary" to="/projects/create">Create your first project</RouterLink>
         </div>
 
-        <div class="card p-4 gap-4 d-grid col-4 align-items-center"
+        <div class="card p-4 gap-4 grid col-4 align-items-center"
              v-for="sitemap in data"
              :key="sitemap.id">
             <div class="name font-weight-bold">
