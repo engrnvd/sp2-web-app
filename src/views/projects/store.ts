@@ -18,24 +18,31 @@ export const useSitemapsStore = defineStore('sitemaps', {
         sortType: 'desc',
       },
     }),
-    createReq: new FetchRequest('sitemaps', 'POST')
+    createReq: new FetchRequest('sitemaps', 'POST'),
+    cloneReq: new FetchRequest('', 'POST'),
   }),
   getters: {},
   actions: {
     load() {
       this.req.send()
     },
+    afterCreate(res: any) {
+      // @ts-ignore
+      this.req.data = this.req.data || { data: [] }
+      // @ts-ignore
+      this.req.data.data = this.req.data.data || []
+      // @ts-ignore
+      this.req.data.data.unshift(res)
+      this.resetForm()
+    },
     create() {
       return this.createReq.send({
         body: JSON.stringify(this.form)
-      }).then(res => {
-        this.req.data = this.req.data || { data: [] }
-        // @ts-ignore
-        this.req.data.data = this.req.data.data || []
-        // @ts-ignore
-        this.req.data.data.unshift(res)
-        this.resetForm()
-      })
+      }).then(this.afterCreate)
+    },
+    clone(id: number) {
+      this.cloneReq.url = `sitemaps/${id}/clone`
+      return this.cloneReq.send().then(this.afterCreate)
     },
     resetForm() {
       this.form = { ...form }

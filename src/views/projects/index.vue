@@ -6,13 +6,14 @@ import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
 import ApmPagination from '@/components/common/crud/ApmPagination.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
 import { dayjs } from 'src/helpers/dayjs'
+import ContentDuplicateIcon from 'src/material-design-icons/ContentDuplicate.vue'
 import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
+import UIconBtn from 'src/U/components/UIconBtn.vue'
 import { onMounted, watch } from 'vue'
 import { useRouter, RouterView } from 'vue-router'
 
 const router = useRouter()
 const sitemaps = useSitemapsStore()
-const editedSitemap = null
 
 onMounted(() => {
     if (!sitemaps.req.hasLoadedData) sitemaps.load()
@@ -45,22 +46,25 @@ watch(() => sitemaps.req.params, () => {
             <RouterLink class="u-btn primary" to="/projects/create">Create your first project</RouterLink>
         </div>
 
-        <div class="card p-4 gap-4 d-flex align-items-center" v-for="sitemap in sitemaps.req.data.data"
+        <div class="card p-4 gap-4 d-grid col-4 align-items-center"
+             v-for="sitemap in sitemaps.req.data.data"
              :key="sitemap.id">
-            <div class="name flex-grow-1 font-weight-bold">
+            <div class="name font-weight-bold">
                 <RouterLink :to="`/p/${sitemap.id}`">{{ sitemap.name }}</RouterLink>
             </div>
-            <div class="flex-grow-1">
+            <div>
                 <div class="text-small text-muted mb-2">Created</div>
                 <div>{{ dayjs(sitemap.created_at).fromNow() }}</div>
             </div>
-            <div class="flex-grow-1">
+            <div>
                 <div class="text-small text-muted mb-2">Last Updated</div>
                 <div>{{ dayjs(sitemap.updated_at).fromNow() }}</div>
             </div>
-            <div class="flex-grow-1"></div>
-            <div class="actions">
+            <div class="d-flex align-items-center gap-2 justify-content-end">
                 <ApmDeleteBtn :req="sitemaps.req" :id="sitemap.id"/>
+                <UIconBtn @click="sitemaps.clone(sitemap.id)" :loading="sitemaps.cloneReq.loading">
+                    <ContentDuplicateIcon/>
+                </UIconBtn>
             </div>
         </div>
 
