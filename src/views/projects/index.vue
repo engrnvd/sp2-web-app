@@ -3,11 +3,9 @@ import { useSitemapsStore } from '@/views/projects/store'
 import PlusIcon from '@/material-design-icons/Plus.vue'
 import UButton from '@/U/components/UButton.vue'
 import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
-import ApmPagination from '@/components/common/crud/ApmPagination.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
 import { dayjs } from 'src/helpers/dayjs'
 import ArchiveIcon from 'src/material-design-icons/Archive.vue'
-import ArchiveCancelIcon from 'src/material-design-icons/ArchiveCancel.vue'
 import ArchiveOffIcon from 'src/material-design-icons/ArchiveOff.vue'
 import ContentDuplicateIcon from 'src/material-design-icons/ContentDuplicate.vue'
 import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
@@ -18,7 +16,8 @@ import { useRouter, RouterView } from 'vue-router'
 const router = useRouter()
 const sitemaps = useSitemapsStore()
 const archived = ref(false)
-const data = computed(() => sitemaps.req.data?.data?.filter(sm => !!sm.archived === archived.value) || [])
+
+const data = computed(() => sitemaps.req?.data?.filter(sm => !!sm.archived === archived.value) || [])
 
 onMounted(() => {
     if (!sitemaps.req.hasLoadedData) sitemaps.load()
@@ -83,6 +82,5 @@ watch(() => sitemaps.req.params, () => {
         </div>
 
         <MainLoader v-if="sitemaps.req.loading"/>
-        <ApmPagination class="mt-4" :req="sitemaps.req"/>
     </div>
 </template>

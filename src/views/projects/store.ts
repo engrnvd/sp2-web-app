@@ -1,41 +1,24 @@
 import { defineStore } from 'pinia'
 import { FetchRequest } from '@/helpers/fetch-request'
-import { Sitemap } from 'src/classes/Sitemap'
+import type { Sitemap } from 'src/classes/Sitemap'
 
-const form = {
-  name: '',
-  owner_id: '',
-  is_template: '',
-}
+const form = { name: '' }
 
 export const useSitemapsStore = defineStore('sitemaps', {
   state: () => ({
     form: { ...form },
-    req: new FetchRequest('sitemaps', 'GET').withProps({
-      pagination: true,
-      delay: 500,
-      params: {
-        sort: 'id',
-        sortType: 'desc',
-        perPage: 100,
-      },
-    }),
+    req: new FetchRequest('sitemaps', 'GET').withProps({ delay: 500 }),
     createReq: new FetchRequest('sitemaps', 'POST'),
     cloneReq: new FetchRequest('', 'POST'),
     archiveReq: new FetchRequest('', 'POST'),
   }),
-  getters: {},
   actions: {
     load() {
       this.req.send()
     },
     afterCreate(res: any) {
-      // @ts-ignore
-      this.req.data = this.req.data || { data: [] }
-      // @ts-ignore
-      this.req.data.data = this.req.data.data || []
-      // @ts-ignore
-      this.req.data.data.unshift(res)
+      this.req.data = this.req.data || []
+      this.req.data.unshift(res)
       this.resetForm()
     },
     create() {
