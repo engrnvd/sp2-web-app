@@ -1,22 +1,35 @@
-import { SitemapBlock } from '../classes/SitemapBlock'
-import { SitemapPage } from '../classes/SitemapPage'
-import { SitemapSection } from '../classes/SitemapSection'
+import type { SitemapBlock } from '../classes/SitemapBlock'
+import type { SitemapPage } from '../classes/SitemapPage'
+import type { SitemapSection } from '../classes/SitemapSection'
 import { Command } from './Command'
+
+interface Payload {
+  item: SitemapPage | SitemapBlock | SitemapSection,
+  prop: string,
+  value: any,
+}
 
 export class EditItemPropCommand extends Command {
   description = 'Edit item property'
-  oldValue = ''
+  oldValue: any = ''
+  declare payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+  }
 
   label(): string {
     return `Edit ${this.item._type} ${this.payload.prop}`
   }
 
-  get item(): SitemapPage | SitemapBlock | SitemapSection {
+  get item() {
     return this.payload.item
   }
 
   run() {
     this.oldValue = this.item[this.payload.prop]
+    // @ts-ignore
     this.item[this.payload.prop] = this.payload.value
 
     super.run()

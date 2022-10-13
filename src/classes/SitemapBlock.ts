@@ -1,19 +1,19 @@
 import { cssFontSize, cssVar } from '../helpers/misc'
 import { colorHelper } from '../U/helpers/color-helper'
 import { CanvasItem } from './canvas/CanvasItem'
-import { SitemapPage } from './SitemapPage'
+import type { SitemapPage } from './SitemapPage'
 
 export class SitemapBlock {
   page: SitemapPage
   _type = 'block'
-  name: string
-  body: string
-  color: string
+  name: string = ''
+  body: string = ''
+  color: string = ''
   wireframe: any
   id: any
   ci: CanvasItem = null
 
-  constructor(page, data) {
+  constructor(page: SitemapPage, data: Partial<SitemapBlock>) {
     this.page = page
     try {
       for (const key in data) {

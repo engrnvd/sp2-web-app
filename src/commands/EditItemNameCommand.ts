@@ -1,9 +1,15 @@
+import type { SitemapBlock } from 'src/classes/SitemapBlock'
+import type { SitemapPage } from 'src/classes/SitemapPage'
+import type { SitemapSection } from 'src/classes/SitemapSection'
 import { EditItemPropCommand } from './EditItemPropCommand'
 
-export class EditItemNameCommand extends EditItemPropCommand {
-  description = 'Edit item name'
+interface Payload {
+  item: SitemapPage | SitemapBlock | SitemapSection,
+  value: any,
+}
 
-  constructor(payload) {
+export class EditItemNameCommand extends EditItemPropCommand {
+  constructor(payload: Payload) {
     super({ ...payload, prop: 'name' })
   }
 }

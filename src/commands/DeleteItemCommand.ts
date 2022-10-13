@@ -3,15 +3,25 @@ import { SitemapPage } from '../classes/SitemapPage'
 import { SitemapSection } from '../classes/SitemapSection'
 import { Command } from './Command'
 
+interface Payload {
+  item: SitemapPage | SitemapBlock | SitemapSection,
+}
+
 export class DeleteItemCommand extends Command {
   description = 'Delete item'
   index = -1
+  declare payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+  }
 
   label(): string {
     return `Delete ${this.item._type}`
   }
 
-  get item(): SitemapPage | SitemapBlock | SitemapSection {
+  get item() {
     return this.payload.item
   }
 

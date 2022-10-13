@@ -27,7 +27,6 @@ export class Sitemap {
             this.sections.push(new SitemapSection(this, section))
           }
         } else {
-          // @ts-ignore
           this[key] = data[key]
         }
       }

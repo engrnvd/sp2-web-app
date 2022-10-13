@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { Command } from 'src/commands/Command'
 import { FetchRequest } from 'src/helpers/fetch-request'
 import { useAppStore } from 'src/stores/app.store'
+import { useAuthStore } from 'src/stores/auth.store'
 
 export const useCommandsStore = defineStore('commands', {
   state: () => ({
@@ -35,7 +36,8 @@ export const useCommandsStore = defineStore('commands', {
     },
     save(undo = false) {
       let app = useAppStore()
-      if (!app.sitemap) return
+      const auth = useAuthStore()
+      if (!app.sitemap || !auth.isLoggedIn) return
 
       this.req.url = `sitemaps/${app.sitemap.id}/commands/`
       this.req.url += undo ? 'undo' : 'save'

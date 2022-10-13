@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref, watchEffect } from 'vue'
-import { EditItemNameCommand } from '../../commands/EditItemNameCommand'
-import { cssVar, DebounceFn } from '../../helpers/misc'
-import { useAppStore } from '../../stores/app.store'
+import { EditItemNameCommand } from 'src/commands/EditItemNameCommand'
+import { DebounceFn } from 'src/helpers/misc'
+import { useAppStore } from 'src/stores/app.store'
 
 const changeFn = new DebounceFn(100)
 const app = useAppStore()

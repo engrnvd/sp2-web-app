@@ -2,9 +2,19 @@ import { SitemapBlock } from '../classes/SitemapBlock'
 import { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
 
+interface Payload {
+  item: SitemapPage | SitemapBlock,
+}
+
 export class DuplicateItemCommand extends Command {
   description = ''
-  clonedItem = null
+  clonedItem: SitemapPage | SitemapBlock = null
+  declare payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+  }
 
   label(): string {
     return `Duplicate ${this.item._type}`
@@ -38,12 +48,14 @@ export class DuplicateItemCommand extends Command {
     if (!this.clonedItem) return
     // @ts-ignore
     const index = this.items.indexOf(this.item) + 1
+    // @ts-ignore
     this.items.splice(index, 0, this.clonedItem)
 
     super.run()
   }
 
   undo() {
+    // @ts-ignore
     this.items.splice(this.items.indexOf(this.clonedItem), 1)
 
     super.undo()

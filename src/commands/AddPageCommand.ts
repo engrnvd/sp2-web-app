@@ -1,8 +1,19 @@
 import type { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
 
+interface Payload {
+  page: SitemapPage,
+  index: number,
+}
+
 export class AddPageCommand extends Command {
   description = 'Add new page'
+  declare payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+  }
 
   run() {
     const page: SitemapPage = this.payload.page
