@@ -7,23 +7,26 @@ import UInput from '@/U/components/UInput.vue'
 import { requiredRule } from '@/Vee/rules/required.rule.js'
 import { useValidator } from '@/Vee/useValidator.js'
 import { Validator } from '@/Vee/validator.js'
+import { useProfileStore } from 'src/stores/profile.store'
 import UButton from 'src/U/components/UButton.vue'
 import { emailRule } from 'src/Vee/rules/email.rule'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const auth = useAuthStore()
+const profile = useProfileStore()
 const { data, apply, cancel } = useClone(auth.user)
-
-const changed = computed(() => data.name !== auth.user.name || data.email !== auth.user.email || data.company !== auth.user.company)
-
+const router = useRouter()
 const v = useValidator(data, (v: Validator) => {
     v.addRule(requiredRule('email'))
     v.addRule(emailRule('email'))
     v.addRule(requiredRule('name'))
 })
 
+const changed = computed(() => data.name !== auth.user.name || data.email !== auth.user.email || data.company !== auth.user.company)
+
 function save() {
-    auth.updateProfile(data).then(r => {
+    profile.updateProfile(data).then(r => {
         apply()
     })
 }
@@ -58,18 +61,20 @@ function save() {
                         class="mb-4"
                     />
                     <UButton
-                        :loading="auth.updateReq.loading"
+                        :loading="profile.updateReq.loading"
                         :disabled="!changed || v.hasErrors"
                     >Save
                     </UButton>
                 </form>
 
                 <h3 class="mt-5 text-muted">Password</h3>
-                <UButton secondary>Change Password</UButton>
+                <UButton @click="router.push({name: 'change-password'})" secondary>Change Password</UButton>
 
                 <h3 class="mt-5 text-muted">Delete Account</h3>
-                <UButton danger>Delete My Account</UButton>
+                <UButton @click="router.push({name: 'delete-account'})" danger>Delete My Account</UButton>
             </PageBody>
         </div>
+
+        <RouterView/>
     </div>
 </template>

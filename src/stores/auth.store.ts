@@ -20,7 +20,6 @@ export const useAuthStore = defineStore('auth', {
     logoutReq: new FetchRequest('logout', 'POST'),
     forgotReq: new FetchRequest('forgot-password', 'POST'),
     resetReq: new FetchRequest('reset-password', 'POST'),
-    updateReq: new FetchRequest('profile/update', 'POST'),
     user: useStorage(USER_KEY),
     authToken: useStorage(TOKEN_KEY),
   }),
@@ -61,11 +60,6 @@ export const useAuthStore = defineStore('auth', {
         body: JSON.stringify({ email: this.form.email, otp: this.form.otp, password: this.form.newPassword })
       }).then((data: any) => {
         this.logUserIn(data)
-      })
-    },
-    updateProfile(payload: any) {
-      return this.updateReq.send({
-        body: JSON.stringify(payload)
       })
     },
     logout() {
