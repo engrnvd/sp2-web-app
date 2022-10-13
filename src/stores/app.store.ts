@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
+import { CanvasDownloader } from 'src/classes/canvas/CanvasDownloader'
 import { FetchRequest } from 'src/helpers/fetch-request'
+import { _snakeCase } from 'src/helpers/string-helper'
 import { useSitemapsStore } from 'src/views/projects/store'
 import type { ApmCanvas } from '../classes/canvas/ApmCanvas'
 import type { Sitemap } from '../classes/Sitemap'
@@ -26,6 +28,14 @@ export const useAppStore = defineStore('app', {
     },
   },
   actions: {
+    downloadPng() {
+      let downloader = new CanvasDownloader(this.sitemap)
+      downloader.downloadImage({ name: _snakeCase(this.sitemap.name), bg: '#fff' })
+    },
+    downloadPdf() {
+      let downloader = new CanvasDownloader(this.sitemap)
+      downloader.downloadPdf({ name: _snakeCase(this.sitemap.name), bg: '#fff' })
+    },
     setSitemap(sitemap: Sitemap) {
       this.sitemap = sitemap
     },
