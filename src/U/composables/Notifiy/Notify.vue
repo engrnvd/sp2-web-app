@@ -1,15 +1,18 @@
 <template>
     <div :class="{'notification-container': true, 'notification-container-empty' : items.length===0}">
         <transition-group name="ntf" tag="div" mode="out">
-            <div v-for="item in items" :key="item.id" :class="'notification shadow-0 '+item.options.type"
+            <div v-for="item in items" :key="item.id" class="notification shadow-0 d-flex align-items-center gap-2"
+                 :class="item.options.type"
                  @click="removeItem(item)">
-                <h4 v-if="item.title" class="title d-flex align-items-center gap-2">
+                <div style="font-size: 1.5rem" class="all-center">
                     <CheckCircleIcon v-if="item.options.type === 'success'"/>
                     <AlertCircleIcon v-else-if="item.options.type === 'danger'"/>
                     <InformationIcon v-else/>
-                    <span>{{ item.title }}</span>
-                </h4>
-                <div class="message" v-if="item.message" v-html="item.message"/>
+                </div>
+                <div>
+                    <h4 v-if="item.title" class="title">{{ item.title }}</h4>
+                    <div class="message" v-if="item.message" v-html="item.message"/>
+                </div>
             </div>
         </transition-group>
     </div>
@@ -83,6 +86,8 @@ div[data-notify="container"] {
     opacity: 0.95;
     margin-top: 1em;
     font-size: 0.8rem;
+    display: flex;
+    align-items: center;
 
     --color: var(--primary);
 
@@ -98,7 +103,7 @@ div[data-notify="container"] {
 
     .title {
         font-weight: bold;
-        margin: 0 0 1em 0;
+        margin: 0 0 0.25em 0;
         line-height: 1;
     }
 
