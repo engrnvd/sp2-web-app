@@ -4,15 +4,22 @@
     display: flex;
 }
 
+.d-grid {
+    display: grid;
+}
+
 .all-center {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-@each $gap in (1, 2, 3, 4, 5, 6) {
-    .gap-#{$gap} {
-        gap: #{math.div($gap, 4)}em;
+@each $n in (1, 2, 3, 4, 5, 6, 7, 8) {
+    .gap-#{$n} {
+        gap: #{math.div($n, 4)}em;
+    }
+    .col-#{$n} {
+        grid-template-columns: repeat(#{$n}, 1fr)
     }
 }
 
