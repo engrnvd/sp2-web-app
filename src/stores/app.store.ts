@@ -29,12 +29,16 @@ export const useAppStore = defineStore('app', {
   },
   actions: {
     downloadPng() {
-      let downloader = new CanvasDownloader(this.sitemap)
-      downloader.downloadImage({ name: _snakeCase(this.sitemap.name), bg: '#fff' })
+      return new CanvasDownloader(this.sitemap).downloadImage({
+        name: _snakeCase(this.sitemap.name),
+        bg: '#fff'
+      })
     },
     downloadPdf() {
-      let downloader = new CanvasDownloader(this.sitemap)
-      downloader.downloadPdf({ name: _snakeCase(this.sitemap.name), bg: '#fff' })
+      return new CanvasDownloader(this.sitemap).downloadPdf({
+        name: _snakeCase(this.sitemap.name),
+        bg: '#fff'
+      })
     },
     setSitemap(sitemap: Sitemap) {
       this.sitemap = sitemap

@@ -18,8 +18,8 @@ export class CanvasDownloader {
     const padding = 100
     let widthO = canvas.width
     let heightO = canvas.height
-    let maxWidth = this.maxWidth = canvas.maxX - canvas.minX + padding
-    let maxHeight = this.maxHeight = canvas.maxY - canvas.minY + padding
+    let maxWidth = this.maxWidth = canvas.maxX - canvas.minX + padding / 2
+    let maxHeight = this.maxHeight = canvas.maxY - canvas.minY + padding / 2
 
     canvas.setZoom(1)
     canvas.updateOrigin(0, 0)
@@ -32,8 +32,8 @@ export class CanvasDownloader {
     let tempC = document.createElement('canvas')
     let ctx = tempC.getContext('2d')
     // adjust the width of the temp canvas
-    let tempCWidth = maxWidth + padding
-    let tempCHeight = maxHeight + padding
+    let tempCWidth = maxWidth + padding / 2
+    let tempCHeight = maxHeight + padding / 2
     const dpr = window.devicePixelRatio
     tempC.width = tempCWidth * dpr
     tempC.height = tempCHeight * dpr
@@ -47,8 +47,8 @@ export class CanvasDownloader {
     ctx.font = `italic 35px Roboto, "Helvetica Neue", Arial, sans-serif`
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
     const appName = env.appName
-    const textW = ctx.measureText(name).width
-    ctx.fillText(appName, tempCWidth - padding - textW, tempC.height - padding)
+    const textW = ctx.measureText(appName).width
+    ctx.fillText(appName, tempCWidth - padding / 2 - textW, tempC.height - padding / 2)
 
     let img = tempC.toDataURL('image/png', 1).replace('image/png', 'image/octet-stream')
 

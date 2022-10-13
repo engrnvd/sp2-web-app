@@ -1,18 +1,18 @@
-import { _sleep } from '../../helpers/misc'
-import { CanvasItem } from './CanvasItem'
+import { _sleep } from 'src/helpers/misc'
+import type { CanvasItem } from './CanvasItem'
 import { CanvasSelection } from './CanvasSelection'
 import { Mouse } from './Mouse'
 import { Easing, Tween } from '@tweenjs/tween.js'
 
 export class ApmCanvas {
-  element
-  ctx
+  element: HTMLCanvasElement
+  ctx: CanvasRenderingContext2D
   width = 800
   height = 600
   minX = 0
   minY = 0
-  maxX = 1600
-  maxY = 1200
+  maxX = 0
+  maxY = 0
   origin = { x: 0, y: 0 }
   lastOrigin = { x: 0, y: 0 }
   zoom = { scale: 1, delta: 0.05, min: 0.20, max: 3 }
@@ -29,7 +29,7 @@ export class ApmCanvas {
     this.selection = new CanvasSelection()
   }
 
-  initialize(element) {
+  initialize(element: HTMLCanvasElement) {
     this.element = element
     this.ctx = element.getContext('2d')
     this.updateCanvasSize()
@@ -50,23 +50,23 @@ export class ApmCanvas {
     return (-this.origin.y + this.height) / this.zoom.scale
   }
 
-  setDraggedItem(item) {
+  setDraggedItem(item: CanvasItem) {
     this.draggedItem = item
   }
 
-  setHoveredItem(item) {
+  setHoveredItem(item: CanvasItem) {
     this.hoveredItem = item
   }
 
-  setEditedItem(item) {
+  setEditedItem(item: CanvasItem) {
     this.editedItem = item
   }
 
-  setSelectedItem(item) {
+  setSelectedItem(item: CanvasItem) {
     this.selectedItem = item
   }
 
-  async locateItem(item) {
+  async locateItem(item: CanvasItem) {
     let cx = this.width / 2
     let cy = this.height / 2
     await this.updateOrigin(-item.left + cx - 100, -item.top + cy - 100, async () => {
@@ -76,12 +76,12 @@ export class ApmCanvas {
     })
   }
 
-  isPointVisible(x, y) {
+  isPointVisible(x: number, y: number) {
     return x > -this.origin.x && x < this.vpRight
       && y > -this.origin.y && y < this.vpBottom
   }
 
-  setZoom(scale) {
+  setZoom(scale: number) {
     return new Tween(this.zoom)
       .to({ scale }, 500)
       .easing(Easing.Cubic.Out)
@@ -106,7 +106,7 @@ export class ApmCanvas {
     this.ctx.clearRect(0, 0, w, h)
   }
 
-  updateCanvasSize(w = null, h = null) {
+  updateCanvasSize(w: number = null, h: number = null) {
     if (w) this.width = w
     if (h) this.height = h
 
@@ -121,7 +121,7 @@ export class ApmCanvas {
     this.element.style.height = `${this.height}px`
   }
 
-  updateOrigin(x, y, onComplete = null) {
+  updateOrigin(x: number, y: number, onComplete: any = null) {
     if (!onComplete) {
       this.origin.x = x
       this.origin.y = y

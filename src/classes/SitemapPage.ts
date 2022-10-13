@@ -173,6 +173,14 @@ export class SitemapPage {
     this.header.draw()
     if (this.children && !this.collapsed) this.children.forEach(p => {
       p.draw()
+
+      // update canvas points
+      const item = p.ci
+      if (item.left < item.canvas.minX) item.canvas.minX = item.left
+      if (item.right > item.canvas.maxX) item.canvas.maxX = item.right
+      if (item.top < item.canvas.minY) item.canvas.minY = item.top
+      if (item.bottom > item.canvas.maxY) item.canvas.maxY = item.bottom
+
       const connection = new Connection(this, p)
       connection.draw()
     })
