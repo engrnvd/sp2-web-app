@@ -4,6 +4,7 @@
   "compilerOptions": {
     "allowJs": true,
     "suppressImplicitAnyIndexErrors": true,
+    "noImplicitAny": false,
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "baseUrl": ".",

@@ -112,6 +112,7 @@ defineProps({
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5em;
     outline: none;
     min-width: 8em;
     border-radius: var(--form-element-border-radius);
