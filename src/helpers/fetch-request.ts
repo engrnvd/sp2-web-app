@@ -18,11 +18,11 @@ export class FetchRequest {
   url
   firstRequest = true
   lastRequestId: any = null
-  data = []
+  data: any = []
   error = ''
   loading = false
   loaded = false
-  perPageOriginal = null
+  perPageOriginal: number = null
   allLoaded = false
   config: RequestInit = {}
   delay = 0
@@ -88,7 +88,7 @@ export class FetchRequest {
     notify.error('Something went wrong!', this.error)
   }
 
-  async logoutAndRefresh() {
+  logoutAndRefresh() {
     const auth = useAuthStore()
     auth.user = null
     auth.authToken = null
@@ -195,7 +195,7 @@ export class FetchRequest {
     })
   }
 
-  upload(config: RequestInit, files = [], key = 'attachments', single = false) {
+  upload(config: RequestInit, files: any[] = [], key = 'attachments', single = false) {
     if (files instanceof File) {
       // @ts-ignore
       files = [files]
