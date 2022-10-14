@@ -136,12 +136,12 @@ export class SitemapPage {
 
   get childrenWidth(): number {
     const { width, gap } = this.styles
-    return this.children.length ? this.children.reduce((w, child) => w + child.childrenWidth + gap, 0) - gap : width
+    return this.children.length && !this.collapsed ? this.children.reduce((w, child) => w + child.childrenWidth + gap, 0) - gap : width
   }
 
   get childrenHeight(): number {
     const { height, gap } = this.styles
-    return this.children.length ? this.children.reduce((h, child) => h + child.childrenHeight + gap, height) : height
+    return this.children.length && !this.collapsed ? this.children.reduce((h, child) => h + child.childrenHeight + gap, height) : height
   }
 
   get shadedColor() {
