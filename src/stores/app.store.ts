@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { CanvasDownloader } from 'src/classes/canvas/CanvasDownloader'
+import { useStorage } from 'src/composables/useStorage'
 import { FetchRequest } from 'src/helpers/fetch-request'
 import { _snakeCase } from 'src/helpers/string-helper'
 import { useSitemapsStore } from 'src/views/projects/store'
@@ -12,6 +13,7 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     sitemap: null as Sitemap | null,
     sitemapReq: new FetchRequest('', 'GET'),
+    sitemapView: useStorage('sitemap-view', 'Horizontal' as 'Horizontal' | 'Vertical'),
   }),
   getters: {
     canvas(): ApmCanvas | null {

@@ -1,3 +1,4 @@
+import { useAppStore } from 'src/stores/app.store'
 import { AddBlockCommand } from '../commands/AddBlockCommand'
 import { AddPageCommand } from '../commands/AddPageCommand'
 import { CollapsePageCommand } from '../commands/CollapsePageCommand'
@@ -116,10 +117,11 @@ export class SitemapPage {
     const paddingY = fontSize * 0.5
     const blockHeight = fontSize + paddingY * 2
     const headerHeight = cssFontSize() * 0.5
-    const blockGap = fontSize * 0.25
+    const blockGap = 4
     const gap = 40
     return {
       width,
+      height: headerHeight + paddingY + (this.blocks.length + 2) * (blockHeight + blockGap) + blockGap,
       gap,
       fontSize,
       paddingX: fontSize * 0.75,
@@ -137,39 +139,79 @@ export class SitemapPage {
     return this.children.length ? this.children.reduce((w, child) => w + child.childrenWidth + gap, 0) - gap : width
   }
 
+  get childrenHeight(): number {
+    const { height, gap } = this.styles
+    return this.children.length ? this.children.reduce((h, child) => h + child.childrenHeight + gap, height) : height
+  }
+
   get shadedColor() {
     let color = this.color
     if (colorHelper.isLight(color)) color = colorHelper.darken(color, 30)
     return color
   }
 
-  update() {
+  get index() {
+    return this.parent?.children?.indexOf(this) || -1
+  }
+
+  get previousPage() {
+    return this.index > 0 ? this.parent.children[this.index - 1] : null
+  }
+
+  updateVertical() {
+    const parent = this.parent
+    const { height, gap, width } = this.styles
+    const ci = this.ci
+    const previousPage = this.previousPage
+
+    const rootTop = 50
+    const rootLeft = 50
+
+    ci.height = height
+    ci.text = this.name
+    this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
+
+    if (this.isRoot) {
+      this.header.top = ci.top = rootTop
+      this.header.left = ci.left = rootLeft
+      return
+    }
+
+    const leftGap = width / 2
+    this.header.left = ci.left = (parent.isRoot ? rootLeft : parent.ci.left) + leftGap
+    this.header.top = ci.top = (previousPage ? previousPage.ci.top + previousPage.childrenHeight : parent.ci.bottom) + gap
+  }
+
+  updateHorizontal() {
     const parent = this.parent
     const canvas = this.sitemap.canvas
-    const { width, blockHeight, blockGap, headerHeight, paddingY, gap } = this.styles
+    const { width, gap } = this.styles
     const ci = this.ci
-    ci.height = headerHeight + blockHeight * 2 + paddingY + blockGap
-    ci.text = this.name
-
-    this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
 
     if (this.isRoot) {
       this.header.top = ci.top = 50
       this.header.left = ci.left = canvas.width / 2 - width / 2
-    } else if (parent) {
-      const totalW = parent.childrenWidth
-      const startLeft = parent.ci.cx - totalW / 2
-      const index = parent.children.indexOf(this)
-      const siblingsBefore = parent.children.slice(0, index)
-      this.header.left = ci.left = startLeft + siblingsBefore.reduce((l, ch) => l + ch.childrenWidth + gap, 0) + this.childrenWidth / 2 - width / 2
-      this.header.top = ci.top = parent.ci.bottom + gap
+      return
     }
 
-    if (this.blocks) this.blocks.forEach(b => {
-      b.update()
-      this.ci.height += b.ci.height + blockGap
-    })
+    const startLeft = parent.ci.cx - parent.childrenWidth / 2
+    const previousPage = this.previousPage
+    this.header.left = ci.left = previousPage ? previousPage.ci.left + previousPage.childrenWidth / 2 + this.childrenWidth / 2 + gap : startLeft
+    this.header.top = ci.top = parent.ci.bottom + gap
+  }
 
+  update() {
+    const { height } = this.styles
+    const ci = this.ci
+    ci.height = height
+    ci.text = this.name
+    this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
+
+    const app = useAppStore()
+    if (app.sitemapView === 'Horizontal') this.updateHorizontal()
+    else this.updateVertical()
+
+    if (this.blocks) this.blocks.forEach(b => b.update())
     if (this.children) this.children.forEach(p => p.update())
 
     return this

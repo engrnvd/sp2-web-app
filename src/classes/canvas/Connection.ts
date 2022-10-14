@@ -1,3 +1,5 @@
+import { useAppStore } from 'src/stores/app.store'
+
 export class Connection {
   fromPage
   toPage
@@ -7,7 +9,7 @@ export class Connection {
     this.toPage = to
   }
 
-  draw() {
+  drawHorizontal() {
     const startX = this.fromPage.ci.cx
     const startY = this.fromPage.ci.bottom
     const endX = this.toPage.ci.cx
@@ -32,5 +34,28 @@ export class Connection {
     ctx.lineTo(endX, endY)
     ctx.stroke()
     ctx.closePath()
+  }
+
+  drawVertical() {
+    let startX = this.fromPage.ci.left + 20
+    let startY = this.fromPage.ci.bottom
+    let endX = this.toPage.ci.left
+    let endY = this.toPage.ci.cy
+
+    const ctx = this.fromPage.sitemap.canvas.ctx
+
+    ctx.beginPath()
+    ctx.strokeStyle = this.fromPage.shadedColor
+    ctx.moveTo(startX, startY)
+    ctx.lineTo(startX, endY)
+    ctx.lineTo(endX, endY)
+    ctx.stroke()
+    ctx.closePath()
+  }
+
+  draw() {
+    const app = useAppStore()
+    if (app.sitemapView === 'Vertical') this.drawVertical()
+    else this.drawHorizontal()
   }
 }
