@@ -8,8 +8,8 @@ import PageHoverBtn from './PageHoverBtn.vue'
 const app = useAppStore()
 const item = computed(() => app.canvas?.hoveredItem)
 
-const left = computed(() => app.hasHorizontalView ? item.value.relRight : item.value.relLeft)
-const top = computed(() => item.value.relCy)
+const left = computed(() => item.value.relRight)
+const top = computed(() => app.hasHorizontalView ? item.value.relCy : item.value.relBottom)
 
 function onClick() {
     const page: SitemapPage = item.value.meta

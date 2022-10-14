@@ -28,6 +28,6 @@ function onClick() {
 
 <style scoped lang="scss">
 .collapse-page-btn {
-    transform: translateX(-50%) translateY(-25%);
+    transform: translateX(-50%) translateY(-50%);
 }
 </style>
