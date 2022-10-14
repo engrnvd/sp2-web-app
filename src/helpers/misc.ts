@@ -35,16 +35,6 @@ export function showSimpleToast(text, duration = 3000) {
   }, duration)
 }
 
-export function _debounce(func, timeout = 300) {
-  let timer
-  return (...args) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      func.apply(this, args)
-    }, timeout)
-  }
-}
-
 export function _sleep(milliseconds) {
   return new Promise(resolve => {
     setTimeout(resolve, milliseconds)
