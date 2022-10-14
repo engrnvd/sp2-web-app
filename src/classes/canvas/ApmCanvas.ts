@@ -29,6 +29,10 @@ export class ApmCanvas {
     this.selection = new CanvasSelection()
   }
 
+  get isBiggerThanViewPort() {
+    return this.width < this.maxX || this.height < this.maxY
+  }
+
   initialize(element: HTMLCanvasElement) {
     this.element = element
     this.ctx = element.getContext('2d')

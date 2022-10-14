@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 
 import { update } from '@tweenjs/tween.js'
+import Minimap from 'src/views/SitemapView/Minimap.vue'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ApmCanvas } from '@/classes/canvas/ApmCanvas'
 import { Sitemap } from '@/classes/Sitemap'
@@ -82,6 +83,8 @@ onBeforeUnmount(() => {
         <SitemapFooter v-if="app.canvas"/>
 
         <MainLoader v-if="!app.sitemap"/>
+
+        <Minimap v-if="app.canvas && app.canvas.isBiggerThanViewPort"/>
     </div>
 </template>
 

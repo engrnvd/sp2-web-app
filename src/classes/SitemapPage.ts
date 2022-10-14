@@ -124,7 +124,7 @@ export class SitemapPage {
       height: headerHeight + paddingY + (this.blocks.length + 2) * (blockHeight + blockGap) + blockGap,
       gap: sitemapConfig.page.gap,
       fontSize,
-      paddingX: fontSize * 0.75,
+      paddingX: fontSize,
       paddingY: fontSize * 0.5 + headerHeight,
       borderRadius: fontSize * 0.25,
       blockHeight,
