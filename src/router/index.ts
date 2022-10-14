@@ -47,6 +47,11 @@ const router = createRouter({
       ]
     },
     {
+      path: '/subscription',
+      name: 'subscription',
+      component: () => import('../views/subscription/Subscription.page.vue')
+    },
+    {
       path: '/p/:id?',
       name: 'sitemap',
       component: () => import('../views/SitemapView/SitemapEditor.vue')

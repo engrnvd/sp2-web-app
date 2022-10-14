@@ -4,6 +4,7 @@ import PlusIcon from '@/material-design-icons/Plus.vue'
 import UButton from '@/U/components/UButton.vue'
 import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
+import FullPageMessage from 'src/components/common/FullPageMessage.vue'
 import { dayjs } from 'src/helpers/dayjs'
 import ArchiveIcon from 'src/material-design-icons/Archive.vue'
 import ArchiveOffIcon from 'src/material-design-icons/ArchiveOff.vue'
@@ -35,7 +36,8 @@ watch(() => sitemaps.req.params, () => {
         <PageHeader>
             Projects
             <template #end>
-                <UButton compact info :transparent="!archived" @click="archived = !archived">
+                <UButton v-if="sitemaps.req.hasLoadedData" compact info :transparent="!archived"
+                         @click="archived = !archived">
                     {{ archived ? 'Showing' : 'Show' }} Archived
                 </UButton>
                 <UButton compact @click="router.push('/projects/create')">
@@ -45,14 +47,17 @@ watch(() => sitemaps.req.params, () => {
             </template>
         </PageHeader>
 
-        <div class="card p-4 text-muted all-center flex-column"
-             v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
-            <div style="font-size: 14rem; color: rgba(0,0,0,0.1)">
+        <FullPageMessage v-if="sitemaps.req.loaded && !sitemaps.req.hasLoadedData">
+            <template #icon>
                 <DrawingBoxIcon/>
-            </div>
-            <div class="mb-5">You don't have any projects.</div>
-            <RouterLink class="u-btn primary" to="/projects/create">Create your first project</RouterLink>
-        </div>
+            </template>
+
+            You don't have any projects.
+
+            <template #action>
+                <RouterLink class="u-btn primary" to="/projects/create">Create your first project</RouterLink>
+            </template>
+        </FullPageMessage>
 
         <div class="card p-4 gap-4 grid col-4 align-items-center"
              v-for="sitemap in data"

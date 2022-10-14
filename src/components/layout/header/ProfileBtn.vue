@@ -39,7 +39,7 @@ function logout() {
                     <AccountIcon/>
                     Account
                 </UMenuItem>
-                <UMenuItem>
+                <UMenuItem @click="router.push({name: 'subscription'})">
                     <CreditCardOutlineIcon/>
                     Subscription
                 </UMenuItem>
