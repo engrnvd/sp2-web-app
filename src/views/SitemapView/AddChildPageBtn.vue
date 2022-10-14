@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { sitemapConfig } from 'src/helpers/sitemap-helper'
 import { computed } from 'vue'
 import { SitemapPage } from 'src/classes/SitemapPage'
 import PlusIcon from 'src/material-design-icons/Plus.vue'
@@ -8,7 +9,11 @@ import PageHoverBtn from './PageHoverBtn.vue'
 const app = useAppStore()
 
 const item = computed(() => app.canvas?.hoveredItem)
-const left = computed(() => item.value.relCx)
+const left = computed(() => {
+    if (app.hasHorizontalView) return item.value.relCx
+    const zoom = app.canvas.zoom.scale
+    return item.value.relLeft + sitemapConfig.connection.offsetX * zoom
+})
 const top = computed(() => item.value.relBottom)
 
 function onClick() {
@@ -19,7 +24,7 @@ function onClick() {
 </script>
 
 <template>
-    <PageHoverBtn class="add-child-page-btn" :left="left" :top="top" @click="onClick">
+    <PageHoverBtn v-tooltip="'Add child'" class="add-child-page-btn" :left="left" :top="top" @click="onClick">
         <PlusIcon/>
     </PageHoverBtn>
 </template>

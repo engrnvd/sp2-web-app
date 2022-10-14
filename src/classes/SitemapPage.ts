@@ -3,7 +3,7 @@ import { AddBlockCommand } from '../commands/AddBlockCommand'
 import { AddPageCommand } from '../commands/AddPageCommand'
 import { CollapsePageCommand } from '../commands/CollapsePageCommand'
 import { cssFontSize, cssVar } from '../helpers/misc'
-import { defaultBlock, defaultPage } from '../helpers/sitemap-helper'
+import { defaultBlock, defaultPage, sitemapConfig } from '../helpers/sitemap-helper'
 import { colorHelper } from '../U/helpers/color-helper'
 import { canvasHelper } from './canvas/canvas-helper'
 import { CanvasItem } from './canvas/CanvasItem'
@@ -112,17 +112,17 @@ export class SitemapPage {
   }
 
   get styles() {
-    const fontSize = cssFontSize() * 0.8
-    const width = 160
+    const bodyFontSize = cssFontSize()
+    const fontSize = bodyFontSize * 0.8
+    const width = bodyFontSize * 11
     const paddingY = fontSize * 0.5
     const blockHeight = fontSize + paddingY * 2
-    const headerHeight = cssFontSize() * 0.5
-    const blockGap = 4
-    const gap = 40
+    const headerHeight = bodyFontSize * 0.5
+    const blockGap = sitemapConfig.block.gap
     return {
       width,
       height: headerHeight + paddingY + (this.blocks.length + 2) * (blockHeight + blockGap) + blockGap,
-      gap,
+      gap: sitemapConfig.page.gap,
       fontSize,
       paddingX: fontSize * 0.75,
       paddingY: fontSize * 0.5 + headerHeight,
@@ -164,8 +164,8 @@ export class SitemapPage {
     const ci = this.ci
     const previousPage = this.previousPage
 
-    const rootTop = 50
-    const rootLeft = 50
+    const rootTop = sitemapConfig.root.top
+    const rootLeft = sitemapConfig.root.left
 
     ci.height = height
     ci.text = this.name
@@ -189,7 +189,7 @@ export class SitemapPage {
     const ci = this.ci
 
     if (this.isRoot) {
-      this.header.top = ci.top = 50
+      this.header.top = ci.top = sitemapConfig.root.top
       this.header.left = ci.left = canvas.width / 2 - width / 2
       return
     }
@@ -256,6 +256,7 @@ export class SitemapPage {
   addChildAt(index: number, data = {}) {
     const page = new SitemapPage(this.sitemap, defaultPage(data), this)
     new AddPageCommand({ page, index }).execute()
+    this.sitemap.canvas.setEditedItem(this.children[index].ci)
     return page
   }
 

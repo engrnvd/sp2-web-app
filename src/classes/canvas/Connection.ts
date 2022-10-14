@@ -1,3 +1,4 @@
+import { sitemapConfig } from 'src/helpers/sitemap-helper'
 import { useAppStore } from 'src/stores/app.store'
 
 export class Connection {
@@ -37,7 +38,7 @@ export class Connection {
   }
 
   drawVertical() {
-    let startX = this.fromPage.ci.left + 20
+    let startX = this.fromPage.ci.left + sitemapConfig.connection.offsetX
     let startY = this.fromPage.ci.bottom
     let endX = this.toPage.ci.left
     let endY = this.toPage.ci.cy

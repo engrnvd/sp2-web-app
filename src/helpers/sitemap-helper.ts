@@ -1,3 +1,20 @@
+export const sitemapConfig = {
+  root: {
+    top: 50, // root page top
+    left: 50
+  },
+  page: {
+    gap: 40, // gap bw tw pages
+    borderWidth: 2,
+  },
+  block: {
+    gap: 4, // gap bw two blocks
+  },
+  connection: {
+    offsetX: 40
+  }
+}
+
 export const defaultBlock = (data = {}) => ({
   name: 'Block name',
   color: '#03a9f4',

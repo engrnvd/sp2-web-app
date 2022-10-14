@@ -28,6 +28,10 @@ export const useAppStore = defineStore('app', {
       // @ts-ignore
       return this.canvas?.hoveredItem?.meta instanceof SitemapBlock
     },
+    hasHorizontalView() {
+      // @ts-ignore
+      return this.sitemapView === 'Horizontal'
+    }
   },
   actions: {
     downloadPng() {

@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { SitemapPage } from '../../classes/SitemapPage'
+import { SitemapPage } from 'src/classes/SitemapPage'
 import PlusIcon from '../../material-design-icons/Plus.vue'
-import { useAppStore } from '../../stores/app.store'
+import { useAppStore } from 'src/stores/app.store'
 import PageHoverBtn from './PageHoverBtn.vue'
 
 const app = useAppStore()
 const item = computed(() => app.canvas?.hoveredItem)
 
-const left = computed(() => item.value.relRight)
+const left = computed(() => app.hasHorizontalView ? item.value.relRight : item.value.relLeft)
 const top = computed(() => item.value.relCy)
 
 function onClick() {
@@ -19,13 +19,13 @@ function onClick() {
 </script>
 
 <template>
-    <PageHoverBtn class="add-sibling-page-btn" :left="left" :top="top" @click="onClick">
+    <PageHoverBtn v-tooltip="'Add sibling'" class="add-sibling-page-btn" :left="left" :top="top" @click="onClick">
         <PlusIcon/>
     </PageHoverBtn>
 </template>
 
 <style scoped lang="scss">
 .add-sibling-page-btn {
-    transform: translateX(-25%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
 }
 </style>
