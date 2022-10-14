@@ -265,8 +265,10 @@ export class SitemapPage {
     return this.addChildAt(this.children.length, childPageData)
   }
 
-  addSibling() {
-    return this.parent.addChildAt(this.parent.children.indexOf(this) + 1)
+  addSibling(location: 'before' | 'after' = 'after') {
+    let idx = this.parent.children.indexOf(this)
+    if (location === 'after') idx++
+    return this.parent.addChildAt(idx)
   }
 
   addBlockAt(index: number, blockData = {}) {

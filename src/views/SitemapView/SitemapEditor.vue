@@ -77,7 +77,10 @@ onBeforeUnmount(() => {
         <SelectedItemToolbar v-if="canvas.selectedItem"/>
         <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
         <AddChildPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
-        <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"/>
+        <AddSiblingPageBtn location="before"
+                           v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"/>
+        <AddSiblingPageBtn location="after"
+                           v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"/>
         <CollapsePageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
 
         <SitemapFooter v-if="app.canvas"/>
