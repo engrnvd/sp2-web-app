@@ -223,20 +223,21 @@ export class SitemapPage {
     if (this.children && !this.collapsed) this.children.forEach(p => {
       p.draw()
 
-      // update canvas points
-      const item = p.ci
-      if (item.left < item.canvas.minX) item.canvas.minX = item.left
-      if (item.right > item.canvas.maxX) item.canvas.maxX = item.right
-      if (item.top < item.canvas.minY) item.canvas.minY = item.top
-      if (item.bottom > item.canvas.maxY) item.canvas.maxY = item.bottom
-
-      const connection = new Connection(this, p)
+      const connection = new Connection(this.ci, p.ci)
       connection.draw()
     })
 
     if (this.collapsed) this.drawCollapsedState()
 
     if (this.blocks) this.blocks.forEach(b => b.draw())
+
+    // update canvas points
+    const item = this.ci
+    if (item.left < item.canvas.minX) item.canvas.minX = item.left
+    if (item.right > item.canvas.maxX) item.canvas.maxX = item.right
+    if (item.top < item.canvas.minY) item.canvas.minY = item.top
+    if (item.bottom > item.canvas.maxY) item.canvas.maxY = item.bottom
+
   }
 
   drawCollapsedState() {

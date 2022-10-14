@@ -1,25 +1,26 @@
+import type { CanvasItem } from 'src/classes/canvas/CanvasItem'
 import { sitemapConfig } from 'src/helpers/sitemap-helper'
 import { useAppStore } from 'src/stores/app.store'
 
 export class Connection {
-  fromPage
-  toPage
+  fromItem: CanvasItem
+  toItem: CanvasItem
 
   constructor(from, to) {
-    this.fromPage = from
-    this.toPage = to
+    this.fromItem = from
+    this.toItem = to
   }
 
   drawHorizontal() {
-    const startX = this.fromPage.ci.cx
-    const startY = this.fromPage.ci.bottom
-    const endX = this.toPage.ci.cx
-    const endY = this.toPage.ci.top
+    const startX = this.fromItem.cx
+    const startY = this.fromItem.bottom
+    const endX = this.toItem.cx
+    const endY = this.toItem.top
 
-    const ctx = this.fromPage.sitemap.canvas.ctx
+    const ctx = this.fromItem.canvas.ctx
 
     ctx.beginPath()
-    ctx.strokeStyle = this.fromPage.shadedColor
+    ctx.strokeStyle = this.fromItem.borderColor
     ctx.moveTo(startX, startY)
     const xDiff = endX - startX
     if (xDiff === 0) {
@@ -38,15 +39,15 @@ export class Connection {
   }
 
   drawVertical() {
-    let startX = this.fromPage.ci.left + sitemapConfig.connection.offsetX
-    let startY = this.fromPage.ci.bottom
-    let endX = this.toPage.ci.left
-    let endY = this.toPage.ci.cy
+    let startX = this.fromItem.left + sitemapConfig.connection.offsetX
+    let startY = this.fromItem.bottom
+    let endX = this.toItem.left
+    let endY = this.toItem.cy
 
-    const ctx = this.fromPage.sitemap.canvas.ctx
+    const ctx = this.fromItem.canvas.ctx
 
     ctx.beginPath()
-    ctx.strokeStyle = this.fromPage.shadedColor
+    ctx.strokeStyle = this.fromItem.borderColor
     ctx.moveTo(startX, startY)
     ctx.lineTo(startX, endY)
     ctx.lineTo(endX, endY)

@@ -30,7 +30,7 @@ export class ApmCanvas {
   }
 
   get isBiggerThanViewPort() {
-    return this.width < this.maxX || this.height < this.maxY
+    return this.width < this.maxX - this.minX || this.height < this.maxY - this.minY
   }
 
   initialize(element: HTMLCanvasElement) {
@@ -108,6 +108,10 @@ export class ApmCanvas {
     // @ts-ignore
     let h = Math.max(parseInt(this.maxY), parseInt(this.height))
     this.ctx.clearRect(0, 0, w, h)
+  }
+
+  resetMinAndMaxPoints() {
+    this.minY = this.minY = this.maxX = this.maxY = 0
   }
 
   updateCanvasSize(w: number = null, h: number = null) {

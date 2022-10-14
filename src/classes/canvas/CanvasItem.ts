@@ -1,6 +1,6 @@
-import { cssVar } from '../../helpers/misc'
-import { colorHelper } from '../../U/helpers/color-helper'
-import { ApmCanvas } from './ApmCanvas'
+import { cssVar } from 'src/helpers/misc'
+import { colorHelper } from 'src/U/helpers/color-helper'
+import type { ApmCanvas } from './ApmCanvas'
 import { canvasHelper } from './canvas-helper'
 
 export class CanvasItem {

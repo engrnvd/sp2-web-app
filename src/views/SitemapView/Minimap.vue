@@ -43,22 +43,29 @@ function onMinimapClick(e) {
     })
 }
 
-function drawPage(ctx: CanvasRenderingContext2D, page: SitemapPage | SitemapBlock) {
+function drawPage(ctx: CanvasRenderingContext2D, item: SitemapPage | SitemapBlock) {
     let canvas = app.canvas
     ctx.textBaseline = 'top'
-    ctx.fillStyle = page.color || '#333'
-    ctx.strokeStyle = page.color || '#333'
-    const left = page.ci.left - canvas.minX
-    const top = page.ci.top - canvas.minY
+
+    const left = item.ci.left - canvas.minX
+    const top = item.ci.top - canvas.minY
     const headX = left * config.ratio
     const headY = top * config.ratio
-    const headW = page.ci.width * config.ratio
-    let headH = page.ci.height * config.ratio
-    ctx.strokeRect(headX, headY, headW, headH)
+    const headW = item.ci.width * config.ratio
+    let headH = item.ci.height * config.ratio
 
-    if (page.children) page.children.forEach(ch => drawPage(ctx, ch))
+    if (item instanceof SitemapPage) {
+        ctx.strokeStyle = item.color || '#333'
+        ctx.strokeRect(headX, headY, headW, headH)
+    } else {
+        ctx.fillStyle = item.color || '#333'
+        ctx.fillRect(headX, headY, headW, headH)
+    }
 
-    if (page.blocks) page.blocks.forEach(ch => drawPage(ctx, ch))
+    if (item instanceof SitemapPage) {
+        if (item.children) item.children.forEach(ch => drawPage(ctx, ch))
+        if (item.blocks) item.blocks.forEach(ch => drawPage(ctx, ch))
+    }
 }
 
 function draw(timestamp) {
@@ -71,7 +78,7 @@ function draw(timestamp) {
 
         if (!config.ctx) config.ctx = canvasEl.value.getContext('2d')
 
-        let ctx = config.ctx
+        let ctx: CanvasRenderingContext2D = config.ctx
         const maxH = Math.max(canvas.maxY - canvas.minY, canvas.height)
         const maxW = Math.max(canvas.maxX - canvas.minX, canvas.width)
 
@@ -98,7 +105,6 @@ function draw(timestamp) {
 
         ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 
-        // items
         for (const page of app.sitemap.tree) drawPage(ctx, page)
 
         ctx.restore()

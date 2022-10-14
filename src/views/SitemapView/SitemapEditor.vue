@@ -24,7 +24,7 @@ const canvas = reactive(new ApmCanvas())
 let route = useRoute()
 
 let lastDrawingTime = 0
-const draw = (timestamp: number) => {
+const draw = (timestamp: number = 1) => {
     const elapsedMs = timestamp - lastDrawingTime
     const frameInterval = 1000 / 60
     if (elapsedMs > frameInterval) {
