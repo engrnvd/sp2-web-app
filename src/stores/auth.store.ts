@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import type { User } from 'src/interfaces/User.interface'
 import { useStorage } from '../composables/useStorage'
 import { TOKEN_KEY, USER_KEY } from '../constants'
 import { FetchRequest } from '../helpers/fetch-request'
@@ -20,7 +21,7 @@ export const useAuthStore = defineStore('auth', {
     logoutReq: new FetchRequest('logout', 'POST'),
     forgotReq: new FetchRequest('forgot-password', 'POST'),
     resetReq: new FetchRequest('reset-password', 'POST'),
-    user: useStorage(USER_KEY),
+    user: useStorage(USER_KEY) as User,
     authToken: useStorage(TOKEN_KEY),
   }),
   getters: {

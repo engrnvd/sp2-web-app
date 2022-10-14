@@ -7,6 +7,7 @@ import UInput from '@/U/components/UInput.vue'
 import { requiredRule } from '@/Vee/rules/required.rule.js'
 import { useValidator } from '@/Vee/useValidator.js'
 import { Validator } from '@/Vee/validator.js'
+import type { User } from 'src/interfaces/User.interface'
 import { useProfileStore } from 'src/stores/profile.store'
 import UButton from 'src/U/components/UButton.vue'
 import { emailRule } from 'src/Vee/rules/email.rule'
@@ -15,7 +16,7 @@ import { useRouter } from 'vue-router'
 
 const auth = useAuthStore()
 const profile = useProfileStore()
-const { data, apply, cancel } = useClone(auth.user)
+const { data, apply, cancel }: { data: User } = useClone(auth.user)
 const router = useRouter()
 const v = useValidator(data, (v: Validator) => {
     v.addRule(requiredRule('email'))
@@ -37,8 +38,8 @@ function save() {
         <PageHeader>Profile</PageHeader>
 
         <div v-if="data">
-            <PageBody style="width: 500px">
-                <form action="" @submit.prevent="save">
+            <PageBody>
+                <form style="width: 500px" @submit.prevent="save">
                     <h3 class="text-muted">Your information</h3>
                     <UInput
                         type="text"
