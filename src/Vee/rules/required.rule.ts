@@ -4,6 +4,6 @@ export function requiredRule(field) {
   return [
     field,
     `${_titleCase(field)} is required`,
-    v => !!v.form[field]?.length
+    v => !!v.form[field]
   ]
 }

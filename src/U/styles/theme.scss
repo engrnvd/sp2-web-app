@@ -7,6 +7,8 @@
     --font-size: #{$fontSize};
     --bg: #{$bg};
     --body-bg: #{$body-bg};
+    --gray: rgba(0, 0, 0, 0.2);
+    --gray-hover: rgba(0, 0, 0, 0.25);
     --main-text-color: #{$main-text-color};
     --main-text-color-contrast: #{color.invert($main-text-color)};
     --muted: #{$muted};
