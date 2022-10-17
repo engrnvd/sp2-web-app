@@ -1,0 +1,53 @@
+<script lang="ts" setup>
+import CheckboxBlankOutlineIcon from 'src/material-design-icons/CheckboxBlankOutline.vue'
+import CheckboxMarkedIcon from 'src/material-design-icons/CheckboxMarked.vue'
+import UButton from 'src/U/components/UButton.vue'
+import UInput from 'src/U/components/UInput.vue'
+import { inputEmits, inputProps } from 'src/U/helpers/input-helper'
+import { computed, defineProps } from 'vue'
+
+const props = defineProps({
+    ...inputProps
+})
+
+const emit = defineEmits([...inputEmits])
+
+const _value = computed({
+    get: () => props.modelValue,
+    set: v => emit('update:modelValue', v)
+})
+
+</script>
+
+<template>
+    <UInput v-bind="$props" class="u-textarea">
+        <textarea
+            class="u-input"
+            v-model="_value"
+            :placeholder="label"
+            rows="3"
+        ></textarea>
+        <label v-if="label">{{ label }}</label>
+    </UInput>
+</template>
+
+<style lang="scss">
+.u-textarea {
+    .u-form-group {
+        label {
+            top: var(--u-input-padding);
+            transform: translateY(0%);
+        }
+
+        .u-input {
+            min-height: 6em;
+
+            &:focus, &:not(:placeholder-shown) {
+                & + label {
+                    transform: translateY(-1.05em) scale(0.8);
+                }
+            }
+        }
+    }
+}
+</style>

@@ -1,42 +1,37 @@
 <script lang="ts" setup>
+import { inputEmits, inputProps } from 'src/U/helpers/input-helper'
 import { defineProps } from 'vue'
 
 defineProps({
-    modelValue: String,
-    label: String,
-    helpText: String,
-    errors: { type: Array, default: () => [] },
-    type: {
-        type: String,
-        default: 'text'
-    },
+    ...inputProps
 })
 
-defineEmits(['update:modelValue'])
+const emit = defineEmits([...inputEmits])
 
 </script>
 
 <template>
     <div class="u-input-container" :class="{'has-error': errors.length}">
         <div class="u-form-group">
-            <input
-                class="u-input"
-                :type="type"
-                :placeholder="label"
-                :value="modelValue"
-                @input="e => $emit('update:modelValue', e.target.value)">
-            <label v-if="label">{{ label }}</label>
+            <slot>
+                <input
+                    class="u-input"
+                    :type="type"
+                    :placeholder="label"
+                    :value="modelValue"
+                    @input="e => emit('update:modelValue', e.target.value)">
+                <label v-if="label">{{ label }}</label>
+            </slot>
         </div>
-        <div class="help-text text-small p-2" v-for="error in errors">
-            {{ error }}
-        </div>
-        <div class="help-text text-small p-2" v-if="helpText">{{ helpText }}</div>
+        <div class="text-small p-2" v-for="error in errors">{{ error }}</div>
+        <div class="text-small p-2" v-if="helpText && !errors.length">{{ helpText }}</div>
     </div>
 </template>
 
-<style scoped lang="scss">
-$uInputPadding: 0.75em;
+<style lang="scss">
 .u-input-container {
+    --u-input-padding: 0.75em;
+    --u-input-border-width: 2px;
     --u-input-color: var(--primary);
     --u-input-text-color: var(--main-text-color);
     --u-input-border-color: var(--border-color);
@@ -53,10 +48,10 @@ $uInputPadding: 0.75em;
         position: relative;
 
         .u-input {
-            border: 2px solid var(--u-input-border-color);
+            border: var(--u-input-border-width) solid var(--u-input-border-color);
             border-radius: var(--border-radius);
             height: var(--form-element-height);
-            padding: $uInputPadding;
+            padding: var(--u-input-padding);
             outline: none;
             background-color: var(--bg);
             transition: border-color 0.2s ease-out;
@@ -75,9 +70,9 @@ $uInputPadding: 0.75em;
                 }
             }
 
-            &:focus, :not(&:placeholder-shown) {
+            &:focus, &:not(:placeholder-shown) {
                 & + label {
-                    transform: translateY(-1.6em) scale(0.8);
+                    transform: translateY(-1.7em) scale(0.8);
                     background-color: var(--bg);
                     display: inline-block;
                     padding-inline: 0.25em;
@@ -88,17 +83,14 @@ $uInputPadding: 0.75em;
         label {
             position: absolute;
             top: 50%;
-            left: $uInputPadding;
+            color: var(--muted);
+            left: var(--u-input-padding);
             transform: translateY(-50%);
-            transition: transform 0.2s ease-out;
+            transition: transform 0.2s ease-out, color 0.5s ease-out, background-color 0.2s ease-out;
             transform-origin: 0 0;
             pointer-events: none;
             font-weight: normal;
         }
-    }
-
-    .help-text {
-
     }
 }
 

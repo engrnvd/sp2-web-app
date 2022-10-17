@@ -28,6 +28,10 @@ export const devRoutes = [
         path: 'editable',
         component: () => import('../views/dev/EditableView.vue')
       },
+      {
+        path: 'chips',
+        component: () => import('../views/dev/ChipsView.vue')
+      },
     ]
   }
 
