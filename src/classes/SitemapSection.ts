@@ -47,7 +47,7 @@ export class SitemapSection {
     const canvas = this.sitemap.canvas
     const fontSize = cssFontSize()
     ci.fontSize = fontSize
-    const paddingX = fontSize * 0.5
+    const paddingX = fontSize
     const paddingY = fontSize * 0.5
     const width = paddingX * 2 + ci.textWidth
 
