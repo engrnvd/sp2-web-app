@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { defineProps } from 'vue'
 import UButton from '@/U/components/UButton.vue'
+import { defineProps } from 'vue'
 
 defineProps({
     tooltip: String,
@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <UButton v-bind="$attrs" icon compact transparent secondary v-tooltip="tooltip">
+    <UButton v-tooltip="tooltip" compact icon secondary transparent v-bind="{...$props, ...$attrs}">
         <slot/>
     </UButton>
 </template>
