@@ -51,7 +51,7 @@ export class SitemapPage {
         })
       }
 
-      const { width, fontSize, paddingX, paddingY, borderRadius, borderWidth, headerHeight } = this.styles
+      const { width, fontSize, paddingX, paddingY, borderWidth, headerHeight } = this.styles
       this.ci = new CanvasItem(this.sitemap.canvas, {
         left: 0,
         top: 0,
@@ -60,7 +60,6 @@ export class SitemapPage {
         paddingX,
         paddingY,
         height: 0,
-        borderRadius: [borderRadius, borderRadius, borderRadius, borderRadius],
         borderColor: this.color,
         borderWidth,
         text: this.name,
@@ -89,7 +88,6 @@ export class SitemapPage {
         paddingX: paddingX / 2,
         text: '● ● ●',
         textColor: cssVar('--light'),
-        borderRadius: [borderRadius, borderRadius, 0, 0]
       })
     } catch (e) {
       console.error('Malformed page data.', e, data)
@@ -118,7 +116,6 @@ export class SitemapPage {
       fontSize,
       paddingX: app.simpleView ? 0 : fontSize,
       paddingY: app.simpleView ? 4 : fontSize * 0.5 + headerHeight,
-      borderRadius: 0,
       blockHeight,
       headerHeight,
       borderWidth: app.simpleView ? 0 : 2,
@@ -204,14 +201,13 @@ export class SitemapPage {
   }
 
   update() {
-    const { height, width, paddingX, paddingY, borderWidth, borderRadius } = this.styles
+    const { height, width, paddingX, paddingY, borderWidth } = this.styles
     const ci = this.ci
     ci.height = height
     ci.width = width
     ci.paddingX = paddingX
     ci.paddingY = paddingY
     ci.borderWidth = borderWidth
-    ci.borderRadius = [borderRadius, borderRadius, borderRadius, borderRadius]
     ci.text = this.name
     this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
 

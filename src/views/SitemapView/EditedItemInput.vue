@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed, ref, watchEffect } from 'vue'
 import { EditItemNameCommand } from 'src/commands/EditItemNameCommand'
 import { DebounceFn } from 'src/helpers/misc'
 import { useAppStore } from 'src/stores/app.store'
+import { computed, ref, watchEffect } from 'vue'
 
 const changeFn = new DebounceFn(100)
 const app = useAppStore()
@@ -23,7 +23,6 @@ const styles = computed(() => {
         width: item.value.relWidth - item.value.borderWidth * 2 * zoom + 'px',
         paddingInline: (item.value.paddingX * zoom) + 'px',
         fontSize: fontSize.value + 'px',
-        borderRadius: (item.value.borderRadius[0] * zoom) + 'px',
         height: height + 'px',
     }
 })
@@ -55,16 +54,16 @@ function onChange(e) {
 <template>
     <input
         ref="inputEl"
-        class="edited-item-input"
-        :value="item.meta.name"
         :style="styles"
+        :value="item.meta.name"
+        class="edited-item-input"
         @change="onChange"
         @keydown.enter="onChange"
         @keydown.esc="close"
     />
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 .edited-item-input {
     position: absolute;

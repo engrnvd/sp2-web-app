@@ -17,7 +17,6 @@ const style = computed(() => {
         left: item.value.relLeft + (item.value.paddingX) * zoom + 'px',
         top: item.value.relBottom - (height + item.value.paddingY - item.value.meta.styles.headerHeight + item.value.meta.styles.blockGap * 2) * zoom + 'px',
         width: item.value.relWidth - (item.value.paddingX * 2) * zoom + 'px',
-        borderRadius: (item.value.borderRadius[0]) * zoom + 'px',
         height: height * zoom + 'px',
     }
 })
@@ -32,18 +31,19 @@ function onClick() {
 
 <template>
     <UButton
-        secondary flat
-        class="add-block-btn page-hover-btn"
-        :style="style"
+        :style="style" class="add-block-btn page-hover-btn"
+        flat
+        secondary
         @click="onClick"
     >
         <PlusIcon/>
     </UButton>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .add-block-btn {
     min-width: 0;
     background-color: var(--secondary-darker);
+    border-radius: 0;
 }
 </style>

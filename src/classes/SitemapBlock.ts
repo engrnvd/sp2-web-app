@@ -27,7 +27,6 @@ export class SitemapBlock {
         paddingX: fontSize * 0.5,
         paddingY: fontSize * 0.5,
         height: 0,
-        borderRadius: [fontSize * 0.25, fontSize * 0.25, fontSize * 0.25, fontSize * 0.25],
         fillColor: this.color,
         text: this.name,
         textColor: cssVar('--light'),
