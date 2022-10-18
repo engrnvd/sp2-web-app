@@ -1,5 +1,6 @@
 import type { SitemapBlock } from 'src/classes/SitemapBlock'
 import type { SitemapPage } from 'src/classes/SitemapPage'
+import { SitemapSection } from 'src/classes/SitemapSection'
 import { useAppStore } from 'src/stores/app.store'
 import { Command } from './Command'
 
@@ -17,21 +18,26 @@ export class ReplaceColorCommand extends Command {
     this.payload = payload
   }
 
-  setItemColor(item: SitemapPage | SitemapBlock, color, newColor) {
+  isSection(item) {
+    return item instanceof SitemapSection
+  }
+
+  setItemColor(item: SitemapPage | SitemapBlock | SitemapSection, color, newColor) {
     // @ts-ignore
     if (item.blocks?.length) item.blocks.forEach(b => this.setItemColor(b, color, newColor))
     // @ts-ignore
     if (item.children?.length) item.children.forEach(c => this.setItemColor(c, color, newColor))
 
-    if (item.color !== color) return
+    // @ts-ignore
+    if (this.isSection(item) || item.color !== color) return
+    // @ts-ignore
     item.color = newColor
   }
 
   replaceColor(color, newColor) {
     const app = useAppStore()
-    app.sitemap.tree.forEach(page => {
-      this.setItemColor(page, color, newColor)
-    })
+    app.sitemap.tree.forEach(page => this.setItemColor(page, color, newColor))
+    app.sitemap.sections.forEach(s => this.setItemColor(s, color, newColor))
   }
 
   run() {
