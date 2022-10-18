@@ -104,7 +104,7 @@ export class SitemapPage {
     const bodyFontSize = cssFontSize()
     const fontSize = bodyFontSize * 0.75
     if (ctx) ctx.font = `${fontSize}px ${cssVar('--font')}`
-    const width = app.simpleView && ctx ? Math.ceil(ctx.measureText(this.name).width) + 4 : bodyFontSize * 11
+    const width = app.simpleView && ctx ? Math.ceil(ctx.measureText(this.name).width) + 4 : bodyFontSize * 10
     const paddingY = fontSize * 0.5
     const blockHeight = fontSize + paddingY * 2
     const headerHeight = bodyFontSize * 0.5

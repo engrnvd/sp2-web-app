@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useAppStore } from '@/stores/app.store.js'
 import { Easing, Tween } from '@tweenjs/tween.js'
 import { SitemapBlock } from 'src/classes/SitemapBlock'
@@ -74,7 +74,7 @@ function draw(timestamp) {
     const frameInterval = 1000 / 60
 
     if (elapsed > frameInterval) {
-        if (!canvas) return
+        if (!canvas || !canvasEl.value) return
 
         if (!config.ctx) config.ctx = canvasEl.value.getContext('2d')
 
@@ -120,9 +120,9 @@ function draw(timestamp) {
 <template>
     <canvas
         ref="canvasEl"
-        class="apm-minimap shadow-0"
-        :width="config.width"
         :height="config.height"
+        :width="config.width"
+        class="apm-minimap shadow-0"
         @click.prevent.stop="onMinimapClick"
         @mousedown.stop=""
         @mouseup.stop="">

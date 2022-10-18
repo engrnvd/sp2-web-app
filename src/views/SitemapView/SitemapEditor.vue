@@ -29,9 +29,7 @@ const draw = (timestamp: number = 1) => {
     const elapsedMs = timestamp - lastDrawingTime
     const frameInterval = 1000 / 60
     if (elapsedMs > frameInterval) {
-        const time = Date.now()
         sitemap.draw()
-        console.log('Date.now() - time', Date.now() - time)
         lastDrawingTime = timestamp
     }
 
