@@ -96,40 +96,32 @@ export class SitemapPage {
     }
   }
 
-  toData(): Object {
-    return {
-      name: this.name,
-      color: this.color,
-      link: this.link,
-      collapsed: this.collapsed,
-      blocks: this.blocks.map(b => b.toData()),
-      children: this.children.map(ch => ch.toData()),
-    }
-  }
-
   get isRoot(): boolean {
     return !this.parent
   }
 
   get styles() {
+    const app = useAppStore()
+    const ctx = this.ci?.canvas?.ctx
     const bodyFontSize = cssFontSize()
     const fontSize = bodyFontSize * 0.8
-    const width = bodyFontSize * 11
+    if (ctx) ctx.font = `${fontSize}px ${cssVar('--font')}`
+    const width = app.simpleView && ctx ? Math.ceil(ctx.measureText(this.name).width) + 4 : bodyFontSize * 11
     const paddingY = fontSize * 0.5
     const blockHeight = fontSize + paddingY * 2
     const headerHeight = bodyFontSize * 0.5
     const blockGap = sitemapConfig.block.gap
     return {
       width,
-      height: headerHeight + paddingY + (this.blocks.length + 2) * (blockHeight + blockGap) + blockGap,
+      height: app.simpleView ? bodyFontSize + 8 : headerHeight + paddingY + (this.blocks.length + 2) * (blockHeight + blockGap) + blockGap,
       gap: sitemapConfig.page.gap,
       fontSize,
-      paddingX: fontSize,
-      paddingY: fontSize * 0.5 + headerHeight,
-      borderRadius: fontSize * 0.25,
+      paddingX: app.simpleView ? 0 : fontSize,
+      paddingY: app.simpleView ? 4 : fontSize * 0.5 + headerHeight,
+      borderRadius: app.simpleView ? 0 : fontSize * 0.25,
       blockHeight,
       headerHeight,
-      borderWidth: 2,
+      borderWidth: app.simpleView ? 0 : 2,
       blockGap,
     }
   }
@@ -156,6 +148,17 @@ export class SitemapPage {
 
   get previousPage() {
     return this.index > 0 ? this.parent.children[this.index - 1] : null
+  }
+
+  toData(): Object {
+    return {
+      name: this.name,
+      color: this.color,
+      link: this.link,
+      collapsed: this.collapsed,
+      blocks: this.blocks.map(b => b.toData()),
+      children: this.children.map(ch => ch.toData()),
+    }
   }
 
   updateVertical() {
@@ -190,20 +193,25 @@ export class SitemapPage {
 
     if (this.isRoot) {
       this.header.top = ci.top = sitemapConfig.root.top
-      this.header.left = ci.left = canvas.width / 2 - width / 2
+      this.header.left = ci.left = Math.round(canvas.width / 2 - width / 2)
       return
     }
 
     const startLeft = parent.ci.cx - parent.childrenWidth / 2
     const previousPage = this.previousPage
-    this.header.left = ci.left = previousPage ? previousPage.ci.left + previousPage.childrenWidth / 2 + this.childrenWidth / 2 + gap : startLeft
-    this.header.top = ci.top = parent.ci.bottom + gap
+    this.header.left = ci.left = Math.round(previousPage ? previousPage.ci.left + previousPage.childrenWidth / 2 + this.childrenWidth / 2 + gap : startLeft)
+    this.header.top = ci.top = Math.round(parent.ci.bottom + gap)
   }
 
   update() {
-    const { height } = this.styles
+    const { height, width, paddingX, paddingY, borderWidth, borderRadius } = this.styles
     const ci = this.ci
     ci.height = height
+    ci.width = width
+    ci.paddingX = paddingX
+    ci.paddingY = paddingY
+    ci.borderWidth = borderWidth
+    ci.borderRadius = [borderRadius, borderRadius, borderRadius, borderRadius]
     ci.text = this.name
     this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
 
@@ -218,18 +226,22 @@ export class SitemapPage {
   }
 
   draw() {
+    const app = useAppStore()
     this.ci.draw()
-    this.header.draw()
+
+    if (!app.simpleView) {
+      this.header.draw()
+    }
+
     if (this.children && !this.collapsed) this.children.forEach(p => {
       p.draw()
-
-      const connection = new Connection(this.ci, p.ci)
-      connection.draw()
+      new Connection(this.ci, p.ci).draw()
     })
 
-    if (this.collapsed) this.drawCollapsedState()
-
-    if (this.blocks) this.blocks.forEach(b => b.draw())
+    if (!app.simpleView) {
+      if (this.collapsed) this.drawCollapsedState()
+      if (this.blocks) this.blocks.forEach(b => b.draw())
+    }
 
     // update canvas points
     const item = this.ci
@@ -237,7 +249,6 @@ export class SitemapPage {
     if (item.right > item.canvas.maxX) item.canvas.maxX = item.right
     if (item.top < item.canvas.minY) item.canvas.minY = item.top
     if (item.bottom > item.canvas.maxY) item.canvas.maxY = item.bottom
-
   }
 
   drawCollapsedState() {

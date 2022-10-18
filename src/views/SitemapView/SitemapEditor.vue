@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 
-import { update } from '@tweenjs/tween.js'
-import Minimap from 'src/views/SitemapView/Minimap.vue'
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ApmCanvas } from '@/classes/canvas/ApmCanvas'
 import { Sitemap } from '@/classes/Sitemap'
 import MainLoader from '@/components/common/MainLoader.vue'
 import { newSitemapTemplate } from '@/helpers/sitemap-helper'
 import { useAppStore } from '@/stores/app.store'
+import { update } from '@tweenjs/tween.js'
+import Minimap from 'src/views/SitemapView/Minimap.vue'
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AddBlockBtn from './AddBlockBtn.vue'
 import AddChildPageBtn from './AddChildPageBtn.vue'
@@ -70,18 +70,21 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="sitemap-editor flex-grow-1" ref="parentEl">
+    <div ref="parentEl" class="sitemap-editor flex-grow-1">
         <canvas ref="canvasEl"></canvas>
 
-        <EditedItemInput v-if="canvas.editedItem"/>
-        <SelectedItemToolbar v-if="canvas.selectedItem"/>
-        <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
-        <AddChildPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
-        <AddSiblingPageBtn location="before"
-                           v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"/>
-        <AddSiblingPageBtn location="after"
-                           v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"/>
-        <CollapsePageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
+        <template v-if="!app.simpleView">
+            <EditedItemInput v-if="canvas.editedItem"/>
+            <SelectedItemToolbar v-if="canvas.selectedItem"/>
+            <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
+            <AddChildPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
+            <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"
+                               location="before"/>
+            <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"
+                               location="after"/>
+            <CollapsePageBtn
+                v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
+        </template>
 
         <SitemapFooter v-if="app.canvas"/>
 
@@ -91,7 +94,7 @@ onBeforeUnmount(() => {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 .sitemap-editor {
     overflow: hidden;

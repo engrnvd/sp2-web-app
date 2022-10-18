@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import OverallColorSelector from 'src/views/SitemapView/OverallColorSelector.vue'
+import SimpleViewToggleBtn from 'src/views/SitemapView/SimpleViewToggleBtn.vue'
 import UndoRedoBtns from './UndoRedoBtns.vue'
-import ZoomTools from './ZoomTools.vue'
-</script>
+import ZoomTools from './ZoomTools.vue'</script>
 
 <template>
     <div class="sitemap-footer d-flex align-items-center gap-2 p-3">
@@ -10,10 +10,11 @@ import ZoomTools from './ZoomTools.vue'
         <div class="flex-grow-1"></div>
         <UndoRedoBtns/>
         <ZoomTools/>
+        <SimpleViewToggleBtn/>
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .sitemap-footer {
     position: absolute;
     left: 0;
