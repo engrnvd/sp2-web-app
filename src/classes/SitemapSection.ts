@@ -31,6 +31,7 @@ export class SitemapSection {
         editable: true,
         selectable: true,
         hoverable: true,
+        meta: this,
       })
     } catch (e) {
       console.error('Malformed section data.', e, data)

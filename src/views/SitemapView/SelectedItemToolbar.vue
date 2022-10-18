@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-import { computed, nextTick, ref, watchEffect } from 'vue'
 import { SitemapBlock } from 'src/classes/SitemapBlock'
 import { SitemapPage } from 'src/classes/SitemapPage'
 import { DeleteItemCommand } from 'src/commands/DeleteItemCommand'
 import { DuplicateItemCommand } from 'src/commands/DuplicateItemCommand'
 import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
 import { cssFontSize } from 'src/helpers/misc'
+import ArrowDownIcon from 'src/material-design-icons/ArrowDown.vue'
+import ArrowUpIcon from 'src/material-design-icons/ArrowUp.vue'
+import { useAppStore } from 'src/stores/app.store'
+import { computed, nextTick, ref, watchEffect } from 'vue'
 import AddBlockIcon from '../../material-design-icons/AddBlock.vue'
 import ContentDuplicateIcon from '../../material-design-icons/ContentDuplicate.vue'
 import DeleteOutlineIcon from '../../material-design-icons/DeleteOutline.vue'
 import LinkVariantIcon from '../../material-design-icons/LinkVariant.vue'
-import { useAppStore } from 'src/stores/app.store'
 import UColorPicker from '../../U/components/UColorPicker.vue'
 
 const app = useAppStore()
@@ -21,6 +23,7 @@ const height = cssFontSize() * 2.25
 const item = computed(() => app.canvas?.selectedItem)
 const top = computed(() => item.value.relTop - height - 5)
 const width = computed(() => item.value.relWidth)
+const isSection = computed(() => item.value.meta._type === 'section')
 
 watchEffect(async () => {
     let _left = item.value.relLeft
@@ -78,27 +81,37 @@ function duplicateItem() {
             minWidth: `${width}px`
          }"
     >
-        <a href="" @click.prevent="addBlock" v-tooltip="'Add Block'">
+        <a href="" @click.prevent="addBlock" v-tooltip="'Add Block'" v-if="!isSection">
             <AddBlockIcon/>
         </a>
 
         <UColorPicker
+            v-if="!isSection"
             v-tooltip="'Color'"
             :model-value="item.meta.color"
             @update:model-value="changeColor"
         />
 
-        <a href="" v-tooltip="'Link'">
+        <a href="" v-tooltip="'Link'" v-if="!isSection">
             <LinkVariantIcon/>
         </a>
 
-        <a href="" v-if="!item.meta.isRoot" @click.prevent="duplicateItem" v-tooltip="'Duplicate'">
+        <a href="" v-if="!item.meta.isRoot && !isSection" @click.prevent="duplicateItem" v-tooltip="'Duplicate'">
             <ContentDuplicateIcon/>
         </a>
 
-        <div class="separator" v-if="!item.meta.isRoot"></div>
+        <a href="" v-if="isSection" @click.prevent="" v-tooltip="'Move up'">
+            <ArrowUpIcon/>
+        </a>
 
-        <a href="" class="text-danger" v-tooltip="'Delete'" v-if="!item.meta.isRoot" @click.prevent="deleteItem">
+        <a href="" v-if="isSection" @click.prevent="" v-tooltip="'Move down'">
+            <ArrowDownIcon/>
+        </a>
+
+        <div class="separator" v-if="!item.meta.isRoot || isSection"></div>
+
+        <a href="" class="text-danger" v-tooltip="'Delete'" v-if="!item.meta.isRoot || isSection"
+           @click.prevent="deleteItem">
             <DeleteOutlineIcon/>
         </a>
     </div>
