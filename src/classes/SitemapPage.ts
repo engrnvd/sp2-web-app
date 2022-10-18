@@ -1,9 +1,10 @@
+import { HasChildPagesMixin } from 'src/classes/HasChildPages.mixin'
+import type { SitemapSection } from 'src/classes/SitemapSection'
 import { useAppStore } from 'src/stores/app.store'
 import { AddBlockCommand } from '../commands/AddBlockCommand'
-import { AddPageCommand } from '../commands/AddPageCommand'
 import { CollapsePageCommand } from '../commands/CollapsePageCommand'
-import { cssFontSize, cssVar } from '../helpers/misc'
-import { defaultBlock, defaultPage, sitemapConfig } from '../helpers/sitemap-helper'
+import { applyMixins, cssFontSize, cssVar } from '../helpers/misc'
+import { defaultBlock, sitemapConfig } from '../helpers/sitemap-helper'
 import { colorHelper } from '../U/helpers/color-helper'
 import { canvasHelper } from './canvas/canvas-helper'
 import { CanvasItem } from './canvas/CanvasItem'
@@ -12,8 +13,7 @@ import type { Sitemap } from './Sitemap'
 import { SitemapBlock } from './SitemapBlock'
 
 export class SitemapPage {
-  sitemap: Sitemap
-  parent: SitemapPage
+  parent: SitemapPage | SitemapSection
   _type = 'page'
   name: string = ''
   color: string = '#03a9f4'
@@ -22,12 +22,10 @@ export class SitemapPage {
   blocks: SitemapBlock[] = []
   children: SitemapPage[] = []
   // @ts-ignore
-  ci: CanvasItem = null
-  // @ts-ignore
   header: CanvasItem = null
 
   // @ts-ignore
-  constructor(sitemap: Sitemap, data: Object, parent: SitemapPage = null) {
+  constructor(sitemap: Sitemap, data: Object, parent: SitemapPage | SitemapSection = null) {
     this.sitemap = sitemap
     this.parent = parent
 
@@ -119,16 +117,6 @@ export class SitemapPage {
       borderWidth: app.simpleView ? 0 : 2,
       blockGap,
     }
-  }
-
-  get childrenWidth(): number {
-    const { width, gap } = this.styles
-    return this.children.length && !this.collapsed ? this.children.reduce((w, child) => w + child.childrenWidth + gap, 0) - gap : width
-  }
-
-  get childrenHeight(): number {
-    const { height, gap } = this.styles
-    return this.children.length && !this.collapsed ? this.children.reduce((h, child) => h + child.childrenHeight + gap, height) : height
   }
 
   get shadedColor() {
@@ -259,17 +247,6 @@ export class SitemapPage {
     ctx.fillText(text, this.ci.left - textW / 2, this.ci.bottom - fontSize / 2)
   }
 
-  addChildAt(index: number, data = {}) {
-    const page = new SitemapPage(this.sitemap, defaultPage(data), this)
-    new AddPageCommand({ page, index }).execute()
-    this.sitemap.canvas.setEditedItem(this.children[index].ci)
-    return page
-  }
-
-  addChild(childPageData = {}) {
-    return this.addChildAt(this.children.length, childPageData)
-  }
-
   addSibling(location: 'before' | 'after' = 'after') {
     let idx = this.parent.children.indexOf(this)
     if (location === 'after') idx++
@@ -289,5 +266,9 @@ export class SitemapPage {
   toggleCollapse() {
     new CollapsePageCommand({ page: this }).execute()
   }
+}
 
+applyMixins(SitemapPage, [HasChildPagesMixin])
+
+export interface SitemapPage extends HasChildPagesMixin {
 }

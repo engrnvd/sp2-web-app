@@ -1,23 +1,23 @@
 import { canvasHelper } from 'src/classes/canvas/canvas-helper'
-import { cssFontSize, cssVar } from 'src/helpers/misc'
+import { HasChildPagesMixin } from 'src/classes/HasChildPages.mixin'
+import { applyMixins, cssFontSize, cssVar } from 'src/helpers/misc'
 import { CanvasItem } from './canvas/CanvasItem'
 import type { Sitemap } from './Sitemap'
 import { SitemapPage } from './SitemapPage'
 
 export class SitemapSection {
   _type = 'section'
-  sitemap: Sitemap
   name: string = ''
   children: SitemapPage[] = []
-  ci: CanvasItem = null
 
   constructor(sitemap: Sitemap, data) {
     this.sitemap = sitemap
     try {
       for (const key in data) {
-        if (key === 'pages') {
+        if (key === 'children') {
           for (const page of data.children) {
-            this.children.push(new SitemapPage(this.sitemap, page))
+            let p = new SitemapPage(this.sitemap, page, this)
+            this.children.push(p)
           }
         } else {
           this[key] = data[key]
@@ -37,6 +37,10 @@ export class SitemapSection {
     }
   }
 
+  get isRoot() {
+    return true
+  }
+
   update() {
     const ci = this.ci
     const canvas = this.sitemap.canvas
@@ -54,6 +58,8 @@ export class SitemapSection {
     ci.paddingX = paddingX
     ci.paddingY = paddingY
 
+    if (this.children) this.children.forEach(p => p.update())
+
     return this
   }
 
@@ -69,6 +75,8 @@ export class SitemapSection {
   draw() {
     this.drawLine()
     this.ci.draw()
+
+    this.children.forEach(p => p.draw())
   }
 
   toData() {
@@ -77,4 +85,9 @@ export class SitemapSection {
       children: this.children.map(ch => ch.toData()),
     }
   }
+}
+
+applyMixins(SitemapSection, [HasChildPagesMixin])
+
+export interface SitemapSection extends HasChildPagesMixin {
 }
