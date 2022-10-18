@@ -24,11 +24,15 @@ const canvas = reactive(new ApmCanvas())
 let route = useRoute()
 
 let lastDrawingTime = 0
+let sitemap = app.sitemap
 const draw = (timestamp: number = 1) => {
+    if (!sitemap) sitemap = app.sitemap
     const elapsedMs = timestamp - lastDrawingTime
     const frameInterval = 1000 / 60
     if (elapsedMs > frameInterval) {
-        app.sitemap.draw()
+        const time = Date.now()
+        sitemap.draw()
+        console.log('Date.now() - time', Date.now() - time)
         lastDrawingTime = timestamp
     }
 

@@ -104,7 +104,7 @@ export class SitemapPage {
     const app = useAppStore()
     const ctx = this.ci?.canvas?.ctx
     const bodyFontSize = cssFontSize()
-    const fontSize = bodyFontSize * 0.8
+    const fontSize = bodyFontSize * 0.75
     if (ctx) ctx.font = `${fontSize}px ${cssVar('--font')}`
     const width = app.simpleView && ctx ? Math.ceil(ctx.measureText(this.name).width) + 4 : bodyFontSize * 11
     const paddingY = fontSize * 0.5
@@ -118,7 +118,7 @@ export class SitemapPage {
       fontSize,
       paddingX: app.simpleView ? 0 : fontSize,
       paddingY: app.simpleView ? 4 : fontSize * 0.5 + headerHeight,
-      borderRadius: app.simpleView ? 0 : fontSize * 0.25,
+      borderRadius: 0,
       blockHeight,
       headerHeight,
       borderWidth: app.simpleView ? 0 : 2,
@@ -226,10 +226,10 @@ export class SitemapPage {
   }
 
   draw() {
-    const app = useAppStore()
+    const simpleView = useAppStore().simpleView
     this.ci.draw()
 
-    if (!app.simpleView) {
+    if (!simpleView) {
       this.header.draw()
     }
 
@@ -238,7 +238,7 @@ export class SitemapPage {
       new Connection(this.ci, p.ci).draw()
     })
 
-    if (!app.simpleView) {
+    if (!simpleView) {
       if (this.collapsed) this.drawCollapsedState()
       if (this.blocks) this.blocks.forEach(b => b.draw())
     }

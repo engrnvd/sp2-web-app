@@ -20,7 +20,7 @@ export class SitemapBlock {
         this[key] = data[key]
       }
 
-      const fontSize = cssFontSize() * 0.8
+      const fontSize = cssFontSize() * 0.75
       this.ci = new CanvasItem(this.page.sitemap.canvas, {
         top: 0,
         fontSize,

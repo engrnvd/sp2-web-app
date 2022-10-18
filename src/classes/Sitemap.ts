@@ -41,8 +41,8 @@ export class Sitemap {
     const ctx = canvas.ctx
     ctx.textBaseline = 'top'
     ctx.save()
-    this.canvas.clear()
-    this.canvas.resetMinAndMaxPoints()
+    canvas.clear()
+    canvas.resetMinAndMaxPoints()
     ctx.translate(canvas.origin.x, canvas.origin.y)
     ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 

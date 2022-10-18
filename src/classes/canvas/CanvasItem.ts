@@ -30,6 +30,14 @@ export class CanvasItem {
   selectable = false
   draggable = false
 
+  constructor(canvas: ApmCanvas, data: Partial<CanvasItem>) {
+    this.canvas = canvas
+
+    for (const key in data) {
+      this[key] = data[key]
+    }
+  }
+
   get right() {
     return this.left + this.width
   }
@@ -78,19 +86,56 @@ export class CanvasItem {
     return this.height * this.canvas.zoom.scale
   }
 
-  constructor(canvas: ApmCanvas, data: Partial<CanvasItem>) {
-    this.canvas = canvas
+  get isHoveredItem() {
+    return this.canvas.hoveredItem === this
+  }
 
-    for (const key in data) {
-      this[key] = data[key]
+  get isSelectedItem() {
+    return this.canvas.selectedItem === this
+  }
+
+  get isEditedItem() {
+    return this.canvas.editedItem === this
+  }
+
+  get hasMouseOver() {
+    const mouse = this.canvas.mouse
+    let mouseX = mouse.x - this.canvas.origin.x
+    let mouseY = mouse.y - this.canvas.origin.y
+
+    let itemL = this.left - this.hoverOffset
+    let itemT = this.top - this.hoverOffset
+    let itemB = this.bottom + this.hoverOffset
+    let itemR = this.right + this.hoverOffset
+
+    const scale = this.canvas.zoom.scale
+    if (scale !== 1) {
+      itemL *= scale
+      itemT *= scale
+      itemB *= scale
+      itemR *= scale
     }
+
+    return itemL < mouseX && mouseX < itemR
+      && itemT < mouseY && mouseY < itemB
   }
 
   drawRect() {
     if (!this.fillColor && !this.borderWidth) return
-    let br = this.borderRadius
-    let cpR = 0.4475 * br[0] // ctrl pt ratio if r = 8 then cp = 3.58 = br * 0.4475
+
     const ctx = this.canvas.ctx
+    const br = this.borderRadius
+
+    if (!br[0]) {
+      if (this.fillColor) ctx.fillStyle = this.shadedColor(this.fillColor)
+      if (this.borderColor) ctx.strokeStyle = this.shadedColor(this.borderColor)
+      if (this.borderWidth) ctx.lineWidth = this.borderWidth
+      if (this.fillColor) ctx.fillRect(this.left, this.top, this.width, this.height)
+      if (this.borderColor || this.borderWidth) ctx.strokeRect(this.left, this.top, this.width, this.height)
+      return
+    }
+
+    let cpR = 0.4475 * br[0] // ctrl pt ratio if r = 8 then cp = 3.58 = br * 0.4475
 
     ctx.beginPath()
     ctx.moveTo(this.left, this.top + br[0])
@@ -165,39 +210,5 @@ export class CanvasItem {
       this.left += this.canvas.mouse.dx
       this.top += this.canvas.mouse.dy
     }
-  }
-
-  get isHoveredItem() {
-    return this.canvas.hoveredItem === this
-  }
-
-  get isSelectedItem() {
-    return this.canvas.selectedItem === this
-  }
-
-  get isEditedItem() {
-    return this.canvas.editedItem === this
-  }
-
-  get hasMouseOver() {
-    const mouse = this.canvas.mouse
-    let mouseX = mouse.x - this.canvas.origin.x
-    let mouseY = mouse.y - this.canvas.origin.y
-
-    let itemL = this.left - this.hoverOffset
-    let itemT = this.top - this.hoverOffset
-    let itemB = this.bottom + this.hoverOffset
-    let itemR = this.right + this.hoverOffset
-
-    const scale = this.canvas.zoom.scale
-    if (scale !== 1) {
-      itemL *= scale
-      itemT *= scale
-      itemB *= scale
-      itemR *= scale
-    }
-
-    return itemL < mouseX && mouseX < itemR
-      && itemT < mouseY && mouseY < itemB
   }
 }
