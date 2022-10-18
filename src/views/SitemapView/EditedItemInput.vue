@@ -24,6 +24,9 @@ const styles = computed(() => {
         paddingInline: (item.value.paddingX * zoom) + 'px',
         fontSize: fontSize.value + 'px',
         height: height + 'px',
+        backgroundColor: item.value.fillColor,
+        color: item.value.textColor,
+        fontWeight: item.value.textBold ? 'bold' : 'normal',
     }
 })
 
