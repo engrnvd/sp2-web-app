@@ -83,7 +83,7 @@ export class SitemapPage {
         fontSize: headerHeight / 2,
         paddingY: headerHeight / 4,
         textBold: true,
-        paddingX: paddingX / 2,
+        paddingX: headerHeight / 4,
         text: '● ● ●',
         textColor: cssVar('--light'),
       })
