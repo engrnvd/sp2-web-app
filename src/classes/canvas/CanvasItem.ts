@@ -38,6 +38,11 @@ export class CanvasItem {
     }
   }
 
+  get textWidth() {
+    this.canvas.ctx.font = `${this.fontSize}px ${cssVar('--font')}`
+    return Math.ceil(this.canvas.ctx.measureText(this.text).width)
+  }
+
   get right() {
     return this.left + this.width
   }

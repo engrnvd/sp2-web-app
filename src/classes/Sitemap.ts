@@ -50,6 +50,10 @@ export class Sitemap {
       page.update().draw()
     })
 
+    this.sections.forEach(section => {
+      section.update().draw()
+    })
+
     ctx.restore()
   }
 

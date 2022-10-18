@@ -50,6 +50,15 @@ export const newSitemapTemplate = (data: any = {}) => ({
       ],
     }),
   ],
-  sections: data.sections || [],
+  sections: data.sections || [
+    {
+      name: 'Section: Links',
+      children: [
+        defaultPage({ name: 'Privacy Policy' }),
+        defaultPage({ name: 'Terms of Service' }),
+        defaultPage({ name: '404' }),
+      ]
+    }
+  ],
 })
 
