@@ -118,7 +118,7 @@ a {
         filter: brightness(85%);
     }
 
-    &.disabled {
+    &.disabled, &[disabled=true] {
         &, &:hover {
             filter: none;
             color: var(--muted);
