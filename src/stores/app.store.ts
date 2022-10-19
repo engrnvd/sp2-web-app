@@ -36,10 +36,11 @@ export const useAppStore = defineStore('app', {
     allColors() {
       let colors = []
       this.sitemap.tree.forEach(page => getColors(page))
+      this.sitemap.sections.forEach(section => getColors(section))
       return [...new Set(colors)]
 
       function getColors(item) {
-        colors.push(item.color)
+        if (item.color) colors.push(item.color)
         if (item.blocks?.length) item.blocks.forEach(b => getColors(b))
         if (item.children?.length) item.children.forEach(ch => getColors(ch))
       }
