@@ -9,7 +9,7 @@ export const colorHelper = {
     return brightness > 155
   },
   shadeColor(col: string, amt: number) {
-    col = col.replace(/^#/, '')
+    col = col.replace(/^.*#/, '')
     if (col.length === 3) col = col[0] + col[0] + col[1] + col[1] + col[2] + col[2]
 
     let [r, g, b] = col.match(/.{2}/g);
