@@ -93,3 +93,7 @@ export function cssFontSize() {
 export function randomArrayItem(arr: any[]) {
   return arr[randomInt(0, arr.length)]
 }
+
+export function lastItem(arr: any[]) {
+  return arr[arr.length - 1]
+}
