@@ -1,15 +1,16 @@
 <script lang="ts" setup>
+import { env } from '@/env'
 import ApmEditable from 'src/components/common/ApmEditable.vue'
+import AddNoteBtn from 'src/components/layout/header/AddNoteBtn.vue'
 import { useAppStore } from 'src/stores/app.store'
 import { RouterLink, useRoute } from 'vue-router'
 import AppLogo from '../../common/AppLogo.vue'
+import DarkModeToggleBtn from './DarkModeToggleBtn.vue'
 import ProfileBtn from './ProfileBtn.vue'
 import ProjectDownloadBtn from './ProjectDownloadBtn.vue'
 import ProjectSettingsBtn from './ProjectSettingsBtn.vue'
 import ProjectShareBtn from './ProjectShareBtn.vue'
 import ViewToggleBtn from './ViewToggleBtn.vue'
-import DarkModeToggleBtn from './DarkModeToggleBtn.vue'
-import { env } from '@/env'
 
 const route = useRoute()
 let app = useAppStore()
@@ -36,7 +37,8 @@ let app = useAppStore()
 
         <div class="flex-grow-1"></div>
 
-        <template v-if="route.name === 'sitemap'">
+        <template v-if="route.name === 'sitemap' && app.canvas">
+            <AddNoteBtn/>
             <ViewToggleBtn/>
             <ProjectSettingsBtn/>
             <ProjectDownloadBtn/>

@@ -8,12 +8,6 @@ interface Payload {
 
 export class AddSectionCommand extends Command {
   description = 'Add new section'
-  declare payload: Payload
-
-  constructor(payload: Payload) {
-    super(payload)
-    this.payload = payload
-  }
 
   run() {
     const section = this.payload.section
@@ -42,4 +36,12 @@ export class AddSectionCommand extends Command {
 
     super.undo()
   }
+
+  declare payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
+  }
+
 }

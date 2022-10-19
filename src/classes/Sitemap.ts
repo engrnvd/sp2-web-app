@@ -1,3 +1,4 @@
+import type { SitemapNote } from 'src/classes/SitemapNote'
 import type { ApmCanvas } from './canvas/ApmCanvas'
 import { SitemapPage } from './SitemapPage'
 import { SitemapSection } from './SitemapSection'
@@ -10,6 +11,7 @@ export class Sitemap {
   archived: Boolean = false
   tree: SitemapPage[] = []
   sections: SitemapSection[] = []
+  notes: SitemapNote[] = []
   created_at: any
   updated_at: any
   owner_id: any
@@ -46,13 +48,9 @@ export class Sitemap {
     ctx.translate(canvas.origin.x, canvas.origin.y)
     ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 
-    this.tree.forEach(page => {
-      page.update().draw()
-    })
-
-    this.sections.forEach(section => {
-      section.update().draw()
-    })
+    this.tree.forEach(page => page.update().draw())
+    this.sections.forEach(section => section.update().draw())
+    this.notes.forEach(note => note.update().draw())
 
     ctx.restore()
   }
