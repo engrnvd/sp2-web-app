@@ -164,8 +164,10 @@ export class SitemapPage {
     }
 
     const leftGap = width / 2
-    this.header.left = ci.left = (parent.isRoot ? rootLeft : parent.ci.left) + leftGap
-    this.header.top = ci.top = (previousPage ? previousPage.ci.top + previousPage.childrenHeight : parent.ci.bottom) + gap
+    const left = (parent.isRoot ? rootLeft : parent.ci.left) + leftGap
+    const top = Math.round(previousPage ? previousPage.ci.top + previousPage.fullHeight : parent.ci.bottom) + gap
+    this.header.left = ci.left = left
+    this.header.top = ci.top = top
   }
 
   updateHorizontal() {
@@ -180,10 +182,12 @@ export class SitemapPage {
       return
     }
 
-    const startLeft = parent.ci.cx - parent.childrenWidth / 2
+    const startLeft = parent.ci.cx - parent.fullWidth / 2
     const previousPage = this.previousPage
-    this.header.left = ci.left = Math.round(previousPage ? previousPage.ci.left + previousPage.childrenWidth / 2 + this.childrenWidth / 2 + gap : startLeft)
-    this.header.top = ci.top = Math.round(parent.ci.bottom + gap)
+    const left = Math.round(previousPage ? previousPage.ci.cx + previousPage.fullWidth / 2 + gap : startLeft) + (this.fullWidth - width) / 2
+    const top = Math.round(parent.ci.bottom + gap)
+    this.header.left = ci.left = left
+    this.header.top = ci.top = top
   }
 
   update() {

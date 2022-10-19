@@ -9,14 +9,14 @@ export class HasChildPagesMixin {
   children: SitemapPage[] = []
   ci: CanvasItem = null
 
-  get childrenWidth(): number {
+  get fullWidth(): number {
     const gap = sitemapConfig.page.gap
-    return this.children.length ? this.children.reduce((w, child) => w + child.childrenWidth + gap, 0) - gap : this.ci.width
+    return this.children.length ? this.children.reduce((w, child) => w + child.fullWidth + gap, -gap) : this.ci.width
   }
 
-  get childrenHeight(): number {
+  get fullHeight(): number {
     const gap = sitemapConfig.page.gap
-    return this.children.length ? this.children.reduce((h, child) => h + child.childrenHeight + gap, this.ci.height) : this.ci.height
+    return this.children.length ? this.children.reduce((h, child) => h + child.fullHeight + gap, this.ci.height) : this.ci.height
   }
 
   addChildAt(index: number, data = {}) {

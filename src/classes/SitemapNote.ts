@@ -28,7 +28,7 @@ export class SitemapNote {
         paddingX,
         paddingY,
         fillColor: '#ffeb3a',
-        textColor: cssVar('--main-text-color'),
+        textColor: cssVar('--dark'),
         editable: true,
         selectable: true,
         hoverable: true,
