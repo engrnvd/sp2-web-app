@@ -6,6 +6,7 @@ import MainLoader from '@/components/common/MainLoader.vue'
 import { newSitemapTemplate } from '@/helpers/sitemap-helper'
 import { useAppStore } from '@/stores/app.store'
 import { update } from '@tweenjs/tween.js'
+import AddNewSectionBtn from 'src/views/SitemapView/AddNewSectionBtn.vue'
 import Minimap from 'src/views/SitemapView/Minimap.vue'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -86,6 +87,8 @@ onBeforeUnmount(() => {
             <CollapsePageBtn
                 v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
         </template>
+
+        <AddNewSectionBtn v-if="app.canvas"/>
 
         <SitemapFooter v-if="app.canvas"/>
 
