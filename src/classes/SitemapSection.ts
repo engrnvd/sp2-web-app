@@ -26,8 +26,6 @@ export class SitemapSection {
 
       this.ci = new CanvasItem(this.sitemap.canvas, {
         text: this.name,
-        fillColor: cssVar('--body-bg'),
-        textColor: cssVar('--muted'),
         editable: true,
         selectable: true,
         hoverable: true,
@@ -53,6 +51,8 @@ export class SitemapSection {
 
     ci.text = this.name
     ci.width = width
+    ci.fillColor = cssVar('--body-bg')
+    ci.textColor = cssVar('--muted')
     ci.height = paddingY * 2 + fontSize
     ci.left = Math.ceil(canvas.width / 2 - width / 2)
     ci.top = Math.round(canvas.maxY) + fontSize * 5
@@ -68,9 +68,9 @@ export class SitemapSection {
     const ci = this.ci
     const canvas = this.sitemap.canvas
     const ctx = canvas.ctx
-    const y = Math.round(ci.top + ci.height / 2)
+    const y = ci.top + ci.height / 2 - 0.5
     const color = cssVar('--border-color')
-    canvasHelper.line(ctx, canvas.minX, y, canvas.width, y, color, 1)
+    canvasHelper.line(ctx, canvas.minX + ci.paddingX, y, canvas.width - ci.paddingX, y, color, 1)
   }
 
   draw() {

@@ -10,6 +10,8 @@ const inputEl = ref()
 
 const item = computed(() => app.canvas?.editedItem)
 const fontSize = computed(() => item.value.fontSize * app.canvas.zoom.scale)
+const color = computed(() => item.value.textColor)
+const backgroundColor = computed(() => item.value.fillColor || 'var(--body-bg)')
 const styles = computed(() => {
     let height = fontSize.value
     let paddingY = item.value.paddingY
@@ -24,8 +26,8 @@ const styles = computed(() => {
         paddingInline: (item.value.paddingX * zoom) + 'px',
         fontSize: fontSize.value + 'px',
         height: height + 'px',
-        backgroundColor: item.value.fillColor,
-        color: item.value.textColor,
+        backgroundColor: backgroundColor.value,
+        color: color.value,
         fontWeight: item.value.textBold ? 'bold' : 'normal',
     }
 })
@@ -67,13 +69,16 @@ function onChange(e) {
 </template>
 
 <style lang="scss" scoped>
-
 .edited-item-input {
     position: absolute;
     border: none;
     outline: none;
-    box-shadow: var(--shadow-raised);
-    z-index: 2;
-}
+    padding-block: 0;
+    line-height: 0;
 
+    &::selection {
+        background-color: v-bind(color);
+        color: v-bind(backgroundColor);
+    }
+}
 </style>
