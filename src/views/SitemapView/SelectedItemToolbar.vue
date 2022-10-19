@@ -24,6 +24,12 @@ const item = computed(() => app.canvas?.selectedItem)
 const top = computed(() => item.value.relTop - height - 5)
 const width = computed(() => item.value.relWidth)
 const isSection = computed(() => item.value.meta._type === 'section')
+// following is to check if the selected item is a page and is the only page left in a section
+// (a section should not be empty)
+const isPage = computed(() => item.value.meta._type === 'page')
+const belongsToSection = computed(() => item.value.meta?.parent?._type === 'section')
+const hasSiblings = computed(() => item.value.meta?.parent?.children?.length > 1)
+const isOnlyPageInSection = computed(() => isPage.value && belongsToSection.value && !hasSiblings.value)
 
 watchEffect(async () => {
     let _left = item.value.relLeft
@@ -100,20 +106,31 @@ function duplicateItem() {
             <ContentDuplicateIcon/>
         </a>
 
-        <a href="" v-if="isSection" @click.prevent="" v-tooltip="'Move up'">
+        <a href=""
+           :disabled="app.sitemap.sections.length <= 1"
+           v-if="isSection"
+           @click.prevent=""
+           v-tooltip="'Move up'">
             <ArrowUpIcon/>
         </a>
 
-        <a href="" v-if="isSection" @click.prevent="" v-tooltip="'Move down'">
+        <a href=""
+           v-if="isSection"
+           :disabled="app.sitemap.sections.length <= 1"
+           @click.prevent=""
+           v-tooltip="'Move down'">
             <ArrowDownIcon/>
         </a>
 
-        <div class="separator" v-if="!item.meta.isRoot || isSection"></div>
+        <template v-if="(!item.meta.isRoot || isSection) && !isOnlyPageInSection">
+            <div class="separator"></div>
 
-        <a href="" class="text-danger" v-tooltip="'Delete'" v-if="!item.meta.isRoot || isSection"
-           @click.prevent="deleteItem">
-            <DeleteOutlineIcon/>
-        </a>
+            <a href="" class="text-danger"
+               v-tooltip="'Delete'"
+               @click.prevent="deleteItem">
+                <DeleteOutlineIcon/>
+            </a>
+        </template>
     </div>
 </template>
 
