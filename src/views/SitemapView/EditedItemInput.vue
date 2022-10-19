@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { EditItemNameCommand } from 'src/commands/EditItemNameCommand'
+import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
 import { DebounceFn } from 'src/helpers/misc'
 import { useAppStore } from 'src/stores/app.store'
 import { computed, ref, watchEffect } from 'vue'
@@ -9,6 +9,7 @@ const app = useAppStore()
 const inputEl = ref()
 
 const item = computed(() => app.canvas?.editedItem)
+const textProp = computed(() => item.value.meta._type === 'note' ? 'text' : 'name')
 const fontSize = computed(() => item.value.fontSize * app.canvas.zoom.scale)
 const color = computed(() => item.value.textColor)
 const backgroundColor = computed(() => item.value.fillColor || 'var(--body-bg)')
@@ -24,6 +25,7 @@ const styles = computed(() => {
         top: item.value.relTop + (item.value.meta._type === 'page' ? item.value.meta.styles.headerHeight * zoom : 0) + 'px',
         width: item.value.relWidth - item.value.borderWidth * 2 * zoom + 'px',
         paddingInline: (item.value.paddingX * zoom) + 'px',
+        paddingBlock: (item.value.paddingY * zoom) + 'px',
         fontSize: fontSize.value + 'px',
         height: height + 'px',
         backgroundColor: backgroundColor.value,
@@ -35,7 +37,7 @@ const styles = computed(() => {
 watchEffect(() => {
     if (!item.value || !inputEl.value) return
     inputEl.value.focus()
-    setTimeout(() => inputEl.value.setSelectionRange(0, item.value.meta.name.length))
+    setTimeout(() => inputEl.value.setSelectionRange(0, item.value.meta[textProp.value].length))
 })
 
 function close() {
@@ -44,11 +46,11 @@ function close() {
 
 function onChange(e) {
     changeFn.run(() => {
-        const existingValue = item.value.meta.name
+        const existingValue = item.value.meta[textProp.value]
         const newValue = e.target.value
         if (existingValue === newValue) return close()
 
-        new EditItemNameCommand({ item: item.value.meta, value: newValue }).execute()
+        new EditItemPropCommand({ item: item.value.meta, prop: textProp.value, value: newValue }).execute()
 
         setTimeout(close)
     })
@@ -57,15 +59,15 @@ function onChange(e) {
 </script>
 
 <template>
-    <input
+    <textarea
         ref="inputEl"
         :style="styles"
-        :value="item.meta.name"
+        :value="item.meta[textProp]"
         class="edited-item-input"
         @change="onChange"
         @keydown.enter="onChange"
         @keydown.esc="close"
-    />
+    ></textarea>
 </template>
 
 <style lang="scss" scoped>
@@ -73,8 +75,6 @@ function onChange(e) {
     position: absolute;
     border: none;
     outline: none;
-    padding-block: 0;
-    line-height: 0;
 
     &::selection {
         background-color: v-bind(color);

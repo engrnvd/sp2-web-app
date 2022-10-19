@@ -1,4 +1,4 @@
-import type { SitemapNote } from 'src/classes/SitemapNote'
+import { SitemapNote } from 'src/classes/SitemapNote'
 import type { ApmCanvas } from './canvas/ApmCanvas'
 import { SitemapPage } from './SitemapPage'
 import { SitemapSection } from './SitemapSection'
@@ -28,6 +28,10 @@ export class Sitemap {
         } else if (key === 'sections' && data.sections) {
           for (const section of data.sections) {
             this.sections.push(new SitemapSection(this, section))
+          }
+        } else if (key === 'notes' && data.notes) {
+          for (const note of data.notes) {
+            this.notes.push(new SitemapNote(this, note))
           }
         } else {
           this[key] = data[key]
@@ -61,6 +65,7 @@ export class Sitemap {
       is_template: this.is_template,
       tree: this.tree.map(p => p.toData()),
       sections: this.sections.map(s => s.toData()),
+      notes: this.notes.map(n => n.toData()),
     }
   }
 }

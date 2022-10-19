@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { SitemapNote } from 'src/classes/SitemapNote'
-import { cssFontSize } from 'src/helpers/misc'
 import NoteOutlineIcon from 'src/material-design-icons/NoteOutline.vue'
 import { useAppStore } from 'src/stores/app.store'
 import UButton from 'src/U/components/UButton.vue'
@@ -9,7 +8,6 @@ const app = useAppStore()
 
 async function addNote() {
     const canvas = app.canvas
-    const fontSize = cssFontSize()
     const { AddNoteCommand } = await import('@/commands/AddNoteCommand')
     const note = new SitemapNote(app.sitemap, { text: 'New note...' })
 
