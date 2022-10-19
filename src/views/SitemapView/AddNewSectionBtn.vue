@@ -11,7 +11,7 @@ import { computed } from 'vue'
 const app = useAppStore()
 const canvas = app.canvas
 const fontSize = cssFontSize()
-const left = computed(() => canvas.width / 2)
+const left = computed(() => canvas.width / 2 + canvas.origin.x)
 const top = computed(() => canvas.maxY + canvas.origin.y + fontSize * 5)
 
 function addSection() {
@@ -21,6 +21,9 @@ function addSection() {
     })
 
     new AddSectionCommand({ section }).execute()
+
+    app.canvas.setEditedItem(section.ci)
+    app.canvas.setSelectedItem(section.ci)
 }
 
 </script>

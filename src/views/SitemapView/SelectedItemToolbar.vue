@@ -4,7 +4,8 @@ import { SitemapPage } from 'src/classes/SitemapPage'
 import { DeleteItemCommand } from 'src/commands/DeleteItemCommand'
 import { DuplicateItemCommand } from 'src/commands/DuplicateItemCommand'
 import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
-import { cssFontSize } from 'src/helpers/misc'
+import { MoveSectionCommand } from 'src/commands/MoveSectionCommand'
+import { cssFontSize, lastItem } from 'src/helpers/misc'
 import ArrowDownIcon from 'src/material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'src/material-design-icons/ArrowUp.vue'
 import { useAppStore } from 'src/stores/app.store'
@@ -24,6 +25,9 @@ const item = computed(() => app.canvas?.selectedItem)
 const top = computed(() => item.value.relTop - height - 5)
 const width = computed(() => item.value.relWidth)
 const isSection = computed(() => item.value.meta._type === 'section')
+const isTheOnlySection = computed(() => app.sitemap.sections.length <= 1)
+const isTheFirstSection = computed(() => app.sitemap.sections[0] === item.value.meta)
+const isTheLastSection = computed(() => lastItem(app.sitemap.sections) === item.value.meta)
 // following is to check if the selected item is a page and is the only page left in a section
 // (a section should not be empty)
 const isPage = computed(() => item.value.meta._type === 'page')
@@ -74,6 +78,16 @@ function duplicateItem() {
     app.canvas.setSelectedItem(command.clonedItem.ci)
 }
 
+function moveSection(offset: 1 | -1) {
+    const section = item.value.meta
+    const fromIndex = app.sitemap.sections.indexOf(section)
+    const toIndex = fromIndex + offset
+
+    if (toIndex < 0 || toIndex >= app.sitemap.sections.length) return
+
+    new MoveSectionCommand({ section, fromIndex, toIndex }).execute()
+}
+
 </script>
 
 <template>
@@ -107,17 +121,17 @@ function duplicateItem() {
         </a>
 
         <a href=""
-           :disabled="app.sitemap.sections.length <= 1"
+           :disabled="isTheOnlySection || isTheFirstSection"
            v-if="isSection"
-           @click.prevent=""
+           @click.prevent="moveSection(-1)"
            v-tooltip="'Move up'">
             <ArrowUpIcon/>
         </a>
 
         <a href=""
            v-if="isSection"
-           :disabled="app.sitemap.sections.length <= 1"
-           @click.prevent=""
+           :disabled="isTheOnlySection || isTheLastSection"
+           @click.prevent="moveSection(1)"
            v-tooltip="'Move down'">
             <ArrowDownIcon/>
         </a>
@@ -135,7 +149,6 @@ function duplicateItem() {
 </template>
 
 <style scoped lang="scss">
-
 .page-hover-toolbar {
     position: absolute;
     padding-inline: 1em;
@@ -149,5 +162,4 @@ function duplicateItem() {
         height: 1em;
     }
 }
-
 </style>
