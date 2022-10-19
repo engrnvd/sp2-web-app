@@ -9,12 +9,6 @@ interface Payload {
 
 export class MoveSectionCommand extends Command {
   description = 'Add new section'
-  declare payload: Payload
-
-  constructor(payload: Payload) {
-    super(payload)
-    this.payload = payload
-  }
 
   run() {
     const { section, fromIndex, toIndex } = this.payload
@@ -34,5 +28,12 @@ export class MoveSectionCommand extends Command {
     sections.splice(fromIndex, 0, section)
 
     super.undo()
+  }
+
+  declare payload: Payload
+
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
   }
 }

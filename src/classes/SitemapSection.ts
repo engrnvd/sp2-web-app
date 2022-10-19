@@ -49,7 +49,7 @@ export class SitemapSection {
     const paddingY = fontSize * 0.5
     const width = paddingX * 2 + ci.textWidth
 
-    ci.text = this.name
+    ci.text = this.name.toUpperCase()
     ci.width = width
     ci.fillColor = cssVar('--body-bg')
     ci.textColor = cssVar('--muted')
