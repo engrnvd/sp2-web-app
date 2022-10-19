@@ -14,20 +14,25 @@ const fontSize = computed(() => item.value.fontSize * app.canvas.zoom.scale)
 const color = computed(() => item.value.textColor)
 const backgroundColor = computed(() => item.value.fillColor || 'var(--body-bg)')
 const styles = computed(() => {
-    let height = fontSize.value
-    let paddingY = item.value.paddingY
-    if (item.value.meta._type === 'page') paddingY -= item.value.meta.styles.headerHeight
-    height += paddingY * 2 * app.canvas.zoom.scale
     const zoom = app.canvas.zoom.scale
+    let height = item.value.relHeight
+    let paddingY = item.value.paddingY
+    let top = item.value.relTop
+    if (item.value.meta._type === 'page') {
+        const headerHeight = item.value.meta.styles.headerHeight
+        top += headerHeight * zoom
+        paddingY -= headerHeight
+        height = (item.value.fontSize + paddingY * 2) * zoom
+    }
 
     return {
         left: item.value.relLeft + item.value.borderWidth * zoom + 'px',
-        top: item.value.relTop + (item.value.meta._type === 'page' ? item.value.meta.styles.headerHeight * zoom : 0) + 'px',
+        top: top + 'px',
         width: item.value.relWidth - item.value.borderWidth * 2 * zoom + 'px',
-        paddingInline: (item.value.paddingX * zoom) + 'px',
-        paddingBlock: (item.value.paddingY * zoom) + 'px',
-        fontSize: fontSize.value + 'px',
         height: height + 'px',
+        paddingInline: (item.value.paddingX * zoom) + 'px',
+        paddingBlock: paddingY * zoom + 'px',
+        fontSize: fontSize.value + 'px',
         backgroundColor: backgroundColor.value,
         color: color.value,
         fontWeight: item.value.textBold ? 'bold' : 'normal',
@@ -72,9 +77,12 @@ function onChange(e) {
 
 <style lang="scss" scoped>
 .edited-item-input {
+    box-sizing: border-box;
     position: absolute;
     border: none;
     outline: none;
+    overflow: hidden;
+    padding-block: 0;
 
     &::selection {
         background-color: v-bind(color);
