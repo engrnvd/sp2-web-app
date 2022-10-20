@@ -1,10 +1,11 @@
+import { SitemapNote } from 'src/classes/SitemapNote'
 import { SitemapBlock } from '../classes/SitemapBlock'
 import { SitemapPage } from '../classes/SitemapPage'
 import { SitemapSection } from '../classes/SitemapSection'
 import { Command } from './Command'
 
 interface Payload {
-  item: SitemapPage | SitemapBlock | SitemapSection,
+  item: SitemapPage | SitemapBlock | SitemapSection | SitemapNote,
 }
 
 export class DeleteItemCommand extends Command {
@@ -25,10 +26,11 @@ export class DeleteItemCommand extends Command {
     return this.payload.item
   }
 
-  get items(): SitemapPage[] | SitemapBlock[] | SitemapSection[] {
+  get items(): any[] {
     if (this.item instanceof SitemapPage) return this.item.parent.children
     if (this.item instanceof SitemapBlock) return this.item.page.blocks
     if (this.item instanceof SitemapSection) return this.item.sitemap.sections
+    if (this.item instanceof SitemapNote) return this.item.sitemap.notes
     console.error('Cant delete', this.item)
     return []
   }
