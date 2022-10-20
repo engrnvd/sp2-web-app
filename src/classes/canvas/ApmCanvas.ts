@@ -1,8 +1,9 @@
+import { Easing, Tween } from '@tweenjs/tween.js'
+import { MoveItemCommand } from 'src/commands/MoveItemCommand'
 import { _sleep } from 'src/helpers/misc'
 import type { CanvasItem } from './CanvasItem'
 import { CanvasSelection } from './CanvasSelection'
 import { Mouse } from './Mouse'
-import { Easing, Tween } from '@tweenjs/tween.js'
 
 export class ApmCanvas {
   element: HTMLCanvasElement
@@ -145,5 +146,8 @@ export class ApmCanvas {
   }
 
   onDragEnd() {
+    if (!this.draggedItem) return
+    new MoveItemCommand({ item: this.draggedItem.meta, dx: this.mouse.dx, dy: this.mouse.dy }).execute()
+    this.setDraggedItem(null)
   }
 }
