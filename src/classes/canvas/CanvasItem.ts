@@ -185,7 +185,7 @@ export class CanvasItem {
     if (!this.text) return
 
     const ctx = this.canvas.ctx
-    ctx.fillStyle = this.fillColor ? this.textColor : this.shadedColor(this.textColor)
+    ctx.fillStyle = this.textColor
     ctx.textBaseline = 'top'
     ctx.font = `${this.fontSize}px ${cssVar('--font')}`
     if (this.textBold) ctx.font = `bold ${ctx.font}`

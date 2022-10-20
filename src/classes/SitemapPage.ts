@@ -5,7 +5,6 @@ import { AddBlockCommand } from '../commands/AddBlockCommand'
 import { CollapsePageCommand } from '../commands/CollapsePageCommand'
 import { applyMixins, cssFontSize, cssVar } from '../helpers/misc'
 import { defaultBlock, sitemapConfig } from '../helpers/sitemap-helper'
-import { colorHelper } from '../U/helpers/color-helper'
 import { canvasHelper } from './canvas/canvas-helper'
 import { CanvasItem } from './canvas/CanvasItem'
 import { Connection } from './canvas/Connection'
@@ -119,12 +118,6 @@ export class SitemapPage {
     }
   }
 
-  get shadedColor() {
-    let color = this.color
-    if (colorHelper.isLight(color)) color = colorHelper.darken(color, 30)
-    return color
-  }
-
   get index() {
     return this.parent?.children?.indexOf(this) || -1
   }
@@ -155,7 +148,6 @@ export class SitemapPage {
 
     ci.height = height
     ci.text = this.name
-    this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
 
     if (this.isRoot) {
       this.header.top = ci.top = rootTop
@@ -199,7 +191,7 @@ export class SitemapPage {
     ci.paddingY = paddingY
     ci.borderWidth = borderWidth
     ci.text = this.name
-    this.header.fillColor = ci.borderColor = ci.textColor = this.shadedColor
+    this.header.fillColor = ci.borderColor = ci.textColor = this.color
 
     const app = useAppStore()
     if (app.sitemapView === 'Horizontal') this.updateHorizontal()
