@@ -1,14 +1,17 @@
+import { SitemapNote } from 'src/classes/SitemapNote'
 import { SitemapBlock } from '../classes/SitemapBlock'
 import { SitemapPage } from '../classes/SitemapPage'
 import { Command } from './Command'
 
+type ClonableItem = SitemapPage | SitemapBlock | SitemapNote
+
 interface Payload {
-  item: SitemapPage | SitemapBlock,
+  item: ClonableItem,
 }
 
 export class DuplicateItemCommand extends Command {
   description = ''
-  clonedItem: SitemapPage | SitemapBlock = null
+  clonedItem: ClonableItem = null
   declare payload: Payload
 
   constructor(payload: Payload) {
@@ -20,18 +23,19 @@ export class DuplicateItemCommand extends Command {
     return `Duplicate ${this.item._type}`
   }
 
-  get item(): SitemapPage | SitemapBlock {
+  get item() {
     return this.payload.item
   }
 
-  get items(): SitemapPage[] | SitemapBlock[] {
+  get items(): ClonableItem[] {
     if (this.item instanceof SitemapPage) return this.item.parent.children
     if (this.item instanceof SitemapBlock) return this.item.page.blocks
+    if (this.item instanceof SitemapNote) return this.item.sitemap.notes
     console.error('Cant duplicate', this.item)
     return []
   }
 
-  getClonedItem(): SitemapPage | SitemapBlock {
+  getClonedItem(): ClonableItem {
     if (this.item instanceof SitemapPage) return new SitemapPage(this.item.sitemap, {
       ...this.item.toData(),
       id: undefined
@@ -39,6 +43,11 @@ export class DuplicateItemCommand extends Command {
     if (this.item instanceof SitemapBlock) return new SitemapBlock(this.item.page, {
       ...this.item.toData(),
       id: undefined
+    })
+    if (this.item instanceof SitemapNote) return new SitemapNote(this.item.sitemap, {
+      text: this.item.text + ' Copy',
+      left: this.item.left + 20,
+      top: this.item.top + 20,
     })
     return null
   }
