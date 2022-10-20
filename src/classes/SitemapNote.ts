@@ -46,6 +46,7 @@ export class SitemapNote {
     ci.text = this.text
     ci.left = this.left
     ci.top = this.top
+    ci.height = ci.textHeight + ci.paddingY * 2
 
     return this
   }

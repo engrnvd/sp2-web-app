@@ -1,15 +1,13 @@
 <script lang="ts" setup>
 import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
-import { DebounceFn } from 'src/helpers/misc'
 import { useAppStore } from 'src/stores/app.store'
 import { computed, ref, watchEffect } from 'vue'
 
-const changeFn = new DebounceFn(100)
 const app = useAppStore()
 const inputEl = ref()
 
 const item = computed(() => app.canvas?.editedItem)
-const textProp = computed(() => item.value.meta._type === 'note' ? 'text' : 'name')
+const textProp = computed(() => item.value?.meta?._type === 'note' ? 'text' : 'name')
 const fontSize = computed(() => item.value.fontSize * app.canvas.zoom.scale)
 const color = computed(() => item.value.textColor)
 const backgroundColor = computed(() => item.value.fillColor || 'var(--body-bg)')
@@ -49,16 +47,18 @@ function close() {
     return app.canvas.setEditedItem(null)
 }
 
-function onChange(e) {
-    changeFn.run(() => {
-        const existingValue = item.value.meta[textProp.value]
-        const newValue = e.target.value
-        if (existingValue === newValue) return close()
+function setValue(item, prop, value) {
+    if (!item) return
+    const existingValue = item[prop]
+    if (existingValue === value) return close()
 
-        new EditItemPropCommand({ item: item.value.meta, prop: textProp.value, value: newValue }).execute()
+    new EditItemPropCommand({ item, prop, value }).execute()
 
-        setTimeout(close)
-    })
+    close()
+}
+
+function onEnter(e, item, prop, value) {
+    if (item._type !== 'note') setValue(item, prop, value)
 }
 
 </script>
@@ -69,8 +69,8 @@ function onChange(e) {
         :style="styles"
         :value="item.meta[textProp]"
         class="edited-item-input"
-        @change="onChange"
-        @keydown.enter="onChange"
+        @change="e => setValue(item?.meta, textProp, e.target.value)"
+        @keydown.enter="e => onEnter(e, item?.meta, textProp, e.target.value)"
         @keydown.esc="close"
     ></textarea>
 </template>

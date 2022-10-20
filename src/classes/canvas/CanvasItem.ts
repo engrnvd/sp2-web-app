@@ -43,6 +43,11 @@ export class CanvasItem {
     return Math.ceil(this.canvas.ctx.measureText(this.text).width)
   }
 
+  get textHeight() {
+    const lines = canvasHelper.getLines(this.canvas.ctx, this.text, this.width - this.paddingX * 2)
+    return lines.length * this.fontSize
+  }
+
   get right() {
     return this.left + this.width
   }
