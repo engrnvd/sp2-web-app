@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useSitemapsStore } from '@/views/projects/store'
-import PlusIcon from '@/material-design-icons/Plus.vue'
-import UButton from '@/U/components/UButton.vue'
 import ApmDeleteBtn from '@/components/common/crud/ApmDeleteBtn.vue'
 import MainLoader from '@/components/common/MainLoader.vue'
+import PlusIcon from '@/material-design-icons/Plus.vue'
+import UButton from '@/U/components/UButton.vue'
+import { useSitemapsStore } from '@/views/projects/store'
 import FullPageMessage from 'src/components/common/FullPageMessage.vue'
+import PageHeader from 'src/components/common/PageHeader.vue'
 import { dayjs } from 'src/helpers/dayjs'
 import ArchiveIcon from 'src/material-design-icons/Archive.vue'
 import ArchiveOffIcon from 'src/material-design-icons/ArchiveOff.vue'
 import ContentDuplicateIcon from 'src/material-design-icons/ContentDuplicate.vue'
 import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
-import PageHeader from 'src/components/common/PageHeader.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
@@ -20,6 +20,7 @@ const sitemaps = useSitemapsStore()
 const archived = ref(false)
 
 const data = computed(() => sitemaps.req?.data?.filter(sm => !!sm.archived === archived.value) || [])
+const hasArchivedProjects = computed(() => sitemaps.req?.data?.filter(s => s.archived).length)
 
 onMounted(() => {
     if (!sitemaps.req.hasLoadedData) sitemaps.load()
@@ -34,9 +35,10 @@ watch(() => sitemaps.req.params, () => {
     <div>
         <RouterView/>
         <PageHeader>
-            Projects
+            {{ archived ? 'Archived Projects' : 'Projects' }}
             <template #end>
-                <UButton v-if="sitemaps.req.hasLoadedData" compact info :transparent="!archived"
+                <UButton v-if="sitemaps.req.hasLoadedData && (hasArchivedProjects || archived)" compact info
+                         :transparent="!archived"
                          @click="archived = !archived">
                     {{ archived ? 'Showing' : 'Show' }} Archived
                 </UButton>
@@ -57,6 +59,14 @@ watch(() => sitemaps.req.params, () => {
             <template #action>
                 <RouterLink class="u-btn primary" to="/projects/create">Create your first project</RouterLink>
             </template>
+        </FullPageMessage>
+
+        <FullPageMessage v-if="archived && !hasArchivedProjects">
+            <template #icon>
+                <DrawingBoxIcon/>
+            </template>
+
+            No archived projects
         </FullPageMessage>
 
         <div class="card p-4 gap-4 grid col-4 align-items-center"
