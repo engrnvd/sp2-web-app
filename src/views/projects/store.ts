@@ -1,16 +1,19 @@
-import { defineStore } from 'pinia'
 import { FetchRequest } from '@/helpers/fetch-request'
+import { defineStore } from 'pinia'
 import type { Sitemap } from 'src/classes/Sitemap'
 
 const form = { name: '' }
+const importForm = { website: 'https://' }
 
 export const useSitemapsStore = defineStore('sitemaps', {
   state: () => ({
     form: { ...form },
+    importForm: { ...importForm },
     req: new FetchRequest('sitemaps', 'GET').withProps({ delay: 500 }),
     createReq: new FetchRequest('sitemaps', 'POST'),
     cloneReq: new FetchRequest('', 'POST'),
     archiveReq: new FetchRequest('', 'POST'),
+    importReq: new FetchRequest('sitemaps/import', 'POST'),
   }),
   actions: {
     load() {
@@ -26,6 +29,11 @@ export const useSitemapsStore = defineStore('sitemaps', {
         body: JSON.stringify(this.form)
       }).then(this.afterCreate)
     },
+    import() {
+      return this.importReq.send({
+        body: JSON.stringify(this.importForm)
+      }).then(this.afterCreate)
+    },
     clone(id: number) {
       this.cloneReq.url = `sitemaps/${id}/clone`
       return this.cloneReq.send().then(this.afterCreate)
@@ -38,6 +46,7 @@ export const useSitemapsStore = defineStore('sitemaps', {
     },
     resetForm() {
       this.form = { ...form }
+      this.importForm = { ...importForm }
     },
   },
 })

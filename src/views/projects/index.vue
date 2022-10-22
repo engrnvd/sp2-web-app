@@ -11,6 +11,7 @@ import ArchiveIcon from 'src/material-design-icons/Archive.vue'
 import ArchiveOffIcon from 'src/material-design-icons/ArchiveOff.vue'
 import ContentDuplicateIcon from 'src/material-design-icons/ContentDuplicate.vue'
 import DrawingBoxIcon from 'src/material-design-icons/DrawingBox.vue'
+import ImportIcon from 'src/material-design-icons/Import.vue'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
@@ -42,7 +43,10 @@ watch(() => sitemaps.req.params, () => {
                          @click="archived = !archived">
                     {{ archived ? 'Showing' : 'Show' }} Archived
                 </UButton>
-                <UButton compact @click="router.push('/projects/create')">
+                <UIconBtn :secondary="false" tooltip="Import" @click="router.push('/projects/import')">
+                    <ImportIcon/>
+                </UIconBtn>
+                <UButton compact transparent @click="router.push('/projects/create')">
                     <PlusIcon/>
                     New Project
                 </UButton>

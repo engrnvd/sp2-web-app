@@ -26,6 +26,11 @@ const router = createRouter({
           name: 'projects.create',
           component: () => import('../views/projects/create.vue'),
         },
+        {
+          path: 'import',
+          name: 'projects.import',
+          component: () => import('../views/projects/import-sitemap.vue'),
+        },
       ],
     },
     {
