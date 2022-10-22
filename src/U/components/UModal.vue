@@ -17,7 +17,7 @@
                             <UButton secondary v-if="!okOnly" @click="cancel">{{ cancelTitle }}</UButton>
                         </slot>
                     </div>
-                    <a href="" class="close-modal-btn text-base" @click.prevent="cancel">
+                    <a href="" class="close-modal-btn text-muted" @click.prevent="cancel">
                         <CloseIcon/>
                     </a>
                 </div>
