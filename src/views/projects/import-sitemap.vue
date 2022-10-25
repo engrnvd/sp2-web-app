@@ -56,7 +56,7 @@ onMounted(() => {
         if (event.completed) {
             loading.value = false
             if (!event.failed) {
-                
+
             }
         }
     })
@@ -87,10 +87,15 @@ onMounted(() => {
             />
         </form>
 
-        <div v-if="loading || event.message" class="state d-flex align-items-center gap-4 text-muted text-small"
-             :class="{'text-danger': event.failed}">
+        <div v-if="loading || event.message" class="state d-flex align-items-center gap-4">
             <MainLoader inline/>
-            <div>{{ event.message || 'Importing...' }}</div>
+            <div class="text-muted text-small d-flex flex-column gap-2" :class="{'text-danger': event.failed}">
+                <div v-if="!event.completed">Import in progress. You will be redirected to your sitemap when done.
+                    (Limited
+                    to first 500 pages.)
+                </div>
+                <div>{{ event.message || `Crawling ${sitemaps.importForm.website}...` }}</div>
+            </div>
         </div>
     </UModal>
 </template>
