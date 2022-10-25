@@ -1,4 +1,5 @@
 export const env = {
-  apiUrl: 'https://api.wm2.com/',
+  apiUrl: 'http://localhost/',
   appName: 'Site Planner',
+  socketIoServer: 'http://localhost:3210/'
 }

@@ -32,6 +32,10 @@ export const devRoutes = [
         path: 'chips',
         component: () => import('../views/dev/ChipsView.vue')
       },
+      {
+        path: 'socket-io',
+        component: () => import('../views/dev/SocketIo.page.vue')
+      },
     ]
   }
 
