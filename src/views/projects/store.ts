@@ -32,7 +32,7 @@ export const useSitemapsStore = defineStore('sitemaps', {
     import() {
       return this.importReq.send({
         body: JSON.stringify(this.importForm)
-      }).then(this.afterCreate)
+      })
     },
     clone(id: number) {
       this.cloneReq.url = `sitemaps/${id}/clone`
