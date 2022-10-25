@@ -27,7 +27,7 @@ export class UrlsToSitemap {
     }
 
     return {
-      name: this.website.replace(/https?\:\/\//, ''),
+      name: this.website.replace(/https?\:\/\//, '').replace(/\/$/, ''),
       tree: this.tree
     }
   }
@@ -40,7 +40,7 @@ export class UrlsToSitemap {
       return
     }
 
-    const pageNames = item.url.replace(/^\//, '').split('/')
+    const pageNames = item.url.replace(/^\//, '').split('/').filter(name => !!name.length)
     const totalPages = pageNames.length
     let index = 0
     let currentPage = this.tree[0]

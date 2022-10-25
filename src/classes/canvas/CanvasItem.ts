@@ -189,7 +189,7 @@ export class CanvasItem {
     ctx.textBaseline = 'top'
     ctx.font = `${this.fontSize}px ${cssVar('--font')}`
     if (this.textBold) ctx.font = `bold ${ctx.font}`
-    const lines = canvasHelper.wrappedText(ctx, this.text, this.width, this.left + this.paddingX, this.top + this.paddingY, this.fontSize)
+    const lines = canvasHelper.wrappedText(ctx, this.text, this.width - this.paddingX * 2, this.left + this.paddingX, this.top + this.paddingY, this.fontSize)
     let height = lines.length * this.fontSize + this.paddingY * 2
     if (height > this.height) {
       this.height = height

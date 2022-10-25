@@ -9,6 +9,7 @@ import { useSocketIoAuth } from 'src/composables/useSocketIo'
 import { IMPORTED_SITEMAP_KEY } from 'src/constants'
 import { Storage } from 'src/helpers/storage-helper'
 import { useAppStore } from 'src/stores/app.store'
+import { useAuthStore } from 'src/stores/auth.store'
 import { websiteRule } from 'src/Vee/rules/website.rule'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -50,6 +51,12 @@ function save() {
     sitemaps.import()
 }
 
+function finish(data) {
+    if (!data.id) Storage.setObject(IMPORTED_SITEMAP_KEY, data)
+    loading.value = false
+    router.push(`/p/${data.id || 'new'}`)
+}
+
 onMounted(() => {
     const io = useSocketIoAuth()
     io.on('crawl-update', (data: CrawlUpdateEvent) => {
@@ -57,10 +64,13 @@ onMounted(() => {
         if (event.completed) {
             if (!event.failed) {
                 let sitemapData = new UrlsToSitemap(event.website, event.pages).parse()
-                Storage.setObject(IMPORTED_SITEMAP_KEY, sitemapData)
-                router.push(`/p/new`)
+                const auth = useAuthStore()
+                if (auth.isLoggedIn) {
+                    sitemaps.create(sitemapData).then(finish)
+                } else {
+                    finish(sitemapData)
+                }
             }
-            loading.value = false
         }
     })
 })
@@ -94,8 +104,7 @@ onMounted(() => {
             <MainLoader inline/>
             <div class="text-muted text-small d-flex flex-column gap-2" :class="{'text-danger': event.failed}">
                 <div v-if="!event.completed">Import in progress. You will be redirected to your sitemap when done.
-                    (Limited
-                    to first 500 pages.)
+                    (Limited to first 500 pages.)
                 </div>
                 <div>{{ event.message || `Crawling ${sitemaps.importForm.website}...` }}</div>
             </div>

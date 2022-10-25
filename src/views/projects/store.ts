@@ -23,10 +23,11 @@ export const useSitemapsStore = defineStore('sitemaps', {
       this.req.data = this.req.data || []
       this.req.data.unshift(res)
       this.resetForm()
+      return res
     },
-    create() {
+    create(data = null) {
       return this.createReq.send({
-        body: JSON.stringify(this.form)
+        body: JSON.stringify(data || this.form)
       }).then(this.afterCreate)
     },
     import() {
