@@ -1,4 +1,5 @@
 export const THEME_KEY = 'appTheme'
 export const TOKEN_KEY = 'auth_token'
 export const USER_KEY = 'user'
+export const IMPORTED_SITEMAP_KEY = 'imported_sitemap'
 export const CANVAS_SETTINGS_KEY = 'canvas_settings'

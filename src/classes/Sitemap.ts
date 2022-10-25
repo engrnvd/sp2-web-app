@@ -16,7 +16,7 @@ export class Sitemap {
   updated_at: any
   owner_id: any
 
-  constructor(canvas: ApmCanvas, data: any = {}) {
+  constructor(canvas: ApmCanvas, data: Partial<Sitemap> = {}) {
     this.canvas = canvas
 
     try {

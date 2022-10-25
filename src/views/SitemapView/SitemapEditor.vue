@@ -6,6 +6,8 @@ import MainLoader from '@/components/common/MainLoader.vue'
 import { newSitemapTemplate } from '@/helpers/sitemap-helper'
 import { useAppStore } from '@/stores/app.store'
 import { update } from '@tweenjs/tween.js'
+import { IMPORTED_SITEMAP_KEY } from 'src/constants'
+import { Storage } from 'src/helpers/storage-helper'
 import AddNewSectionBtn from 'src/views/SitemapView/AddNewSectionBtn.vue'
 import Minimap from 'src/views/SitemapView/Minimap.vue'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
@@ -51,7 +53,8 @@ onMounted(() => {
 
     if (!id || id === 'new') {
         setTimeout(() => {
-            app.setSitemap(new Sitemap(canvas, newSitemapTemplate()))
+            let data = Storage.getObject(IMPORTED_SITEMAP_KEY) || newSitemapTemplate()
+            app.setSitemap(new Sitemap(canvas, data))
             draw()
         }, 100)
     } else if (app.sitemap?.id !== id) {

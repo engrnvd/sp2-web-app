@@ -3,9 +3,12 @@ import UInput from '@/U/components/UInput.vue'
 import UModal from '@/U/components/UModal.vue'
 import { useValidator } from '@/Vee/useValidator'
 import { Validator } from '@/Vee/validator'
-import { SitemapPage } from 'src/classes/SitemapPage'
+import { UrlsToSitemap } from 'src/classes/UrlsToSitemap'
 import MainLoader from 'src/components/common/MainLoader.vue'
 import { useSocketIoAuth } from 'src/composables/useSocketIo'
+import { IMPORTED_SITEMAP_KEY } from 'src/constants'
+import { Storage } from 'src/helpers/storage-helper'
+import { useAppStore } from 'src/stores/app.store'
 import { websiteRule } from 'src/Vee/rules/website.rule'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -17,7 +20,7 @@ interface CrawlUpdateEvent {
     message: string
     numPages: number
     website: string
-    pages: Partial<SitemapPage>[]
+    pages: any[]
 }
 
 const resetEvent = {
@@ -31,8 +34,8 @@ const resetEvent = {
 
 const router = useRouter()
 const sitemaps = useSitemapsStore()
+const app = useAppStore()
 const event: CrawlUpdateEvent = reactive({ ...resetEvent })
-
 const loading = ref(false)
 
 const v = useValidator(sitemaps.importForm, (v: Validator) => {
@@ -44,9 +47,7 @@ function save() {
     if (v.hasErrors) return
     loading.value = true
     Object.assign(event, resetEvent)
-    sitemaps.import().then(res => {
-        //router.push(`/p/${sitemaps.createReq.data.id}`)
-    })
+    sitemaps.import()
 }
 
 onMounted(() => {
@@ -54,10 +55,12 @@ onMounted(() => {
     io.on('crawl-update', (data: CrawlUpdateEvent) => {
         Object.assign(event, data)
         if (event.completed) {
-            loading.value = false
             if (!event.failed) {
-
+                let sitemapData = new UrlsToSitemap(event.website, event.pages).parse()
+                Storage.setObject(IMPORTED_SITEMAP_KEY, sitemapData)
+                router.push(`/p/new`)
             }
+            loading.value = false
         }
     })
 })

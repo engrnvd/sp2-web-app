@@ -17,6 +17,7 @@ export class SitemapPage {
   name: string = ''
   color: string = '#03a9f4'
   link: string = ''
+  last_modified: string = ''
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
   children: SitemapPage[] = []
@@ -24,7 +25,7 @@ export class SitemapPage {
   header: CanvasItem = null
 
   // @ts-ignore
-  constructor(sitemap: Sitemap, data: Object, parent: SitemapPage | SitemapSection = null) {
+  constructor(sitemap: Sitemap, data: Partial<SitemapPage>, parent: SitemapPage | SitemapSection = null) {
     this.sitemap = sitemap
     this.parent = parent
 
