@@ -58,7 +58,7 @@ export class UrlsToSitemap {
       // @ts-ignore
       page = {
         name,
-        link: currentPage.link + '/' + childName,
+        link: currentPage.link.replace(/\/$/, '') + '/' + childName,
         last_modified: item.last_modified,
         children: [],
       }

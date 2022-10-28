@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
 
         <SitemapFooter v-if="app.canvas"/>
 
-        <MainLoader v-if="!app.sitemap"/>
+        <MainLoader v-if="!app.sitemap || app.sitemapXmlReq.loading"/>
 
         <Minimap v-if="app.canvas && app.canvas.isBiggerThanViewPort"/>
     </div>

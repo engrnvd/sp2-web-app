@@ -3,7 +3,6 @@ import FilePdfBoxOutlineIcon from 'src/material-design-icons/FilePdfBoxOutline.v
 import FilePngBoxIcon from 'src/material-design-icons/FilePngBox.vue'
 import SitemapIcon from 'src/material-design-icons/Sitemap.vue'
 import TextIcon from 'src/material-design-icons/Text.vue'
-import XmlIcon from 'src/material-design-icons/Xml.vue'
 import { useAppStore } from 'src/stores/app.store'
 import UDropdown from 'src/U/components/UDropdown.vue'
 import UMenuItem from 'src/U/components/UMenuItem.vue'
@@ -31,15 +30,15 @@ const app = useAppStore()
                     <FilePngBoxIcon/>
                     PNG
                 </UMenuItem>
-                <UMenuItem>
-                    <XmlIcon/>
-                    XML
-                </UMenuItem>
+                <!--                <UMenuItem>-->
+                <!--                    <XmlIcon/>-->
+                <!--                    XML-->
+                <!--                </UMenuItem>-->
                 <UMenuItem>
                     <TextIcon/>
                     Text
                 </UMenuItem>
-                <UMenuItem>
+                <UMenuItem @click="app.downloadSitemapXml()">
                     <SitemapIcon/>
                     Sitemap.xml
                 </UMenuItem>

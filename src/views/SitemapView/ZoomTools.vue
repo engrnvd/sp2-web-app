@@ -13,7 +13,8 @@ const app = useAppStore()
         <a href="" @click.prevent="app.canvas.zoomOut()">
             <MinusIcon/>
         </a>
-        <a href="" @click.prevent="app.canvas.setZoom(1)" style="min-width: 3rem; text-align: center">
+        <a href="" @click.prevent="app.canvas.setZoom(1); app.canvas.updateOrigin(0, 0, d => {})"
+           style="min-width: 3rem; text-align: center">
             {{ Math.round(app.canvas.zoom.scale * 100) }}%
         </a>
         <a href="" @click.prevent="app.canvas.zoomIn()">
