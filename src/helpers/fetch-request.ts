@@ -8,9 +8,9 @@
 * paginationMode: replace | append. Type: Bool. Default: 'replace'. Set to 'append' to implement "load more" feature)
 * */
 import { _deepClone } from 'src/helpers/misc'
+import { useNotify } from 'src/U/composables/Notifiy'
 import { env } from '../env'
 import { useAuthStore } from '../stores/auth.store'
-import { useNotify } from 'src/U/composables/Notifiy'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'OPTIONS' | 'DELETE' | 'HEAD' | 'CONNECT' | 'TRACE'
 
@@ -28,6 +28,7 @@ export class FetchRequest {
   delay = 0
   delayFirstRequest = false
   pagination = false
+  resToJson = true
   paginationMode: 'append' | 'replace' = 'replace'
   params: Object = {
     page: 1,
@@ -146,14 +147,16 @@ export class FetchRequest {
         // @ts-ignore
         fetch(url, config).then(async (res: Response) => {
           let output = res
-          try {
-            output = await res.json()
-          } catch (e) {
-          }
+          if (this.resToJson) {
+            try {
+              output = await res.json()
+            } catch (e) {
+            }
 
-          if (!res.ok) {
-            this.handleError(output)
-            return
+            if (!res.ok) {
+              this.handleError(output)
+              return
+            }
           }
 
           return output
@@ -192,6 +195,19 @@ export class FetchRequest {
           else resolve(this.data)
         })
       }, delay)
+    })
+  }
+
+  download(filename, config: RequestInit = {}) {
+    this.resToJson = false
+    return this.send(config).then(res => {
+      // @ts-ignore
+      return res.blob().then(blob => {
+        let a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.setAttribute('download', filename)
+        a.click()
+      })
     })
   }
 
