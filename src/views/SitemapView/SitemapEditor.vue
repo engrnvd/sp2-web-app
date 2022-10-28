@@ -28,6 +28,8 @@ let route = useRoute()
 
 let lastDrawingTime = 0
 const draw = (timestamp: number = 1) => {
+    if (route.name !== 'sitemap') return
+
     let sitemap = app.sitemap
     const elapsedMs = timestamp - lastDrawingTime
     const frameInterval = 1000 / 60
