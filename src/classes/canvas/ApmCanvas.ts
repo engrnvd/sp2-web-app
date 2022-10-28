@@ -112,7 +112,7 @@ export class ApmCanvas {
   }
 
   resetMinAndMaxPoints() {
-    this.minY = this.minY = this.maxX = this.maxY = 0
+    this.minX = this.minY = this.maxX = this.maxY = 0
   }
 
   updateCanvasSize(w: number = null, h: number = null) {

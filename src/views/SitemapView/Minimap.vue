@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/stores/app.store.js'
-import { Easing, Tween } from '@tweenjs/tween.js'
 import { SitemapBlock } from 'src/classes/SitemapBlock'
 import { SitemapPage } from 'src/classes/SitemapPage'
 import { onMounted, reactive, ref } from 'vue'
@@ -23,23 +22,10 @@ onMounted(() => {
 
 function onMinimapClick(e) {
     let canvas = app.sitemap.canvas
-
     const vp = config.vp
-    let t = new Tween(config.vp)
-        .to({
-            x: -canvas.origin.x * config.ratio,
-            y: -canvas.origin.y * config.ratio,
-            w: canvas.width * config.ratio,
-            h: canvas.height * config.ratio,
-        }, 500)
-        .easing(Easing.Cubic.Out)
-        .onComplete(async () => {
-        })
-        .start()
-
     let x = e.offsetX - vp.w / 2
     let y = e.offsetY - vp.h / 2
-    canvas.updateOrigin(-x / config.ratio, -y / config.ratio, () => {
+    canvas.updateOrigin(-x / config.ratio - canvas.minX, -y / config.ratio - canvas.minY, () => {
     })
 }
 
@@ -81,14 +67,23 @@ function draw(timestamp) {
         let ctx: CanvasRenderingContext2D = config.ctx
         const maxH = Math.max(canvas.maxY - canvas.minY, canvas.height)
         const maxW = Math.max(canvas.maxX - canvas.minX, canvas.width)
+        let height, width
 
-        let height = Math.round(Math.min(maxH * 0.09, canvas.height * 0.9))
-        if (height !== config.height) config.height = height
+        if (maxH > maxW) {
+            height = Math.round(Math.min(maxH * 0.09, canvas.height * 0.9))
+            config.ratio = height / maxH
+            width = Math.round(maxW * config.ratio)
 
-        config.ratio = height / maxH
+            if (height !== config.height) config.height = height
+            if (width !== config.width) config.width = width
+        } else {
+            width = Math.round(Math.min(maxW * 0.09, canvas.width * 0.9))
+            config.ratio = width / maxW
+            height = Math.round(maxH * config.ratio)
 
-        let width = Math.round(maxW * config.ratio)
-        if (width !== config.width) config.width = width
+            if (width !== config.width) config.width = width
+            if (height !== config.height) config.height = height
+        }
 
         ctx.save()
         ctx.clearRect(0, 0, config.width, config.height)

@@ -224,10 +224,11 @@ export class SitemapPage {
 
     // update canvas points
     const item = this.ci
-    if (item.left < item.canvas.minX) item.canvas.minX = item.left
-    if (item.right > item.canvas.maxX) item.canvas.maxX = item.right
-    if (item.top < item.canvas.minY) item.canvas.minY = item.top
-    if (item.bottom > item.canvas.maxY) item.canvas.maxY = item.bottom
+    const canvas = item.canvas
+    if (item.left < canvas.minX) canvas.minX = item.left
+    if (item.right > canvas.maxX) canvas.maxX = item.right
+    if (item.top < canvas.minY) canvas.minY = item.top
+    if (item.bottom > canvas.maxY) canvas.maxY = item.bottom
   }
 
   drawCollapsedState() {
