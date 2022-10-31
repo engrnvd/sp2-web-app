@@ -64,7 +64,7 @@ export class SitemapPage {
         textBold: true,
         textColor: this.color,
         hoverable: true,
-        hoverOffset: fontSize,
+        hoverOffset: fontSize * 2,
         selectable: true,
         editable: true,
         meta: this,
@@ -100,9 +100,9 @@ export class SitemapPage {
     const app = useAppStore()
     const bodyFontSize = cssFontSize()
     const fontSize = bodyFontSize * 0.75
-    const width = app.simpleView ? this.ci.textWidth + 4 : bodyFontSize * 10
+    const width = app.simpleView ? this.ci.textWidth + 4 : bodyFontSize * 9
     const paddingY = fontSize * 0.5
-    const blockHeight = fontSize + paddingY * 2
+    const blockHeight = fontSize + paddingY * 1.5
     const headerHeight = bodyFontSize * 0.5
     const blockGap = sitemapConfig.block.gap
     return {

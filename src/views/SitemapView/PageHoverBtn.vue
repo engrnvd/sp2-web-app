@@ -33,6 +33,6 @@ defineProps({
 .page-hover-btn {
     position: absolute;
     animation: fade-in 0.25s ease-out;
-    --form-element-height: 1.5rem !important;
+    --form-element-height: 1.25rem !important;
 }
 </style>

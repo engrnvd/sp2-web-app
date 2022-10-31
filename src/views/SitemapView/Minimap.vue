@@ -35,17 +35,18 @@ function drawPage(ctx: CanvasRenderingContext2D, item: SitemapPage | SitemapBloc
 
     const left = item.ci.left - canvas.minX
     const top = item.ci.top - canvas.minY
-    const headX = left * config.ratio
-    const headY = top * config.ratio
-    const headW = item.ci.width * config.ratio
-    let headH = item.ci.height * config.ratio
+    const x = Math.round(left * config.ratio)
+    const y = Math.round(top * config.ratio)
+    const w = Math.round(item.ci.width * config.ratio)
+    let h = Math.round(item.ci.height * config.ratio)
 
     if (item instanceof SitemapPage) {
+        ctx.lineWidth = 0.5
         ctx.strokeStyle = item.color || '#333'
-        ctx.strokeRect(headX, headY, headW, headH)
+        ctx.strokeRect(x, y, w, h)
     } else {
         ctx.fillStyle = item.color || '#333'
-        ctx.fillRect(headX, headY, headW, headH)
+        ctx.fillRect(x, y, w, h)
     }
 
     if (item instanceof SitemapPage) {

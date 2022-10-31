@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import { SitemapPage } from 'src/classes/SitemapPage'
+import { defaultBlock } from 'src/helpers/sitemap-helper'
+import { useAppStore } from 'src/stores/app.store'
 import { computed } from 'vue'
-import { SitemapPage } from '../../classes/SitemapPage'
-import { defaultBlock } from '../../helpers/sitemap-helper'
 import PlusIcon from '../../material-design-icons/Plus.vue'
-import { useAppStore } from '../../stores/app.store'
 import UButton from '../../U/components/UButton.vue'
 
 const app = useAppStore()
@@ -14,9 +14,9 @@ const style = computed(() => {
     const height = item.value.meta.styles.blockHeight
     const zoom = app.canvas.zoom.scale
     return {
-        left: item.value.relLeft + (item.value.paddingX + 3) * zoom + 'px',
+        left: item.value.relLeft + (item.value.paddingX) * zoom + 'px',
         top: item.value.relBottom - (height + item.value.paddingY - item.value.meta.styles.headerHeight + item.value.meta.styles.blockGap * 2) * zoom + 'px',
-        width: item.value.relWidth - (item.value.paddingX * 2 + 6) * zoom + 'px',
+        width: item.value.relWidth - (item.value.paddingX * 2) * zoom + 'px',
         height: height * zoom + 'px',
     }
 })
