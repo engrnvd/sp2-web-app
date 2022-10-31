@@ -21,8 +21,8 @@ export class SitemapPage {
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
   children: SitemapPage[] = []
-  // @ts-ignore
   header: CanvasItem = null
+  placeholder: CanvasItem = null
 
   // @ts-ignore
   constructor(sitemap: Sitemap, data: Partial<SitemapPage>, parent: SitemapPage | SitemapSection = null) {
@@ -67,6 +67,7 @@ export class SitemapPage {
         hoverOffset: fontSize * 2,
         selectable: true,
         editable: true,
+        draggable: !this.isRoot,
         meta: this,
       })
 
@@ -183,6 +184,35 @@ export class SitemapPage {
     this.header.top = ci.top = top
   }
 
+  updateDraggedState() {
+    const ci = this.ci
+    const canvas = ci.canvas
+
+    if (!canvas.draggedItem) {
+      this.placeholder = null
+      return
+    }
+    if (ci.isDraggedItem || (canvas.mouse.pressed && ci.isInSelectedItems)) {
+      // add children to selection
+      canvas.selection.selectMany([this.header, ...this.children.reduce((acc, p) => [...acc, p.ci, p.header], [])])
+      // set placeholder
+      this.placeholder = this.placeholder || new CanvasItem(canvas, {
+        left: ci.left,
+        top: ci.top,
+        width: ci.width,
+        height: ci.height,
+        fillColor: 'rgba(0,0,0,0.1)'
+      })
+      return
+    }
+
+    const previousPage = this.previousPage
+    if (!previousPage) {
+      // set drop-space before
+    }
+    // set drop-space after
+  }
+
   update() {
     const { height, width, paddingX, paddingY, borderWidth } = this.styles
     const ci = this.ci
@@ -198,6 +228,8 @@ export class SitemapPage {
     if (app.sitemapView === 'Horizontal') this.updateHorizontal()
     else this.updateVertical()
 
+    this.updateDraggedState()
+
     if (this.blocks) this.blocks.forEach(b => b.update())
     if (this.children) this.children.forEach(p => p.update())
 
@@ -206,7 +238,13 @@ export class SitemapPage {
 
   draw() {
     const simpleView = useAppStore().simpleView
-    this.ci.draw()
+    const ci = this.ci
+    const canvas = ci.canvas
+
+    // check dragged state
+    this.drawDraggedState()
+
+    ci.draw()
 
     if (!simpleView) {
       this.header.draw()
@@ -214,7 +252,7 @@ export class SitemapPage {
 
     if (this.children && !this.collapsed) this.children.forEach(p => {
       p.draw()
-      new Connection(this.ci, p.ci).draw()
+      new Connection(ci, p.ci).draw()
     })
 
     if (!simpleView) {
@@ -223,12 +261,20 @@ export class SitemapPage {
     }
 
     // update canvas points
-    const item = this.ci
-    const canvas = item.canvas
-    if (item.left < canvas.minX) canvas.minX = item.left
-    if (item.right > canvas.maxX) canvas.maxX = item.right
-    if (item.top < canvas.minY) canvas.minY = item.top
-    if (item.bottom > canvas.maxY) canvas.maxY = item.bottom
+    if (ci.left < canvas.minX) canvas.minX = ci.left
+    if (ci.right > canvas.maxX) canvas.maxX = ci.right
+    if (ci.top < canvas.minY) canvas.minY = ci.top
+    if (ci.bottom > canvas.maxY) canvas.maxY = ci.bottom
+  }
+
+  drawDraggedState() {
+    const ci = this.ci
+    const canvas = ci.canvas
+
+    // draw placeholder
+    if (this.placeholder) this.placeholder.draw()
+    // draw drop-space before
+    // draw drop-space after
   }
 
   drawCollapsedState() {

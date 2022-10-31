@@ -91,10 +91,6 @@ export class Mouse {
       e.stopPropagation()
     })
 
-    canvas.element.addEventListener('mouseleave', (e: MouseEvent) => {
-      canvas.onDragEnd()
-    })
-
     canvas.element.addEventListener('wheel', (e: WheelEvent) => {
       if (!e.metaKey && !e.ctrlKey) {
         let x = canvas.origin.x - Math.round(e.deltaX * 0.25)

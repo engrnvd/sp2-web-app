@@ -108,6 +108,10 @@ export class CanvasItem {
     return this.canvas.editedItem === this
   }
 
+  get isDraggedItem() {
+    return this.canvas.draggedItem === this
+  }
+
   get hasMouseOver() {
     const mouse = this.canvas.mouse
     let mouseX = mouse.x - this.canvas.origin.x
@@ -210,6 +214,11 @@ export class CanvasItem {
       && !this.canvas.isPointVisible(this.left, this.bottom)
   }
 
+  get isInSelectedItems() {
+    let selectedItems = this.canvas?.selection?.items || []
+    return selectedItems.includes(this)
+  }
+
   update() {
     if (!this.canvas.draggedItem) {
       if (this.hoverable && this.hasMouseOver) {
@@ -219,8 +228,7 @@ export class CanvasItem {
       }
     }
 
-    let selectedItems = this.canvas?.selection?.items || []
-    if (this.canvas.draggedItem === this || (selectedItems.includes(this) && this.canvas.mouse.pressed)) {
+    if (this.isDraggedItem || (this.isInSelectedItems && this.canvas.mouse.pressed)) {
       this.left += this.canvas.mouse.dx
       this.top += this.canvas.mouse.dy
     }

@@ -18,7 +18,7 @@ export class ApmCanvas {
   lastOrigin = { x: 0, y: 0 }
   zoom = { scale: 1, delta: 0.05, min: 0.20, max: 3 }
   mouse
-  selection
+  selection: CanvasSelection
   editedItem: CanvasItem = null
   selectedItem: CanvasItem = null
   draggedItem: CanvasItem = null
