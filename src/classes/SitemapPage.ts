@@ -1,3 +1,4 @@
+import { DropSpace } from 'src/classes/DropSpace'
 import { HasChildPagesMixin } from 'src/classes/HasChildPages.mixin'
 import type { SitemapSection } from 'src/classes/SitemapSection'
 import { useAppStore } from 'src/stores/app.store'
@@ -23,6 +24,9 @@ export class SitemapPage {
   children: SitemapPage[] = []
   header: CanvasItem = null
   placeholder: CanvasItem = null
+  dropSpaceBefore: DropSpace = null
+  dropSpaceAfter: DropSpace = null
+  dropSpaceOver: DropSpace = null
 
   // @ts-ignore
   constructor(sitemap: Sitemap, data: Partial<SitemapPage>, parent: SitemapPage | SitemapSection = null) {
@@ -185,11 +189,17 @@ export class SitemapPage {
   }
 
   updateDraggedState() {
+    if (this.isRoot) return
+
     const ci = this.ci
     const canvas = ci.canvas
 
     if (!canvas.draggedItem) {
       this.placeholder = null
+      this.dropSpaceBefore = null
+      this.dropSpaceAfter = null
+      this.dropSpaceOver = null
+      canvas.selection.clear()
       return
     }
     if (ci.isDraggedItem || (canvas.mouse.pressed && ci.isInSelectedItems)) {
@@ -206,11 +216,23 @@ export class SitemapPage {
       return
     }
 
-    const previousPage = this.previousPage
-    if (!previousPage) {
-      // set drop-space before
-    }
-    // set drop-space after
+    if (this.dropSpaceBefore) this.dropSpaceBefore.update()
+    else this.dropSpaceBefore = new DropSpace({
+      page: this,
+      location: 'before',
+    })
+
+    if (this.dropSpaceAfter) this.dropSpaceAfter.update()
+    else this.dropSpaceAfter = new DropSpace({
+      page: this,
+      location: 'after',
+    })
+
+    if (this.dropSpaceOver) this.dropSpaceOver.update()
+    else this.dropSpaceOver = new DropSpace({
+      page: this,
+      location: 'over',
+    })
   }
 
   update() {
@@ -241,7 +263,6 @@ export class SitemapPage {
     const ci = this.ci
     const canvas = ci.canvas
 
-    // check dragged state
     this.drawDraggedState()
 
     ci.draw()
@@ -268,13 +289,11 @@ export class SitemapPage {
   }
 
   drawDraggedState() {
-    const ci = this.ci
-    const canvas = ci.canvas
-
-    // draw placeholder
+    if (this.isRoot) return
     if (this.placeholder) this.placeholder.draw()
-    // draw drop-space before
-    // draw drop-space after
+    if (this.dropSpaceBefore) this.dropSpaceBefore.draw()
+    if (this.dropSpaceAfter) this.dropSpaceAfter.draw()
+    if (this.dropSpaceOver) this.dropSpaceOver.draw()
   }
 
   drawCollapsedState() {
