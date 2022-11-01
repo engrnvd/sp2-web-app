@@ -250,6 +250,7 @@ export class SitemapPage {
   update() {
     const { height, width, paddingX, paddingY, borderWidth } = this.styles
     const ci = this.ci
+    const app = useAppStore()
     ci.height = height
     ci.width = width
     ci.paddingX = paddingX
@@ -257,9 +258,8 @@ export class SitemapPage {
     ci.borderWidth = borderWidth
     ci.text = this.name
     this.header.fillColor = ci.borderColor = ci.textColor = this.color
-    ci.draggable = !this.isRoot && !this.isLastPageLeftInSection
+    ci.draggable = !this.isRoot && !this.isLastPageLeftInSection && !app.simpleView
 
-    const app = useAppStore()
     if (app.sitemapView === 'Horizontal') this.updateHorizontal()
     else this.updateVertical()
 
