@@ -15,7 +15,7 @@ function toggle() {
 </script>
 
 <template>
-    <UButton icon transparent @click="toggle()" v-tooltip="tooltip">
+    <UButton compact icon transparent @click="toggle()" v-tooltip="tooltip">
         <svg viewBox="0 0 24 24" fill="currentColor" width="1em">
             <path :d="path"></path>
         </svg>

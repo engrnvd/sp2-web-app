@@ -10,7 +10,6 @@ import ProfileBtn from './ProfileBtn.vue'
 import ProjectDownloadBtn from './ProjectDownloadBtn.vue'
 import ProjectSettingsBtn from './ProjectSettingsBtn.vue'
 import ProjectShareBtn from './ProjectShareBtn.vue'
-import ViewToggleBtn from './ViewToggleBtn.vue'
 
 const route = useRoute()
 let app = useAppStore()
@@ -39,7 +38,6 @@ let app = useAppStore()
 
         <template v-if="route.name === 'sitemap' && app.canvas">
             <AddNoteBtn/>
-            <ViewToggleBtn/>
             <ProjectSettingsBtn/>
             <ProjectDownloadBtn/>
             <ProjectShareBtn/>

@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import ShareVariantIcon from '../../../material-design-icons/ShareVariant.vue'
-import UButton from '../../../U/components/UButton.vue'
-
-</script>
+import AccountMultipleOutlineIcon from 'src/material-design-icons/AccountMultipleOutline.vue'
+import UButton from '../../../U/components/UButton.vue'</script>
 
 <template>
     <UButton icon transparent v-tooltip="'Share'">
-        <ShareVariantIcon/>
+        <AccountMultipleOutlineIcon/>
     </UButton>
 </template>
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SitemapNote } from 'src/classes/SitemapNote'
-import NoteOutlineIcon from 'src/material-design-icons/NoteOutline.vue'
+import NotePlusOutlineIcon from 'src/material-design-icons/NotePlusOutline.vue'
 import { useAppStore } from 'src/stores/app.store'
 import UButton from 'src/U/components/UButton.vue'
 
@@ -29,7 +29,7 @@ async function addNote() {
         icon transparent
         v-tooltip="'Add sticky note'"
         @click="addNote">
-        <NoteOutlineIcon/>
+        <NotePlusOutlineIcon/>
     </UButton>
 </template>
 

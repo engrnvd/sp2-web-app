@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ViewToggleBtn from 'src/components/layout/header/ViewToggleBtn.vue'
 import OverallColorSelector from 'src/views/SitemapView/OverallColorSelector.vue'
 import SimpleViewToggleBtn from 'src/views/SitemapView/SimpleViewToggleBtn.vue'
 import UndoRedoBtns from './UndoRedoBtns.vue'
@@ -11,6 +12,7 @@ import ZoomTools from './ZoomTools.vue'</script>
         <UndoRedoBtns/>
         <ZoomTools/>
         <SimpleViewToggleBtn/>
+        <ViewToggleBtn/>
     </div>
 </template>
 

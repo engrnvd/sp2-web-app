@@ -130,9 +130,9 @@ function draw(timestamp) {
     --m-border-color: #bdcad5;
     position: fixed;
     right: 1em;
-    bottom: 3em;
+    bottom: 4em;
     background-color: var(--m-border-color);
-    z-index: 99;
+    z-index: 9;
     cursor: initial;
     overflow: hidden;
     border: 1px solid var(--m-border-color);
