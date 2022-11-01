@@ -1,6 +1,7 @@
 import { CanvasItem } from 'src/classes/canvas/CanvasItem'
 import type { SitemapPage } from 'src/classes/SitemapPage'
 import { sitemapConfig } from 'src/helpers/sitemap-helper'
+import { useAppStore } from 'src/stores/app.store'
 
 export type DropSpaceLocation = 'before' | 'after' | 'over'
 
@@ -37,16 +38,29 @@ export class DropSpace {
   }
 
   initCi() {
+    const app = useAppStore()
+    const isHorizontal = app.simpleView === 'Horizontal'
     const ci = this.page.ci
     const offset = 3
-    const width = (this.location === 'over' ? ci.width : sitemapConfig.page.gap) - offset * 2
-    const left = this.location === 'before' ? ci.left - width - offset : (this.location === 'after' ? ci.right + offset : ci.left + offset)
-    const top = ci.top
+
+    let width, left, top, height
+    if (isHorizontal) {
+      width = (this.location === 'over' ? ci.width : sitemapConfig.page.gap) - offset * 2
+      left = this.location === 'before' ? ci.left - width - offset : (this.location === 'after' ? ci.right + offset : ci.left + offset)
+      top = ci.top
+      height = ci.height
+    } else {
+      width = ci.width
+      height = (this.location === 'over' ? ci.height : sitemapConfig.page.gap) - offset * 2
+      left = ci.left
+      top = this.location === 'before' ? ci.top - height - offset : (this.location === 'after' ? ci.bottom + offset : ci.top + offset)
+    }
+
     this.ci = new CanvasItem(ci.canvas, {
-      left: left,
-      top: top,
-      width: width,
-      height: ci.height,
+      left,
+      top,
+      width,
+      height,
       meta: this,
     })
   }
