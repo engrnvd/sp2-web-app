@@ -1,3 +1,4 @@
+import type { DropSpaceLocation } from 'src/classes/DropSpace'
 import { DropSpace } from 'src/classes/DropSpace'
 import { HasChildPagesMixin } from 'src/classes/HasChildPages.mixin'
 import type { SitemapSection } from 'src/classes/SitemapSection'
@@ -23,10 +24,11 @@ export class SitemapPage {
   blocks: SitemapBlock[] = []
   children: SitemapPage[] = []
   header: CanvasItem = null
-  placeholder: CanvasItem = null
-  dropSpaceBefore: DropSpace = null
-  dropSpaceAfter: DropSpace = null
-  dropSpaceOver: DropSpace = null
+  dropSpaces = {
+    before: null as DropSpace,
+    after: null as DropSpace,
+    over: null as DropSpace,
+  }
 
   // @ts-ignore
   constructor(sitemap: Sitemap, data: Partial<SitemapPage>, parent: SitemapPage | SitemapSection = null) {
@@ -125,11 +127,21 @@ export class SitemapPage {
   }
 
   get index() {
-    return this.parent?.children?.indexOf(this) || -1
+    const idx = this.parent?.children?.indexOf(this)
+    if (!idx && idx !== 0) return -1
+    return idx
   }
 
   get previousPage() {
-    return this.index > 0 ? this.parent.children[this.index - 1] : null
+    return this.index > 0 ? this.parent?.children[this.index - 1] : null
+  }
+
+  get nextPage() {
+    return this.parent?.children[this.index + 1]
+  }
+
+  get isBeingDragged() {
+    return this.ci.isDraggedItem || (this.ci.canvas.mouse.pressed && this.ci.isInSelectedItems)
   }
 
   toData(): Object {
@@ -189,49 +201,37 @@ export class SitemapPage {
   }
 
   updateDraggedState() {
-    if (this.isRoot) return
-
     const ci = this.ci
     const canvas = ci.canvas
 
+    // reset drag state
     if (!canvas.draggedItem) {
-      this.placeholder = null
-      this.dropSpaceBefore = null
-      this.dropSpaceAfter = null
-      this.dropSpaceOver = null
+      this.dropSpaces.before = null
+      this.dropSpaces.after = null
+      this.dropSpaces.over = null
       canvas.selection.clear()
       return
     }
-    if (ci.isDraggedItem || (canvas.mouse.pressed && ci.isInSelectedItems)) {
+
+    // don't draw drop spaces for the dragged page
+    if (this.isBeingDragged) {
       // add children to selection
       canvas.selection.selectMany([this.header, ...this.children.reduce((acc, p) => [...acc, p.ci, p.header], [])])
-      // set placeholder
-      this.placeholder = this.placeholder || new CanvasItem(canvas, {
-        left: ci.left,
-        top: ci.top,
-        width: ci.width,
-        height: ci.height,
-        fillColor: 'rgba(0,0,0,0.1)'
-      })
       return
     }
 
-    if (this.dropSpaceBefore) this.dropSpaceBefore.update()
-    else this.dropSpaceBefore = new DropSpace({
-      page: this,
-      location: 'before',
-    })
+    this.updateDropSpace('over')
 
-    if (this.dropSpaceAfter) this.dropSpaceAfter.update()
-    else this.dropSpaceAfter = new DropSpace({
-      page: this,
-      location: 'after',
-    })
+    if (!this.previousPage?.isBeingDragged && !this.isRoot) this.updateDropSpace('before')
 
-    if (this.dropSpaceOver) this.dropSpaceOver.update()
-    else this.dropSpaceOver = new DropSpace({
+    if (!this.nextPage?.isBeingDragged && !this.isRoot) this.updateDropSpace('after')
+  }
+
+  updateDropSpace(location: DropSpaceLocation) {
+    if (this.dropSpaces[location]) this.dropSpaces[location].update()
+    else this.dropSpaces[location] = new DropSpace({
       page: this,
-      location: 'over',
+      location,
     })
   }
 
@@ -291,11 +291,14 @@ export class SitemapPage {
   }
 
   drawDraggedState() {
+    if (this.dropSpaces.over && !this.isParentOf(this.ci.canvas.draggedItem.meta)) this.dropSpaces.over.draw()
     if (this.isRoot) return
-    if (this.placeholder) this.placeholder.draw()
-    if (this.dropSpaceBefore) this.dropSpaceBefore.draw()
-    if (this.dropSpaceAfter) this.dropSpaceAfter.draw()
-    if (this.dropSpaceOver) this.dropSpaceOver.draw()
+    if (this.dropSpaces.before) this.dropSpaces.before.draw()
+    if (this.dropSpaces.after) this.dropSpaces.after.draw()
+  }
+
+  isParentOf(page: SitemapPage) {
+    return page?.parent === this
   }
 
   drawCollapsedState() {

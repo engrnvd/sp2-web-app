@@ -22,7 +22,7 @@ export class DropSpace {
     const pageCi = this.page.ci
     const canvas = pageCi.canvas
     if (canvas.draggedItem && this.ci.hasMouseOver) {
-      this.ci.fillColor = 'rgba(0,0,0,0.2)'
+      this.ci.fillColor = 'rgba(0,0,0,0.25)'
     } else {
       this.ci.fillColor = 'rgba(0,0,0,0.05)'
     }
