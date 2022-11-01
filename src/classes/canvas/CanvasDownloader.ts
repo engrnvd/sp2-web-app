@@ -2,6 +2,7 @@ import { _sleep } from '@/helpers/misc.js'
 import type { ApmCanvas } from 'src/classes/canvas/ApmCanvas'
 import type { Sitemap } from 'src/classes/Sitemap'
 import { env } from 'src/env'
+import { FileHelper } from 'src/helpers/FileHelper'
 
 export class CanvasDownloader {
   sitemap: Sitemap
@@ -59,10 +60,7 @@ export class CanvasDownloader {
 
   downloadImage({ name = 'generated', bg = '#fff' }) {
     return this.captureImage({ name, bg }).then(dataUrl => {
-      let link = document.createElement('a')
-      link.download = name + '.png'
-      link.href = dataUrl
-      link.click()
+      FileHelper.downloadDataUrl(dataUrl, name + '.png')
     })
   }
 

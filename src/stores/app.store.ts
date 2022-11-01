@@ -13,7 +13,7 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     sitemap: null as Sitemap | null,
     sitemapReq: new FetchRequest('', 'GET'),
-    sitemapXmlReq: new FetchRequest('', 'GET'),
+    downloadSitemapReq: new FetchRequest('', 'GET'),
     sitemapView: useStorage('sitemap-view', 'Horizontal' as 'Horizontal' | 'Vertical'),
     simpleView: useStorage('simple-view', false),
   }),
@@ -48,10 +48,10 @@ export const useAppStore = defineStore('app', {
     },
   },
   actions: {
-    downloadSitemapXml() {
+    downloadSitemap(format) {
       if (!this.sitemap) return
-      this.sitemapXmlReq.url = `sitemaps/${this.sitemap.id}/to-sitemap-xml`
-      return this.sitemapXmlReq.download(_snakeCase(this.sitemap.name) + '.xml')
+      this.downloadSitemapReq.url = `sitemaps/${this.sitemap.id}/download?format=${format}`
+      return this.downloadSitemapReq.download(_snakeCase(this.sitemap.name) + `.${format}`)
     },
     downloadPng() {
       return new CanvasDownloader(this.sitemap).downloadImage({
