@@ -37,6 +37,12 @@ export class ApmCanvas {
     return this.width < this.maxX - this.minX || this.height < this.maxY - this.minY
   }
 
+  get isTranslated() {
+    const offset = 100
+    const { x, y } = this.origin
+    return x < -offset || x > offset || y < -offset || y > offset
+  }
+
   initialize(element: HTMLCanvasElement) {
     this.element = element
     this.ctx = element.getContext('2d')

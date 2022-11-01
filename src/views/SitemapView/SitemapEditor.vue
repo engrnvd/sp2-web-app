@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
 
         <MainLoader v-if="!app.sitemap || app.downloadSitemapReq.loading"/>
 
-        <Minimap v-if="app.canvas && app.canvas.isBiggerThanViewPort"/>
+        <Minimap v-if="app.canvas && (app.canvas.isBiggerThanViewPort || app.canvas.isTranslated)"/>
     </div>
 </template>
 

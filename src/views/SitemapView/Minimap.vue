@@ -102,6 +102,9 @@ function draw(timestamp) {
         ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 
         for (const page of app.sitemap.tree) drawPage(ctx, page)
+        for (const section of app.sitemap.sections) {
+            for (const page of section.children) drawPage(ctx, page)
+        }
 
         ctx.restore()
 
