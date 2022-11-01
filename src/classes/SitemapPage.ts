@@ -334,6 +334,11 @@ export class SitemapPage {
   toggleCollapse() {
     new CollapsePageCommand({ page: this }).execute()
   }
+
+  delete() {
+    if (!this.parent) throw new Error('Root page can not be deleted')
+    this.parent.removeChildPage(this)
+  }
 }
 
 applyMixins(SitemapPage, [HasChildPagesMixin])

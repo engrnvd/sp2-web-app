@@ -1,4 +1,6 @@
 import { Easing, Tween } from '@tweenjs/tween.js'
+import type { DropSpace } from 'src/classes/DropSpace'
+import { DropPageCommand } from 'src/commands/DropPageCommand'
 import { MoveItemCommand } from 'src/commands/MoveItemCommand'
 import { _sleep } from 'src/helpers/misc'
 import type { CanvasItem } from './CanvasItem'
@@ -24,6 +26,7 @@ export class ApmCanvas {
   draggedItem: CanvasItem = null
   hoveredItem: CanvasItem = null
   highlightedItem: CanvasItem = null
+  currentDropSpace: DropSpace = null
 
   constructor() {
     this.mouse = new Mouse()
@@ -147,7 +150,12 @@ export class ApmCanvas {
 
   onDragEnd() {
     if (!this.draggedItem) return
-    new MoveItemCommand({ item: this.draggedItem.meta, dx: this.mouse.dx, dy: this.mouse.dy }).execute()
+
+    if (this.draggedItem.meta._type === 'page') {
+      new DropPageCommand({ dropSpace: this.currentDropSpace, draggedPage: this.draggedItem.meta }).execute()
+    } else {
+      new MoveItemCommand({ item: this.draggedItem.meta, dx: this.mouse.dx, dy: this.mouse.dy }).execute()
+    }
     this.setDraggedItem(null)
   }
 }

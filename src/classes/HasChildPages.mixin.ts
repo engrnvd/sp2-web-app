@@ -30,4 +30,14 @@ export class HasChildPagesMixin {
   addChild(childPageData = {}) {
     return this.addChildAt(this.children.length, childPageData)
   }
+
+  addChildPageAt(idx: number, page: SitemapPage) {
+    this.children.splice(idx, 0, page)
+    // @ts-ignore
+    page.parent = this
+  }
+
+  removeChildPage(page: SitemapPage) {
+    this.children.splice(this.children.indexOf(page), 1)
+  }
 }

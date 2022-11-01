@@ -1,12 +1,11 @@
 import { CanvasItem } from 'src/classes/canvas/CanvasItem'
 import type { SitemapPage } from 'src/classes/SitemapPage'
-import type { SitemapSection } from 'src/classes/SitemapSection'
 import { sitemapConfig } from 'src/helpers/sitemap-helper'
 
 export type DropSpaceLocation = 'before' | 'after' | 'over'
 
 export class DropSpace {
-  page: SitemapPage | SitemapSection
+  page: SitemapPage
   location: DropSpaceLocation
   ci: CanvasItem
 
@@ -21,10 +20,15 @@ export class DropSpace {
   update() {
     const pageCi = this.page.ci
     const canvas = pageCi.canvas
-    if (canvas.draggedItem && this.ci.hasMouseOver) {
-      this.ci.fillColor = 'rgba(0,0,0,0.25)'
+    const ci = this.ci
+    if (canvas.draggedItem && ci.hasMouseOver) {
+      ci.fillColor = 'rgba(0,0,0,0.25)'
+      canvas.currentDropSpace = this
     } else {
-      this.ci.fillColor = 'rgba(0,0,0,0.05)'
+      ci.fillColor = 'rgba(0,0,0,0.05)'
+      if (canvas.currentDropSpace === this) {
+        canvas.currentDropSpace = null
+      }
     }
   }
 
