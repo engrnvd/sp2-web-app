@@ -282,10 +282,12 @@ export class SitemapPage {
     }
 
     // update canvas points
-    if (ci.left < canvas.minX) canvas.minX = ci.left
-    if (ci.right > canvas.maxX) canvas.maxX = ci.right
-    if (ci.top < canvas.minY) canvas.minY = ci.top
-    if (ci.bottom > canvas.maxY) canvas.maxY = ci.bottom
+    if (!canvas.draggedItem) {
+      if (ci.left < canvas.minX) canvas.minX = ci.left
+      if (ci.right > canvas.maxX) canvas.maxX = ci.right
+      if (ci.top < canvas.minY) canvas.minY = ci.top
+      if (ci.bottom > canvas.maxY) canvas.maxY = ci.bottom
+    }
   }
 
   drawDraggedState() {

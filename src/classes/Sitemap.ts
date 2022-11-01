@@ -48,7 +48,7 @@ export class Sitemap {
     ctx.textBaseline = 'top'
     ctx.save()
     canvas.clear()
-    canvas.resetMinAndMaxPoints()
+    if (!canvas.draggedItem) canvas.resetMinAndMaxPoints()
     ctx.translate(canvas.origin.x, canvas.origin.y)
     ctx.scale(canvas.zoom.scale, canvas.zoom.scale)
 

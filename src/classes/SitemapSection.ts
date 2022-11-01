@@ -55,7 +55,7 @@ export class SitemapSection {
     ci.textColor = cssVar('--muted')
     ci.height = paddingY * 2 + fontSize
     ci.left = Math.ceil(canvas.width / 2 - width / 2)
-    ci.top = Math.round(canvas.maxY) + fontSize * 5
+    if (!canvas.draggedItem) ci.top = Math.round(canvas.maxY) + fontSize * 5
     ci.paddingX = paddingX
     ci.paddingY = paddingY
 
