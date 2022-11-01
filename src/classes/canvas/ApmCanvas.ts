@@ -148,11 +148,17 @@ export class ApmCanvas {
 
   }
 
+  get hasDraggedPage() {
+    return this.draggedItem?.meta?._type === 'page'
+  }
+
   onDragEnd() {
     if (!this.draggedItem) return
 
-    if (this.draggedItem.meta._type === 'page') {
-      new DropPageCommand({ dropSpace: this.currentDropSpace, draggedPage: this.draggedItem.meta }).execute()
+    if (this.hasDraggedPage) {
+      if (this.currentDropSpace) {
+        new DropPageCommand({ dropSpace: this.currentDropSpace, draggedPage: this.draggedItem.meta }).execute()
+      }
     } else {
       new MoveItemCommand({ item: this.draggedItem.meta, dx: this.mouse.dx, dy: this.mouse.dy }).execute()
     }

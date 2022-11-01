@@ -205,7 +205,7 @@ export class SitemapPage {
     const canvas = ci.canvas
 
     // reset drag state
-    if (!canvas.draggedItem) {
+    if (!canvas.hasDraggedPage) {
       this.dropSpaces.before = null
       this.dropSpaces.after = null
       this.dropSpaces.over = null
@@ -235,6 +235,18 @@ export class SitemapPage {
     })
   }
 
+  get belongsToSection() {
+    return this.parent?._type === 'section'
+  }
+
+  get isOnlyChild() {
+    return this.parent?.children?.length === 1
+  }
+
+  get isLastPageLeftInSection() {
+    return this.belongsToSection && this.isOnlyChild
+  }
+
   update() {
     const { height, width, paddingX, paddingY, borderWidth } = this.styles
     const ci = this.ci
@@ -245,6 +257,7 @@ export class SitemapPage {
     ci.borderWidth = borderWidth
     ci.text = this.name
     this.header.fillColor = ci.borderColor = ci.textColor = this.color
+    ci.draggable = !this.isRoot && !this.isLastPageLeftInSection
 
     const app = useAppStore()
     if (app.sitemapView === 'Horizontal') this.updateHorizontal()
