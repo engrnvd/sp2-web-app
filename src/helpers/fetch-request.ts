@@ -7,6 +7,7 @@
 * pagination: Whether to request paginated data. Type: Bool. Default: false
 * paginationMode: replace | append. Type: Bool. Default: 'replace'. Set to 'append' to implement "load more" feature)
 * */
+import { FileHelper } from 'src/helpers/FileHelper'
 import { _deepClone } from 'src/helpers/misc'
 import { useNotify } from 'src/U/composables/Notifiy'
 import { env } from '../env'
@@ -203,10 +204,7 @@ export class FetchRequest {
     return this.send(config).then(res => {
       // @ts-ignore
       return res.blob().then(blob => {
-        let a = document.createElement('a')
-        a.href = URL.createObjectURL(blob)
-        a.setAttribute('download', filename)
-        a.click()
+        FileHelper.downloadBlob(blob, filename)
       })
     })
   }
