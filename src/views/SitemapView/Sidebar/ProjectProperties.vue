@@ -18,6 +18,7 @@ const app = useAppStore()
         <div class="d-flex gap-2">
             <SitemapIcon/>
             <ApmEditable
+                class="item-name-editable"
                 v-model="app.sitemap.name"
                 :url="`sitemaps/${app.sitemap.id}`"
                 filed-name="name"
@@ -51,9 +52,5 @@ const app = useAppStore()
 </template>
 
 <style lang="scss">
-.apm-editable {
-    input {
-        font-weight: bold;
-    }
-}
+
 </style>

@@ -15,12 +15,19 @@ defineProps({
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .sidebar-section {
     border-bottom: 1px solid var(--border-color);
 
     .header {
         font-weight: bold;
+    }
+
+    .apm-editable {
+        input {
+            padding: 0.25em 0.5em;
+            min-width: 7ch;
+        }
     }
 }
 </style>

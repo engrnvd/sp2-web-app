@@ -13,7 +13,6 @@ import { computed, nextTick, ref, watchEffect } from 'vue'
 import AddBlockIcon from '../../material-design-icons/AddBlock.vue'
 import ContentDuplicateIcon from '../../material-design-icons/ContentDuplicate.vue'
 import DeleteOutlineIcon from '../../material-design-icons/DeleteOutline.vue'
-import LinkVariantIcon from '../../material-design-icons/LinkVariant.vue'
 import UColorPicker from '../../U/components/UColorPicker.vue'
 
 const app = useAppStore()
@@ -111,10 +110,6 @@ function moveSection(offset: 1 | -1) {
             :model-value="item.meta.color"
             @update:model-value="changeColor"
         />
-
-        <a href="" v-tooltip="'Link'" v-if="!isSection">
-            <LinkVariantIcon/>
-        </a>
 
         <a href="" v-if="!item.meta.isRoot && !isSection" @click.prevent="duplicateItem" v-tooltip="'Duplicate'">
             <ContentDuplicateIcon/>

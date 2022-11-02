@@ -19,6 +19,8 @@ export class SitemapPage {
   name: string = ''
   color: string = '#03a9f4'
   link: string = ''
+  titleTag: string = ''
+  metaDesc: string = ''
   last_modified: string = ''
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
@@ -149,6 +151,8 @@ export class SitemapPage {
       name: this.name,
       color: this.color,
       link: this.link,
+      titleTag: this.titleTag,
+      metaDesc: this.metaDesc,
       collapsed: this.collapsed,
       blocks: this.blocks.map(b => b.toData()),
       children: this.children.map(ch => ch.toData()),
