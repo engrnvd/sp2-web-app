@@ -28,21 +28,36 @@ function updateTooltip(e) {
   tooltip.style.top = top + 'px'
 }
 
+function createTooltip(el, value) {
+  let tooltip = el.querySelector('.u-tooltip')
+
+  if (!tooltip) {
+    tooltip = document.createElement('span')
+    el.appendChild(tooltip)
+    tooltip.classList.add('u-tooltip')
+  }
+
+  if (!value) {
+    el.removeEventListener('mouseenter', updateTooltip)
+    tooltip.remove()
+    return
+  }
+
+  tooltip.innerText = value
+  getComputedStyle(el).position === 'absolute' || (el.style.position = 'relative')
+
+  if (!el.classList.contains('u-tooltip-parent')) {
+    el.classList.add('u-tooltip-parent')
+    el.addEventListener('mouseenter', updateTooltip)
+  }
+}
+
 export const vTooltip = {
   mounted: (el: any, { value }) => {
-    if (!value) return
-    const tooltip = document.createElement('span')
-    tooltip.classList.add('u-tooltip')
-    tooltip.innerText = value
-    getComputedStyle(el).position === 'absolute' || (el.style.position = 'relative')
-    el.appendChild(tooltip)
-    el.classList.add('u-tooltip-parent')
-
-    el.addEventListener('mouseenter', updateTooltip)
+    createTooltip(el, value)
   },
   updated: (el, { value }) => {
-    if (!value) return
-    el.querySelector('.u-tooltip').innerText = value
+    createTooltip(el, value)
   },
   unmounted: (el) => {
     el.removeEventListener('mouseenter', updateTooltip)
