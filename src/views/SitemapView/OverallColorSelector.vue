@@ -13,7 +13,7 @@ function onChange(color, newColor) {
 <template>
     <div class="overall-color-selector d-flex align-items-center gap-2 flex-wrap">
         <UColorPicker
-            up
+            left
             v-for="color in app.allColors"
             :key="color"
             :model-value="color"

@@ -32,6 +32,19 @@ export class SitemapPage {
     over: null as DropSpace,
   }
 
+  toData(): Object {
+    return {
+      name: this.name,
+      color: this.color,
+      link: this.link,
+      titleTag: this.titleTag,
+      metaDesc: this.metaDesc,
+      collapsed: this.collapsed,
+      blocks: this.blocks.map(b => b.toData()),
+      children: this.children.map(ch => ch.toData()),
+    }
+  }
+
   // @ts-ignore
   constructor(sitemap: Sitemap, data: Partial<SitemapPage>, parent: SitemapPage | SitemapSection = null) {
     this.sitemap = sitemap
@@ -144,19 +157,6 @@ export class SitemapPage {
 
   get isBeingDragged() {
     return this.ci.isDraggedItem || (this.ci.canvas.mouse.pressed && this.ci.isInSelectedItems)
-  }
-
-  toData(): Object {
-    return {
-      name: this.name,
-      color: this.color,
-      link: this.link,
-      titleTag: this.titleTag,
-      metaDesc: this.metaDesc,
-      collapsed: this.collapsed,
-      blocks: this.blocks.map(b => b.toData()),
-      children: this.children.map(ch => ch.toData()),
-    }
   }
 
   updateVertical() {

@@ -9,7 +9,7 @@ const app = useAppStore()
 async function addNote() {
     const canvas = app.canvas
     const { AddNoteCommand } = await import('@/commands/AddNoteCommand')
-    const note = new SitemapNote(app.sitemap, { text: 'New note...' })
+    const note = new SitemapNote(app.sitemap, { text: 'New note...', color: '#ffeb3a' })
 
     const { x, y } = canvas.vpCenter
     note.left = x - note.ci.relWidth / 2

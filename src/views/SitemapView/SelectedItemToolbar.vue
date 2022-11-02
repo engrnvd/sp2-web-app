@@ -24,6 +24,7 @@ const item = computed(() => app.canvas?.selectedItem)
 const top = computed(() => item.value.relTop - height - 5)
 const width = computed(() => item.value.relWidth)
 const isSection = computed(() => item.value.meta._type === 'section')
+const isNote = computed(() => item.value.meta._type === 'note')
 const isTheOnlySection = computed(() => app.sitemap.sections.length <= 1)
 const isTheFirstSection = computed(() => app.sitemap.sections[0] === item.value.meta)
 const isTheLastSection = computed(() => lastItem(app.sitemap.sections) === item.value.meta)
@@ -100,7 +101,7 @@ function moveSection(offset: 1 | -1) {
             minWidth: `${width}px`
          }"
     >
-        <a href="" @click.prevent="addBlock" v-tooltip="'Add Block'" v-if="!isSection">
+        <a href="" @click.prevent="addBlock" v-tooltip="'Add Block'" v-if="!isSection && !isNote">
             <AddBlockIcon/>
         </a>
 

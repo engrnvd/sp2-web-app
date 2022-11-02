@@ -6,9 +6,9 @@ defineProps({
 
 <template>
     <div class="sidebar-section px-3 py-3">
-        <slot name="header">
-            <div class="header mb-3" v-if="title">{{ title }}</div>
-        </slot>
+        <div class="header mb-3" v-if="title || $slots.header">
+            <slot name="header">{{ title }}</slot>
+        </div>
         <div class="body">
             <slot></slot>
         </div>

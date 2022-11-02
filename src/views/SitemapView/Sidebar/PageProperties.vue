@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
 import ApmEditable from 'src/components/common/ApmEditable.vue'
-import FileDocumentIcon from 'src/material-design-icons/FileDocument.vue'
 import FormatTitleIcon from 'src/material-design-icons/FormatTitle.vue'
 import LinkVariantIcon from 'src/material-design-icons/LinkVariant.vue'
 import { useAppStore } from 'src/stores/app.store'
 import ItemColorSection from 'src/views/SitemapView/Sidebar/ItemColorSection.vue'
-import ItemNameEditable from 'src/views/SitemapView/Sidebar/ItemNameEditable.vue'
+import ItemNameSection from 'src/views/SitemapView/Sidebar/ItemNameSection.vue'
 import SidebarSection from 'src/views/SitemapView/Sidebar/SidebarSection.vue'
 import { computed } from 'vue'
 
@@ -21,12 +20,7 @@ function updateProp(prop, value) {
 </script>
 
 <template>
-    <SidebarSection>
-        <div class="d-flex gap-2">
-            <FileDocumentIcon/>
-            <ItemNameEditable/>
-        </div>
-    </SidebarSection>
+    <ItemNameSection/>
 
     <ItemColorSection/>
 
@@ -57,7 +51,7 @@ function updateProp(prop, value) {
     <SidebarSection title="Meta Description">
         <ApmEditable
             type="textarea"
-            class="w100 flex-column meta-editable"
+            class="w100 flex-column text-editable"
             :model-value="page.metaDesc"
             filed-name="metaDesc"
             @update:modelValue="v => updateProp('metaDesc', v)"
@@ -67,7 +61,7 @@ function updateProp(prop, value) {
 </template>
 
 <style lang="scss">
-.meta-editable {
+.text-editable {
     position: relative;
 
     .apm-editable-btns {

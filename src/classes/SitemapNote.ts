@@ -7,8 +7,18 @@ export class SitemapNote {
   sitemap: Sitemap
   ci: CanvasItem = null
   text: string = ''
+  color: string = ''
   left: number = 0
   top: number = 0
+
+  toData() {
+    return {
+      text: this.text,
+      top: this.top,
+      left: this.left,
+      color: this.color,
+    }
+  }
 
   constructor(sitemap: Sitemap, data: Partial<SitemapNote>) {
     this.sitemap = sitemap
@@ -27,7 +37,7 @@ export class SitemapNote {
         height: paddingY * 2 + fontSize,
         paddingX,
         paddingY,
-        fillColor: '#ffeb3a',
+        fillColor: this.color || '#ffeb3a',
         textColor: cssVar('--dark'),
         editable: true,
         selectable: true,
@@ -46,6 +56,7 @@ export class SitemapNote {
     ci.text = this.text
     ci.left = this.left
     ci.top = this.top
+    ci.fillColor = this.color || '#ffeb3a'
     ci.height = ci.textHeight + ci.paddingY * 2
 
     return this
@@ -55,11 +66,4 @@ export class SitemapNote {
     this.ci.draw()
   }
 
-  toData() {
-    return {
-      text: this.text,
-      top: this.top,
-      left: this.left,
-    }
-  }
 }
