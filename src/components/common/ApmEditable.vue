@@ -7,6 +7,7 @@ import CheckCircleIcon from 'src/material-design-icons/CheckCircle.vue'
 import CloseIcon from 'src/material-design-icons/Close.vue'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
 import ULoading from 'src/U/components/ULoading.vue'
+import UTextarea from 'src/U/components/UTextarea.vue'
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -47,6 +48,7 @@ watch(_value, () => {
 
 // methods
 async function updateWidth() {
+    if (!inputEl.value) return
     await nextTick()
     let w = _getInputTextSize(inputEl.value)
     inputEl.value.style.width = `${w}px`
@@ -77,7 +79,7 @@ function cancel() {
     _value.value = props.modelValue
     req.error = ''
     req.loaded = false
-    inputEl.value.blur()
+    if (inputEl.value) inputEl.value.blur()
 }
 
 </script>
@@ -85,21 +87,22 @@ function cancel() {
 <template>
     <div ref="el" class="apm-editable d-flex align-items-center gap-2">
         <slot :value="_value">
-            <input :type="type" v-model="_value"/>
+            <UTextarea v-if="type === 'textarea'" v-model="_value" placeholder="not set"/>
+            <input v-else :type="type" v-model="_value" placeholder="not set"/>
         </slot>
         <ULoading v-if="req.loading"/>
         <AlertCircleIcon v-if="req.error" class="text-danger" v-tooltip="req.error"/>
         <Transition name="fade">
             <CheckCircleIcon v-if="showSuccessIcon" class="text-success" v-tooltip="`Saved`"/>
         </Transition>
-        <template v-if="confirmBeforeSave && hasChanged && !req.loading">
+        <div class="d-flex gap-2 apm-editable-btns" v-if="confirmBeforeSave && hasChanged && !req.loading">
             <UIconBtn success @click="ok">
                 <CheckIcon/>
             </UIconBtn>
             <UIconBtn @click="cancel">
                 <CloseIcon/>
             </UIconBtn>
-        </template>
+        </div>
     </div>
 </template>
 
@@ -139,6 +142,20 @@ function cancel() {
             height: var(--color-input-size);
             min-height: var(--color-input-size);
             max-width: var(--color-input-size);
+        }
+    }
+
+    .u-input-container {
+        width: 100%;
+
+        .u-input {
+            border-width: 1px;
+        }
+    }
+
+    .apm-editable-btns {
+        .u-btn {
+            --form-element-height: 1.5rem;
         }
     }
 }
