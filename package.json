@@ -10,6 +10,8 @@
     "sass": "sass src/U/u-core.scss:style-for-ide.css"
   },
   "dependencies": {
+    "@tiptap/starter-kit": "^2.0.0-beta.199",
+    "@tiptap/vue-3": "^2.0.0-beta.199",
     "@tweenjs/tween.js": "^18.6.4",
     "dayjs": "^1.11.5",
     "jspdf": "^2.5.1",

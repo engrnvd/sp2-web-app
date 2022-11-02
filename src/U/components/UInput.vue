@@ -29,13 +29,15 @@ const emit = defineEmits([...inputEmits])
 </template>
 
 <style lang="scss">
-.u-input-container {
+:root {
     --u-input-padding: 0.75em;
     --u-input-border-width: 2px;
     --u-input-color: var(--primary);
     --u-input-text-color: var(--main-text-color);
     --u-input-border-color: var(--border-color);
+}
 
+.u-input-container {
     &.has-error {
         --u-input-color: var(--danger);
         --u-input-text-color: var(--danger);
