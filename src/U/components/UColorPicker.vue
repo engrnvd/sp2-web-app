@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import UDropdown from '@/U/components/UDropdown.vue'
-import { defineProps } from 'vue'
+import { useStorage } from 'src/composables/useStorage'
+import CloseIcon from 'src/material-design-icons/Close.vue'
+import { defineProps, watchEffect } from 'vue'
 
+const recentColors = useStorage('recent-colors-pallet', [])
 // props
 const props = defineProps({
     modelValue: String,
@@ -24,10 +27,20 @@ function selectColor(color) {
     emit('update:modelValue', color)
 }
 
+function removeColor(color) {
+    recentColors.value.splice(recentColors.value.indexOf(color), 1)
+}
+
+watchEffect(() => {
+    if (props.modelValue && !props.colors.includes(props.modelValue) && !recentColors.value.includes(props.modelValue)) {
+        recentColors.value.push(props.modelValue)
+    }
+})
+
 </script>
 
 <template>
-    <UDropdown class="apm-color-picker" v-bind="$attrs">
+    <UDropdown :auto-close="false" class="apm-color-picker" v-bind="$attrs">
         <a class="apc-button"
            href="#"
            :style="{backgroundColor: modelValue || '#adb5bd'}">
@@ -42,11 +55,32 @@ function selectColor(color) {
                          @click="selectColor(color)"
                     ></div>
                 </div>
+
+                <template v-if="recentColors.length">
+                    <hr class="my-2">
+
+                    <div class="text-muted font-weight-bold text-small mb-2">Recent</div>
+                    <div class="color-list mb-3">
+                        <div class="color-item"
+                             v-for="color in recentColors" :key="color"
+                             :style="{backgroundColor: color}"
+                             :class="{selected: color === modelValue}"
+                             @click="selectColor(color)"
+                        >
+                            <a v-if="color !== modelValue"
+                               @click.prevent.stop="removeColor(color)"
+                               class="remove-color-btn text-small all-center">
+                                <CloseIcon/>
+                            </a>
+                        </div>
+                    </div>
+                </template>
+
                 <input
                     class="color-input"
                     type="color"
                     :value="modelValue || '#adb5bd'"
-                    @input="e => selectColor(e.target.value)"
+                    @change="e => selectColor(e.target.value)"
                 >
             </div>
         </template>
@@ -90,6 +124,10 @@ function selectColor(color) {
 
                 &:hover {
                     transform: scale(1.25);
+
+                    .remove-color-btn {
+                        display: flex;
+                    }
                 }
 
                 &.selected {
@@ -104,6 +142,15 @@ function selectColor(color) {
                         border-radius: 50%;
                         border: 2px solid #777;
                     }
+                }
+
+                .remove-color-btn {
+                    position: absolute;
+                    right: -0.5em;
+                    top: -0.5em;
+                    background-color: var(--bg);
+                    border-radius: 50%;
+                    display: none;
                 }
             }
         }
