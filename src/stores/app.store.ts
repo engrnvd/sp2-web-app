@@ -16,6 +16,7 @@ export const useAppStore = defineStore('app', {
     downloadSitemapReq: new FetchRequest('', 'GET'),
     sitemapView: useStorage('sitemap-view', 'Horizontal' as 'Horizontal' | 'Vertical'),
     simpleView: useStorage('simple-view', false),
+    contentModalPage: null as SitemapPage,
   }),
   getters: {
     canvas(): ApmCanvas | null {

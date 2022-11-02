@@ -4,6 +4,7 @@ import ApmEditable from 'src/components/common/ApmEditable.vue'
 import FormatTitleIcon from 'src/material-design-icons/FormatTitle.vue'
 import LinkVariantIcon from 'src/material-design-icons/LinkVariant.vue'
 import { useAppStore } from 'src/stores/app.store'
+import UButton from 'src/U/components/UButton.vue'
 import ItemColorSection from 'src/views/SitemapView/Sidebar/ItemColorSection.vue'
 import ItemNameSection from 'src/views/SitemapView/Sidebar/ItemNameSection.vue'
 import SidebarSection from 'src/views/SitemapView/Sidebar/SidebarSection.vue'
@@ -57,6 +58,14 @@ function updateProp(prop, value) {
             @update:modelValue="v => updateProp('metaDesc', v)"
             confirm-before-save
         />
+    </SidebarSection>
+
+    <SidebarSection>
+        <div class="all-center">
+            <UButton compact secondary flat transparent @click="app.contentModalPage = page">
+                Additional tags or notes
+            </UButton>
+        </div>
     </SidebarSection>
 </template>
 

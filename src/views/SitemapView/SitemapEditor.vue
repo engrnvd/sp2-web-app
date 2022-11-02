@@ -10,6 +10,7 @@ import { IMPORTED_SITEMAP_KEY } from 'src/constants'
 import { Storage } from 'src/helpers/storage-helper'
 import AddNewSectionBtn from 'src/views/SitemapView/AddNewSectionBtn.vue'
 import Minimap from 'src/views/SitemapView/Minimap.vue'
+import PageContentModal from 'src/views/SitemapView/Sidebar/PageContentModal.vue'
 import SitemapSidebar from 'src/views/SitemapView/Sidebar/SitemapSidebar.vue'
 import SitemapFooter from 'src/views/SitemapView/SitemapFooter.vue'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
@@ -102,6 +103,8 @@ onBeforeUnmount(() => {
             <MainLoader v-if="!app.sitemap || app.downloadSitemapReq.loading"/>
 
             <Minimap v-if="app.canvas && (app.canvas.isBiggerThanViewPort || app.canvas.isTranslated)"/>
+
+            <PageContentModal/>
         </div>
         <SitemapSidebar v-if="app.canvas"/>
     </div>

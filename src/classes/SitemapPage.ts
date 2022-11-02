@@ -21,6 +21,7 @@ export class SitemapPage {
   link: string = ''
   titleTag: string = ''
   metaDesc: string = ''
+  content: string = ''
   last_modified: string = ''
   collapsed: Boolean = false
   blocks: SitemapBlock[] = []
@@ -39,6 +40,7 @@ export class SitemapPage {
       link: this.link,
       titleTag: this.titleTag,
       metaDesc: this.metaDesc,
+      content: this.content,
       collapsed: this.collapsed,
       blocks: this.blocks.map(b => b.toData()),
       children: this.children.map(ch => ch.toData()),
