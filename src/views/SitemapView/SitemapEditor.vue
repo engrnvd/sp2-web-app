@@ -10,6 +10,8 @@ import { IMPORTED_SITEMAP_KEY } from 'src/constants'
 import { Storage } from 'src/helpers/storage-helper'
 import AddNewSectionBtn from 'src/views/SitemapView/AddNewSectionBtn.vue'
 import Minimap from 'src/views/SitemapView/Minimap.vue'
+import SitemapSidebar from 'src/views/SitemapView/Sidebar/SitemapSidebar.vue'
+import SitemapFooter from 'src/views/SitemapView/SitemapFooter.vue'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AddBlockBtn from './AddBlockBtn.vue'
@@ -18,7 +20,6 @@ import AddSiblingPageBtn from './AddSiblingPageBtn.vue'
 import CollapsePageBtn from './CollapsePageBtn.vue'
 import EditedItemInput from './EditedItemInput.vue'
 import SelectedItemToolbar from './SelectedItemToolbar.vue'
-import SitemapFooter from './SitemapFooter.vue'
 
 const app = useAppStore()
 const parentEl = ref()
@@ -77,38 +78,50 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div ref="parentEl" class="sitemap-editor flex-grow-1">
-        <canvas ref="canvasEl"></canvas>
+    <div class="flex-grow-1 d-flex sitemap-container">
+        <div ref="parentEl" class="sitemap-editor flex-grow-1">
+            <canvas ref="canvasEl"></canvas>
 
-        <template v-if="!app.simpleView">
-            <EditedItemInput v-if="canvas.editedItem"/>
-            <SelectedItemToolbar v-if="canvas.selectedItem"/>
-            <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
-            <AddChildPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
-            <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"
-                               location="before"/>
-            <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"
-                               location="after"/>
-            <CollapsePageBtn
-                v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
-        </template>
+            <template v-if="!app.simpleView">
+                <EditedItemInput v-if="canvas.editedItem"/>
+                <SelectedItemToolbar v-if="canvas.selectedItem"/>
+                <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
+                <AddChildPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>
+                <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"
+                                   location="before"/>
+                <AddSiblingPageBtn v-if="canvas.hoveredItem && app.hasHoveredPage && !canvas.hoveredItem?.meta?.isRoot"
+                                   location="after"/>
+                <CollapsePageBtn
+                    v-if="canvas.hoveredItem && app.hasHoveredPage && canvas.hoveredItem?.meta?.children?.length"/>
+            </template>
 
-        <AddNewSectionBtn v-if="app.canvas"/>
+            <AddNewSectionBtn v-if="app.canvas"/>
 
-        <SitemapFooter v-if="app.canvas"/>
+            <SitemapFooter v-if="app.canvas"/>
 
-        <MainLoader v-if="!app.sitemap || app.downloadSitemapReq.loading"/>
+            <MainLoader v-if="!app.sitemap || app.downloadSitemapReq.loading"/>
 
-        <Minimap v-if="app.canvas && (app.canvas.isBiggerThanViewPort || app.canvas.isTranslated)"/>
+            <Minimap v-if="app.canvas && (app.canvas.isBiggerThanViewPort || app.canvas.isTranslated)"/>
+        </div>
+        <SitemapSidebar v-if="app.canvas"/>
     </div>
 </template>
 
-<style lang="scss" scoped>
-
-.sitemap-editor {
+<style lang="scss">
+.sitemap-container {
     overflow: hidden;
-    user-select: none;
     position: relative;
+    --sidebar-width: 240px;
+
+    .sitemap-editor {
+        overflow: hidden;
+        user-select: none;
+        position: relative;
+    }
+
+    .apm-minimap {
+        right: calc(var(--sidebar-width) + 1em);
+    }
 }
 
 </style>

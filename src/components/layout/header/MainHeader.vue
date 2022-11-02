@@ -51,6 +51,11 @@ let app = useAppStore()
 </template>
 
 <style scoped lang="scss">
+.main-header {
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
 .home-link {
     border-bottom: none;
 }
