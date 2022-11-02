@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import ApmEditable from 'src/components/common/ApmEditable.vue'
 import ArrowCollapseIcon from 'src/material-design-icons/ArrowCollapse.vue'
+import FileTreeIcon from 'src/material-design-icons/FileTree.vue'
+import LanIcon from 'src/material-design-icons/Lan.vue'
 import SitemapIcon from 'src/material-design-icons/Sitemap.vue'
 import { useAppStore } from 'src/stores/app.store'
 import UIconBtn from 'src/U/components/UIconBtn.vue'
@@ -34,10 +36,15 @@ const app = useAppStore()
             <USwitch v-model="app.simpleView"/>
         </div>
     </SidebarSection>
-    <SidebarSection title="View">
-        <div class="d-flex gap-4">
-            <UIconBtn>
+    <SidebarSection>
+        <div class="d-flex gap-4 align-items-center">
+            <LanIcon/>
+            <div class="flex-grow-1 font-weight-bold">Layout</div>
+            <UIconBtn flat :transparent="!app.hasHorizontalView" @click="app.sitemapView = 'Horizontal'">
                 <SitemapIcon/>
+            </UIconBtn>
+            <UIconBtn flat :transparent="app.hasHorizontalView" @click="app.sitemapView = 'Vertical'">
+                <FileTreeIcon/>
             </UIconBtn>
         </div>
     </SidebarSection>

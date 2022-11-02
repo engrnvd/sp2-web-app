@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import ViewToggleBtn from 'src/components/layout/header/ViewToggleBtn.vue'
 import UndoRedoBtns from './UndoRedoBtns.vue'
 import ZoomTools from './ZoomTools.vue'</script>
 
@@ -8,7 +7,6 @@ import ZoomTools from './ZoomTools.vue'</script>
         <div class="flex-grow-1"></div>
         <UndoRedoBtns/>
         <ZoomTools/>
-        <ViewToggleBtn/>
     </div>
 </template>
 

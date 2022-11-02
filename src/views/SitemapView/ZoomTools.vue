@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-
+import { useAppStore } from 'src/stores/app.store'
 import MinusIcon from '../../material-design-icons/Minus.vue'
 import PlusIcon from '../../material-design-icons/Plus.vue'
-import { useAppStore } from '../../stores/app.store'
 
 const app = useAppStore()
 
 </script>
 
 <template>
-    <div class="zoom-tools all-center gap-2 px-2">
+    <div class="zoom-tools all-center gap-2">
         <a href="" @click.prevent="app.canvas.zoomOut()">
             <MinusIcon/>
         </a>
