@@ -42,7 +42,9 @@ watch(() => app.contentModalPage, () => {
         title="Page Content">
         <template #header>
             <div class="d-flex align-items-center mr-4">
-                <h2 class="m-0 flex-grow-1">Page Content</h2>
+                <h2 class="m-0 flex-grow-1">
+                    Page Content: {{ app.contentModalPage?.name || '' }}
+                </h2>
                 <USwitch v-model="state.preview" label="Preview"/>
             </div>
         </template>
