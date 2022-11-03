@@ -2,8 +2,8 @@
 import ApmEditable from '@/components/common/ApmEditable.vue'
 import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
 import BorderHorizontalIcon from 'src/material-design-icons/BorderHorizontal.vue'
-import FileDocumentIcon from 'src/material-design-icons/FileDocument.vue'
 import TextIcon from 'src/material-design-icons/Text.vue'
+import TextBoxOutlineIcon from 'src/material-design-icons/TextBoxOutline.vue'
 import { useAppStore } from 'src/stores/app.store'
 import SidebarSection from 'src/views/SitemapView/Sidebar/SidebarSection.vue'
 import { computed } from 'vue'
@@ -26,7 +26,7 @@ function update(value) {
         <div class="d-flex gap-2">
             <TextIcon v-if="item.meta._type === 'block'"/>
             <BorderHorizontalIcon v-else-if="item.meta._type === 'section'"/>
-            <FileDocumentIcon v-else/>
+            <TextBoxOutlineIcon v-else/>
             <ApmEditable
                 class="item-name-editable"
                 :model-value="item.meta.name"

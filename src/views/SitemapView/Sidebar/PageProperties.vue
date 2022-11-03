@@ -3,8 +3,8 @@ import { EditItemPropCommand } from 'src/commands/EditItemPropCommand'
 import ApmEditable from 'src/components/common/ApmEditable.vue'
 import FormatTitleIcon from 'src/material-design-icons/FormatTitle.vue'
 import LinkVariantIcon from 'src/material-design-icons/LinkVariant.vue'
+import TextIcon from 'src/material-design-icons/Text.vue'
 import { useAppStore } from 'src/stores/app.store'
-import UButton from 'src/U/components/UButton.vue'
 import ItemColorSection from 'src/views/SitemapView/Sidebar/ItemColorSection.vue'
 import ItemNameSection from 'src/views/SitemapView/Sidebar/ItemNameSection.vue'
 import SidebarSection from 'src/views/SitemapView/Sidebar/SidebarSection.vue'
@@ -60,11 +60,10 @@ function updateProp(prop, value) {
         />
     </SidebarSection>
 
-    <SidebarSection>
-        <div class="all-center">
-            <UButton compact secondary flat transparent @click="app.contentModalPage = page">
-                Additional tags or notes
-            </UButton>
+    <SidebarSection class="has-hover" v-ripple @click="app.contentModalPage = page">
+        <div class="d-flex gap-4 font-weight-bold">
+            <TextIcon/>
+            Additional tags or notes
         </div>
     </SidebarSection>
 </template>
