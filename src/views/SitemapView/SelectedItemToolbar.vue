@@ -19,9 +19,9 @@ const app = useAppStore()
 const toolbarEl = ref()
 const left = ref(0)
 
-const height = cssFontSize() * 2.25
+const height = cssFontSize() * 2
 const item = computed(() => app.canvas?.selectedItem)
-const top = computed(() => item.value.relTop - height - 5)
+const top = computed(() => item.value.relTop - height - 6)
 const width = computed(() => item.value.relWidth)
 const isSection = computed(() => item.value.meta._type === 'section')
 const isNote = computed(() => item.value.meta._type === 'note')

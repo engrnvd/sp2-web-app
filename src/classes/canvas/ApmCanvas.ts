@@ -4,7 +4,6 @@ import { DropPageCommand } from 'src/commands/DropPageCommand'
 import { MoveItemCommand } from 'src/commands/MoveItemCommand'
 import { _sleep } from 'src/helpers/misc'
 import type { CanvasItem } from './CanvasItem'
-import { CanvasSelection } from './CanvasSelection'
 import { Mouse } from './Mouse'
 
 export class ApmCanvas {
@@ -19,8 +18,8 @@ export class ApmCanvas {
   origin = { x: 0, y: 0 }
   lastOrigin = { x: 0, y: 0 }
   zoom = { scale: 1, delta: 0.05, min: 0.20, max: 3 }
-  mouse
-  selection: CanvasSelection
+  mouse: Mouse
+  selection: Set<any>
   editedItem: CanvasItem = null
   selectedItem: CanvasItem = null
   draggedItem: CanvasItem = null
@@ -30,7 +29,7 @@ export class ApmCanvas {
 
   constructor() {
     this.mouse = new Mouse()
-    this.selection = new CanvasSelection()
+    this.selection = new Set()
   }
 
   get isBiggerThanViewPort() {
@@ -169,5 +168,6 @@ export class ApmCanvas {
       new MoveItemCommand({ item: this.draggedItem.meta, dx: this.mouse.dx, dy: this.mouse.dy }).execute()
     }
     this.setDraggedItem(null)
+    this.selection.clear()
   }
 }

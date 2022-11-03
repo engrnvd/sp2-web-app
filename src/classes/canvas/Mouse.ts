@@ -34,21 +34,34 @@ export class Mouse {
     })
 
     canvas.element.addEventListener('click', (e: MouseEvent) => {
-      if (e.shiftKey) {
-        canvas.selection.toggle(canvas.hoveredItem)
-        return
-      }
-
       this.x = e.offsetX
       this.y = e.offsetY
       this.clicked = true
       this.pressed = false
 
+      if (e.shiftKey || e.ctrlKey || e.metaKey) {
+        if (canvas.hoveredItem.selectable) {
+          if (!canvas.selection.has(canvas.hoveredItem)) {
+            canvas.selection.add(canvas.hoveredItem)
+            if (canvas.selectedItem) {
+              canvas.selection.add(canvas.selectedItem)
+            }
+          } else {
+            canvas.selection.delete(canvas.hoveredItem)
+          }
+        }
+        return
+      }
+
       if (canvas.hoveredItem) {
-        if (canvas.hoveredItem.selectable) canvas.setSelectedItem(canvas.hoveredItem)
+        if (canvas.hoveredItem.selectable) {
+          canvas.setSelectedItem(canvas.hoveredItem)
+          canvas.selection.clear()
+        }
       } else {
         canvas.setSelectedItem(null)
         canvas.setEditedItem(null)
+        canvas.selection.clear()
       }
     })
 

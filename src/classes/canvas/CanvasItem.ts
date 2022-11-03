@@ -140,10 +140,11 @@ export class CanvasItem {
     const ctx = this.canvas.ctx
     const br = this.borderRadius
 
+    if (this.borderColor) ctx.strokeStyle = this.shadedColor(this.borderColor)
+    if (this.borderWidth) ctx.lineWidth = this.borderWidth
+    if (this.fillColor) ctx.fillStyle = this.shadedColor(this.fillColor)
+
     if (!br[0]) {
-      if (this.fillColor) ctx.fillStyle = this.shadedColor(this.fillColor)
-      if (this.borderColor) ctx.strokeStyle = this.shadedColor(this.borderColor)
-      if (this.borderWidth) ctx.lineWidth = this.borderWidth
       if (this.fillColor) ctx.fillRect(this.left, this.top, this.width, this.height)
       if (this.borderColor || this.borderWidth) ctx.strokeRect(this.left, this.top, this.width, this.height)
       return
@@ -172,10 +173,6 @@ export class CanvasItem {
     nextY = this.top + br[0]
     ctx.lineTo(this.left, nextY)
 
-    if (this.fillColor) ctx.fillStyle = this.shadedColor(this.fillColor)
-    if (this.borderColor) ctx.strokeStyle = this.shadedColor(this.borderColor)
-    if (this.borderWidth) ctx.lineWidth = this.borderWidth
-
     if (this.fillColor) ctx.fill()
     if (this.borderColor || this.borderWidth) ctx.stroke()
     ctx.closePath()
@@ -200,11 +197,29 @@ export class CanvasItem {
     }
   }
 
+  drawSelectedState() {
+    if (this.isSelectedItem || this.isInSelectedItems) {
+      const offset = 1.5
+      const ctx = this.canvas.ctx
+      const bw = this.borderWidth
+      ctx.lineWidth = 1
+      ctx.strokeStyle = cssVar('--primary')
+      ctx.strokeStyle = '#f4c800'
+      ctx.strokeRect(
+        this.left - offset - bw,
+        this.top - offset - bw,
+        this.width + (bw + offset) * 2,
+        this.height + (bw + offset) * 2,
+      )
+    }
+  }
+
   draw() {
     if (this.isOutOfScreen()) return
     this.update()
     this.drawRect()
     this.drawText()
+    this.drawSelectedState()
   }
 
   isOutOfScreen() {
@@ -215,11 +230,13 @@ export class CanvasItem {
   }
 
   get isInSelectedItems() {
-    let selectedItems = this.canvas?.selection?.items || []
-    return selectedItems.includes(this)
+    return this.canvas?.selection?.has(this)
   }
 
   update() {
+    this.left = Math.round(this.left)
+    this.top = Math.round(this.top)
+
     if (!this.canvas.draggedItem) {
       if (this.hoverable && this.hasMouseOver) {
         this.canvas.setHoveredItem(this)

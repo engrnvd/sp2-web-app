@@ -8,7 +8,7 @@ export const sitemapConfig = {
     borderWidth: 2,
   },
   block: {
-    gap: 2, // gap bw two blocks
+    gap: 3, // gap bw two blocks
   },
   connection: {
     offsetX: 40

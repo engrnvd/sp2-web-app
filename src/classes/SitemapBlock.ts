@@ -64,14 +64,6 @@ export class SitemapBlock {
     this.ci.width = parent.width - parent.paddingX * 2
     this.ci.top = parent.top + headerHeight + (blockHeight + blockGap) * (index + 1)
 
-    if (this.ci.isSelectedItem) {
-      this.ci.borderWidth = 2
-      this.ci.borderColor = '#e6aa8a'
-    } else {
-      this.ci.borderWidth = 0
-      this.ci.borderColor = ''
-    }
-
     return this
   }
 

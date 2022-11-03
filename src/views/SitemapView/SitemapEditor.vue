@@ -46,11 +46,11 @@ const draw = (timestamp: number = 1) => {
 
 function updateCanvasSize() {
     const rect = parentEl.value.getBoundingClientRect()
-    canvas.initialize(canvasEl.value)
     canvas.updateCanvasSize(rect.width, rect.height)
 }
 
 onMounted(() => {
+    canvas.initialize(canvasEl.value)
     updateCanvasSize()
 
     let id = route.params.id
@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
         <div ref="parentEl" class="sitemap-editor flex-grow-1">
             <canvas ref="canvasEl"></canvas>
 
-            <template v-if="!app.simpleView">
+            <template v-if="!app.simpleView && !app.hasDraggedPage">
                 <EditedItemInput v-if="canvas.editedItem"/>
                 <SelectedItemToolbar v-if="canvas.selectedItem"/>
                 <AddBlockBtn v-if="canvas.hoveredItem && app.hasHoveredPage"/>

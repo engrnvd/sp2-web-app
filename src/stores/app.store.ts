@@ -23,6 +23,10 @@ export const useAppStore = defineStore('app', {
       // @ts-ignore
       return this.sitemap?.canvas
     },
+    hasDraggedPage() {
+      // @ts-ignore
+      return this.canvas?.draggedItem?.meta._type === 'page'
+    },
     hasHoveredPage() {
       // @ts-ignore
       return this.canvas?.hoveredItem?.meta instanceof SitemapPage

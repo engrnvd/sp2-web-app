@@ -126,7 +126,7 @@ export class SitemapPage {
     const fontSize = bodyFontSize * 0.75
     const width = app.simpleView ? this.ci.textWidth + 4 : bodyFontSize * 9
     const paddingY = fontSize * 0.5
-    const blockHeight = fontSize + paddingY * 1.5
+    const blockHeight = Math.round(fontSize + paddingY * 2)
     const headerHeight = bodyFontSize * 0.5
     const blockGap = sitemapConfig.block.gap
     return {
@@ -182,8 +182,8 @@ export class SitemapPage {
     const leftGap = width / 2
     const left = (parent.isRoot ? rootLeft : parent.ci.left) + leftGap
     const top = Math.round(previousPage ? previousPage.ci.top + previousPage.fullHeight : parent.ci.bottom) + gap
-    this.header.left = ci.left = left
-    this.header.top = ci.top = top
+    this.header.left = ci.left = Math.round(left)
+    this.header.top = ci.top = Math.round(top)
   }
 
   updateHorizontal() {
@@ -202,8 +202,8 @@ export class SitemapPage {
     const previousPage = this.previousPage
     const left = Math.round(previousPage ? previousPage.ci.cx + previousPage.fullWidth / 2 + gap : startLeft) + (this.fullWidth - width) / 2
     const top = Math.round(parent.ci.bottom + gap)
-    this.header.left = ci.left = left
-    this.header.top = ci.top = top
+    this.header.left = ci.left = Math.round(left)
+    this.header.top = ci.top = Math.round(top)
   }
 
   updateDraggedState() {
@@ -215,14 +215,13 @@ export class SitemapPage {
       this.dropSpaces.before = null
       this.dropSpaces.after = null
       this.dropSpaces.over = null
-      canvas.selection.clear()
       return
     }
 
     // don't draw drop spaces for the dragged page
     if (this.isBeingDragged) {
       // add children to selection
-      canvas.selection.selectMany([this.header, ...this.children.reduce((acc, p) => [...acc, p.ci, p.header], [])])
+      this.addToSelectedItems()
       return
     }
 
@@ -231,6 +230,14 @@ export class SitemapPage {
     if (!this.previousPage?.isBeingDragged && !this.isRoot) this.updateDropSpace('before')
 
     if (!this.nextPage?.isBeingDragged && !this.isRoot) this.updateDropSpace('after')
+  }
+
+  addToSelectedItems() {
+    const canvas = this.ci.canvas
+    canvas.selection.add(this.ci)
+    canvas.selection.add(this.header)
+    this.blocks.forEach(b => canvas.selection.add(b.ci))
+    this.children.forEach(ch => ch.addToSelectedItems())
   }
 
   updateDropSpace(location: DropSpaceLocation) {
