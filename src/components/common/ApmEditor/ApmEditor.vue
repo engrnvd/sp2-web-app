@@ -30,6 +30,7 @@ onMounted(() => {
             }),
             Image.configure({
                 inline: true,
+                allowBase64: true,
             })
         ],
         content: props.modelValue,
