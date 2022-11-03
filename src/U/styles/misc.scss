@@ -44,3 +44,9 @@
         opacity: 1;
     }
 }
+
+.has-hover {
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}

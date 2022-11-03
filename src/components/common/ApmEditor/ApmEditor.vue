@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { Image } from '@tiptap/extension-image'
+import { Link } from '@tiptap/extension-link'
+import { TextAlign } from '@tiptap/extension-text-align'
+import { Underline } from '@tiptap/extension-underline'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import ApmEditorMenu from 'src/components/common/ApmEditor/ApmEditorMenu.vue'
@@ -16,12 +20,22 @@ onMounted(() => {
     editor.value = new Editor({
         extensions: [
             StarterKit,
+            Underline,
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+            }),
+            Link.configure({
+                protocols: ['ftp', 'mailto'],
+                openOnClick: true,
+            }),
+            Image.configure({
+                inline: true,
+            })
         ],
         content: props.modelValue,
         onUpdate: () => {
             emit('update:modelValue', editor.value.getHTML())
         },
-        injectCSS: false,
         autofocus: true,
     })
 })
@@ -30,6 +44,7 @@ onBeforeUnmount(() => {
     editor.value.destroy()
 })
 
+defineExpose({ editor })
 </script>
 
 
@@ -43,28 +58,36 @@ onBeforeUnmount(() => {
 <style lang="scss">
 .apm-editor {
     position: relative;
-    --menu-height: 2em;
+    --menu-height: 3em;
+    overflow: hidden;
 
     .apm-editor-menu {
         position: absolute;
         height: var(--menu-height);
+        z-index: 1;
+        width: 100%;
+        box-shadow: var(--shadow-0);
     }
 
     .ProseMirror {
         border: var(--u-input-border-width) solid var(--border-color);
         border-radius: var(--form-element-border-radius);
-        padding: var(--menu-height) 0.8em 0.8em;
-        min-height: 8em;
-
-        p, h1, h2, h3, h4, h5 {
-            &:first-child {
-                margin-top: 0;
-            }
-        }
+        padding: var(--menu-height) 1em 1em;
+        min-height: 10em;
+        transition: border-color 0.5s ease-out;
 
         &:focus {
             outline: none;
-            border-color: var(--primary);
+        }
+
+        a:hover {
+            cursor: pointer;
+        }
+
+        img {
+            &.ProseMirror-selectednode {
+                outline: 2px solid var(--primary);
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ function createRipple(event: any) {
 
 export const vRipple = {
   mounted: (el: any) => {
+    el.style.cursor = 'pointer'
     el.addEventListener('click', createRipple)
   },
   unmounted: (el: any) => {

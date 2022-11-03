@@ -2,17 +2,18 @@
 import { defineProps } from 'vue'
 
 const props = withDefaults(defineProps<{
-    active: boolean,
+    active?: boolean,
 }>(), {
     active: false,
 })
 
+const emit = defineEmits(['click'])
 </script>
 
 <template>
-    <div class="ae-menu-btn all-center" :class="{active}">
+    <a href="" @click.prevent="e => emit('click', e)" class="ae-menu-btn all-center" :class="{active}">
         <slot></slot>
-    </div>
+    </a>
 </template>
 
 <style scoped lang="scss">
@@ -22,17 +23,19 @@ const props = withDefaults(defineProps<{
     height: var(--size);
     cursor: pointer;
     border-radius: 0.25em;
+    color: var(--main-text-color);
 
-    &:hover {
+    &:hover:not(.disabled) {
         background-color: rgba(0, 0, 0, 0.1);
     }
 
-    &:active {
+    &:active:not(.disabled) {
         background-color: rgba(0, 0, 0, 0.2);
     }
 
     &.active {
-        background-color: rgba(0, 0, 0, 0.25);
+        background-color: var(--primary-lighter);
+        color: var(--primary);
     }
 }
 </style>

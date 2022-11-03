@@ -146,7 +146,7 @@ export default {
 
 .apm-modal-body {
     padding: 3em;
-    max-height: calc(100vh - 4em);
+    max-height: calc(100vh - 14em);
     overflow: auto;
 }
 </style>
