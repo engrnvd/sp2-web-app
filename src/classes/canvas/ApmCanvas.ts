@@ -170,4 +170,20 @@ export class ApmCanvas {
     this.setDraggedItem(null)
     this.selection.clear()
   }
+
+  resetSelection() {
+    this.setSelectedItem(null)
+    this.setEditedItem(null)
+    this.selection.clear()
+  }
+
+  handleMultipleSelection() {
+    if (this.selection.has(this.hoveredItem)) {
+      this.selection.delete(this.hoveredItem)
+      return
+    }
+
+    this.selection.add(this.hoveredItem)
+    if (this.selectedItem) this.selection.add(this.selectedItem)
+  }
 }
