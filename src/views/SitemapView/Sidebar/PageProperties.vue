@@ -61,7 +61,7 @@ function updateProp(prop, value) {
     </SidebarSection>
 
     <SidebarSection class="has-hover" v-ripple @click="app.contentModalPage = page">
-        <div class="d-flex gap-4 font-weight-bold">
+        <div class="d-flex align-items-center gap-4 font-weight-bold">
             <TextIcon/>
             Additional tags or notes
         </div>

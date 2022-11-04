@@ -28,5 +28,9 @@ const app = useAppStore()
     background-color: var(--bg);
     border-left: 1px solid var(--border-color);
     flex-shrink: 0;
+
+    .material-design-icon {
+        font-size: 1rem;
+    }
 }
 </style>

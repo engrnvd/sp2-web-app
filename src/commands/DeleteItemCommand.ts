@@ -35,18 +35,18 @@ export class DeleteItemCommand extends Command {
     return []
   }
 
-  run() {
+  run(runSuper = true) {
     // @ts-ignore
     this.index = this.items.indexOf(this.item)
     this.items.splice(this.index, 1)
 
-    super.run()
+    if (runSuper) super.run()
   }
 
-  undo() {
+  undo(runSuper = true) {
     // @ts-ignore
     this.items.splice(this.index, 0, this.item)
 
-    super.undo()
+    if (runSuper) super.undo()
   }
 }
