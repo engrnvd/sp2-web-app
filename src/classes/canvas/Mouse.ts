@@ -57,6 +57,8 @@ export class Mouse {
     canvas.element.addEventListener('mousedown', (e: MouseEvent) => {
       if (e.button !== 0) return // only left click plz
 
+      canvas.updateCursor()
+
       this.lastX = e.offsetX
       this.lastY = e.offsetY
       this.pressed = true
@@ -69,28 +71,40 @@ export class Mouse {
       this.pressed = false
       this.mouseUp = true
       canvas.onDragEnd()
+      canvas.updateCursor()
     })
 
     canvas.element.addEventListener('mousemove', (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
       this.x = e.offsetX
       this.y = e.offsetY
       this.moving = true
 
-      canvas.element.style.cursor = canvas.hoveredItem ? 'pointer' : 'initial'
+      canvas.updateCursor()
 
-      if (this.pressed) {
-        if (canvas.hoveredItem) { // dragging an object
-          if (!canvas.draggedItem) { // don't select a new object if already dragging
-            if (canvas.hoveredItem?.draggable) canvas.setDraggedItem(canvas.hoveredItem)
-          }
-          // fix: dragging over the toolbar makes things go crazy
-          canvas.setSelectedItem(null)
-        } else { // dragging the canvas
-          canvas.updateOrigin(this.dx + canvas.lastOrigin.x, this.dy + canvas.lastOrigin.y)
-        }
+      if (!this.pressed) return
+      // mouse is pressed. Let's move things:
+
+      // dragging the canvas
+      if (!canvas.hoveredItem?.draggable) {
+        canvas.updateOrigin(this.dx + canvas.lastOrigin.x, this.dy + canvas.lastOrigin.y)
+        return
       }
-      e.preventDefault()
-      e.stopPropagation()
+
+      // dragging an object
+
+      // don't drag a new object if already dragging
+      if (canvas.draggedItem) return
+
+      // if the current item is not draggable, return
+      if (!canvas.hoveredItem?.draggable) return
+
+      // okay, drag now
+      canvas.setDraggedItem(canvas.hoveredItem)
+
+      // fix: dragging over the toolbar makes things go crazy
+      canvas.setSelectedItem(null)
     })
 
     canvas.element.addEventListener('wheel', (e: WheelEvent) => {

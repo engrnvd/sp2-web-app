@@ -186,4 +186,8 @@ export class ApmCanvas {
     this.selection.add(this.hoveredItem)
     if (this.selectedItem) this.selection.add(this.selectedItem)
   }
+
+  updateCursor() {
+    this.element.style.cursor = this.mouse.pressed ? 'grabbing' : (this.hoveredItem ? 'pointer' : 'initial')
+  }
 }
