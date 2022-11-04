@@ -31,15 +31,21 @@ export class DropSpace {
         canvas.currentDropSpace = null
       }
     }
+
+    const { width, height, left, top } = this.getCoords()
+    ci.width = width
+    ci.height = height
+    ci.left = left
+    ci.top = top
   }
 
   draw() {
     this.ci.draw()
   }
 
-  initCi() {
+  getCoords() {
     const app = useAppStore()
-    const isHorizontal = app.simpleView === 'Horizontal'
+    const isHorizontal = app.sitemapView === 'Horizontal'
     const ci = this.page.ci
     const offset = 3
 
@@ -56,7 +62,13 @@ export class DropSpace {
       top = this.location === 'before' ? ci.top - height - offset : (this.location === 'after' ? ci.bottom + offset : ci.top + offset)
     }
 
-    this.ci = new CanvasItem(ci.canvas, {
+    return { width, height, left, top }
+  }
+
+  initCi() {
+    const { width, height, left, top } = this.getCoords()
+
+    this.ci = new CanvasItem(this.page.ci.canvas, {
       left,
       top,
       width,

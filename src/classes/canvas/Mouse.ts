@@ -12,10 +12,6 @@ export class Mouse {
   moving = false
   mouseUp = false
 
-  get dragging() {
-    return this.pressed && this.moving
-  }
-
   get dx() {
     return this.x - this.lastX
   }
@@ -87,7 +83,7 @@ export class Mouse {
       // mouse is pressed. Let's move things:
 
       // dragging the canvas
-      if (!canvas.hoveredItem?.draggable) {
+      if (!canvas.hoveredItem?.draggable && !canvas.draggedItem) {
         canvas.updateOrigin(this.dx + canvas.lastOrigin.x, this.dy + canvas.lastOrigin.y)
         return
       }
