@@ -28,7 +28,7 @@ const app = useAppStore()
         </div>
     </SidebarSection>
     <SidebarSection title="Project Colors">
-        <OverallColorSelector style="max-width: 17em"/>
+        <OverallColorSelector style="max-width: 17em" :colors="app.allColors"/>
     </SidebarSection>
     <SidebarSection>
         <div class="d-flex gap-4 align-items-center font-weight-bold">
