@@ -226,7 +226,7 @@ export class SitemapPage {
 
     this.updateDropSpace('over')
 
-    if (!this.previousPage?.isBeingDragged && !this.isRoot) this.updateDropSpace('before')
+    if (!this.previousPage?.isBeingDragged && !this.isRoot && this.index === 0) this.updateDropSpace('before')
 
     if (!this.nextPage?.isBeingDragged && !this.isRoot) this.updateDropSpace('after')
   }

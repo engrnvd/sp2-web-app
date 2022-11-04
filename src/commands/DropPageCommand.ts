@@ -26,10 +26,10 @@ export class DropPageCommand extends Command {
       this.newIdx = page.children.length
     } else if (location === 'before') {
       this.newParent = page.parent
-      this.newIdx = page.index
+      this.newIdx = page.index === 0 ? page.index : page.index - 1
     } else {
       this.newParent = page.parent
-      this.newIdx = page.index + 1
+      this.newIdx = this.newParent === draggedPage.parent && draggedPage.index < page.index ? page.index : page.index + 1
     }
   }
 
