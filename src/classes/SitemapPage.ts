@@ -4,7 +4,6 @@ import { HasChildPagesMixin } from 'src/classes/HasChildPages.mixin'
 import type { SitemapSection } from 'src/classes/SitemapSection'
 import { useAppStore } from 'src/stores/app.store'
 import { AddBlockCommand } from '../commands/AddBlockCommand'
-import { CollapsePageCommand } from '../commands/CollapsePageCommand'
 import { applyMixins, cssFontSize, cssVar } from '../helpers/misc'
 import { defaultBlock, sitemapConfig } from '../helpers/sitemap-helper'
 import { canvasHelper } from './canvas/canvas-helper'
@@ -358,7 +357,7 @@ export class SitemapPage {
   }
 
   toggleCollapse() {
-    new CollapsePageCommand({ page: this }).execute()
+    this.collapsed = !this.collapsed
   }
 
   delete() {

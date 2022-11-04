@@ -17,6 +17,7 @@ export class EditItemPropCommand extends Command {
   constructor(payload: Payload) {
     super(payload)
     this.payload = payload
+    this.oldValue = this.item[this.payload.prop]
   }
 
   label(): string {
@@ -28,8 +29,6 @@ export class EditItemPropCommand extends Command {
   }
 
   run() {
-    this.oldValue = this.item[this.payload.prop]
-    // @ts-ignore
     this.item[this.payload.prop] = this.payload.value
 
     super.run()

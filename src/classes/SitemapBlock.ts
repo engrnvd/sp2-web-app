@@ -10,7 +10,6 @@ export class SitemapBlock {
   body: string = ''
   color: string = ''
   wireframe: any
-  id: any
   ci: CanvasItem = null
 
   constructor(page: SitemapPage, data: Partial<SitemapBlock>) {
@@ -43,7 +42,6 @@ export class SitemapBlock {
 
   toData() {
     return {
-      id: this.id,
       name: this.name,
       color: this.color,
       body: this.body,

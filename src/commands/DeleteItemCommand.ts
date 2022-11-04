@@ -16,6 +16,7 @@ export class DeleteItemCommand extends Command {
   constructor(payload: Payload) {
     super(payload)
     this.payload = payload
+    this.index = this.items.indexOf(this.item)
   }
 
   label(): string {
@@ -36,15 +37,12 @@ export class DeleteItemCommand extends Command {
   }
 
   run(runSuper = true) {
-    // @ts-ignore
-    this.index = this.items.indexOf(this.item)
     this.items.splice(this.index, 1)
 
     if (runSuper) super.run()
   }
 
   undo(runSuper = true) {
-    // @ts-ignore
     this.items.splice(this.index, 0, this.item)
 
     if (runSuper) super.undo()

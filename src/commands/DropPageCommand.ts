@@ -4,16 +4,17 @@ import type { SitemapSection } from 'src/classes/SitemapSection'
 import { Command } from './Command'
 
 export class DropPageCommand extends Command {
+  description = ''
+  declare payload: Payload
   oldParent: SitemapPage | SitemapSection = null
   oldIndex: number = null
   newIdx: number = null
   newParent: SitemapPage | SitemapSection = null
 
-  label(): string {
-    return `Drop page ${this.payload.dropSpace.location} ${this.payload.dropSpace.page.name}`
-  }
+  constructor(payload: Payload) {
+    super(payload)
+    this.payload = payload
 
-  run() {
     const { dropSpace, draggedPage } = this.payload
     const { location, page } = dropSpace
 
@@ -30,6 +31,14 @@ export class DropPageCommand extends Command {
       this.newParent = page.parent
       this.newIdx = page.index + 1
     }
+  }
+
+  label(): string {
+    return `Drop page ${this.payload.dropSpace.location} ${this.payload.dropSpace.page.name}`
+  }
+
+  run() {
+    const { draggedPage } = this.payload
 
     this.oldParent.removeChildPage(draggedPage)
     this.newParent.addChildPageAt(this.newIdx, draggedPage)
@@ -45,15 +54,6 @@ export class DropPageCommand extends Command {
 
     super.undo()
   }
-
-  description = ''
-  declare payload: Payload
-
-  constructor(payload: Payload) {
-    super(payload)
-    this.payload = payload
-  }
-
 }
 
 interface Payload {

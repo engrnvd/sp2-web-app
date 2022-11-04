@@ -18,6 +18,10 @@ export class ReplaceColorCommand extends Command {
   constructor(payload: Payload) {
     super(payload)
     this.payload = payload
+
+    const app = useAppStore()
+    // should we replace all the colors or just for the selected items?
+    if (app.canvas.selection.size > 0) this.selection = app.canvas.selection
   }
 
   isSection(item) {
@@ -52,11 +56,6 @@ export class ReplaceColorCommand extends Command {
   }
 
   run() {
-    const app = useAppStore()
-
-    // should we replace all the colors or just for the selected items?
-    if (app.canvas.selection.size > 0) this.selection = app.canvas.selection
-
     this.replaceColor(this.payload.color, this.payload.newColor)
     super.run()
   }

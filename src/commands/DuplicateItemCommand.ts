@@ -36,16 +36,11 @@ export class DuplicateItemCommand extends Command {
   }
 
   getClonedItem(): ClonableItem {
-    if (this.item instanceof SitemapPage) return new SitemapPage(this.item.sitemap, {
-      ...this.item.toData(),
-      id: undefined
-    }, this.item.parent)
-    if (this.item instanceof SitemapBlock) return new SitemapBlock(this.item.page, {
-      ...this.item.toData(),
-      id: undefined
-    })
+    if (this.item instanceof SitemapPage) return new SitemapPage(this.item.sitemap, this.item.toData(), this.item.parent)
+    if (this.item instanceof SitemapBlock) return new SitemapBlock(this.item.page, this.item.toData())
     if (this.item instanceof SitemapNote) return new SitemapNote(this.item.sitemap, {
       text: this.item.text + ' Copy',
+      color: this.item.color,
       left: this.item.left + 20,
       top: this.item.top + 20,
     })
@@ -55,18 +50,14 @@ export class DuplicateItemCommand extends Command {
   run() {
     this.clonedItem = this.getClonedItem()
     if (!this.clonedItem) return
-    // @ts-ignore
     const index = this.items.indexOf(this.item) + 1
-    // @ts-ignore
     this.items.splice(index, 0, this.clonedItem)
 
     super.run()
   }
 
   undo() {
-    // @ts-ignore
     this.items.splice(this.items.indexOf(this.clonedItem), 1)
-
     super.undo()
   }
 }
