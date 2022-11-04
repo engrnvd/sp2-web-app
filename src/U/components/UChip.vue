@@ -28,6 +28,7 @@ const props = withDefaults(defineProps<{
     border-radius: calc(var(--form-element-height) / 2);
     color: var(--main-text-color);
     cursor: pointer;
+    flex-shrink: 0;
 
     &:hover, &:focus {
         background-color: var(--gray-hover);

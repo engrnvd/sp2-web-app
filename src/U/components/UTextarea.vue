@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import CheckboxBlankOutlineIcon from 'src/material-design-icons/CheckboxBlankOutline.vue'
-import CheckboxMarkedIcon from 'src/material-design-icons/CheckboxMarked.vue'
-import UButton from 'src/U/components/UButton.vue'
 import UInput from 'src/U/components/UInput.vue'
 import { inputEmits, inputProps } from 'src/U/helpers/input-helper'
 import { computed, defineProps } from 'vue'
