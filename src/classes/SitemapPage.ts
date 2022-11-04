@@ -157,7 +157,7 @@ export class SitemapPage {
   }
 
   get isBeingDragged() {
-    return this.ci.isDraggedItem || (this.ci.canvas.mouse.pressed && this.ci.isInSelectedItems)
+    return this.ci.isDraggedItem || (this.ci.canvas.draggedItem && this.ci.isInSelectedItems)
   }
 
   updateVertical() {
@@ -270,7 +270,7 @@ export class SitemapPage {
     ci.borderWidth = borderWidth
     ci.text = this.name
     this.header.fillColor = ci.borderColor = ci.textColor = this.color
-    ci.draggable = !this.isRoot && !this.isLastPageLeftInSection && !app.simpleView
+    ci.draggable = !this.isRoot && !this.isLastPageLeftInSection && !app.simpleView && !ci.canvas.selection.size
 
     if (app.sitemapView === 'Horizontal') this.updateHorizontal()
     else this.updateVertical()

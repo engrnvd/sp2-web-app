@@ -58,6 +58,7 @@ export class SitemapNote {
     ci.top = this.top
     ci.fillColor = this.color || '#ffeb3a'
     ci.height = ci.textHeight + ci.paddingY * 2
+    ci.draggable = !ci.canvas.selection.size
 
     return this
   }

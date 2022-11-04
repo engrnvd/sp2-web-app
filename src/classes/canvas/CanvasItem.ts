@@ -245,7 +245,7 @@ export class CanvasItem {
       }
     }
 
-    if (this.isDraggedItem || (this.isInSelectedItems && this.canvas.mouse.pressed)) {
+    if (this.isDraggedItem || (this.canvas.draggedItem && this.isInSelectedItems)) {
       this.left += this.canvas.mouse.dx
       this.top += this.canvas.mouse.dy
     }
